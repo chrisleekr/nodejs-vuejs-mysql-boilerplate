@@ -1,12 +1,15 @@
 # Frontend for Node.js + Vue.js boilerplate
 
-## How to start for development
+## How to start development
+
+Simply install npm packages and run serve
 
 ```bash
+$ npm install
 $ npm run serve
 ```
 
-Opent the browser and go to [http://localhost:8080](http://localhost:8080)
+Open the browser and go to [http://localhost:8080](http://localhost:8080)
 
 ## Pages
 
@@ -23,4 +26,4 @@ Opent the browser and go to [http://localhost:8080](http://localhost:8080)
 
 - [ ] Unit tests
 - [ ] E2E tests
-- [ ] File uploader
+- [ ] File upload

@@ -14,7 +14,7 @@ FROM node:12-alpine AS dev-stage
 
 WORKDIR /srv
 
-COPY --from=initial-stage /srv/node_modules .
+COPY --from=initial-stage /srv/node_modules ./node_modules
 
 COPY . .
 
@@ -27,7 +27,7 @@ FROM node:12-alpine AS production-stage
 
 WORKDIR /srv
 
-COPY --from=initial-stage /srv/node_modules .
+COPY --from=initial-stage /srv/node_modules ./node_modules
 
 COPY . .
 

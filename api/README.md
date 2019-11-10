@@ -1,5 +1,16 @@
 # API for Node.js + Vue.js boilerplate
 
+## How to start development
+
+1. Install npm packages
+
+    ```bash
+    $ npm install
+    ```
+
+2. Uncomment **volumes** in the `docker-compose.yml` file
+3. Access via `http://localhost/api`
+
 ## Routes
 
 - [x] GET `/`
