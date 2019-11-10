@@ -1,0 +1,6 @@
+{
+  "apiHost": "http://localhost/api",
+  "format": {
+    "dateTime": "YYYY-MM-DD HH:MM:SS"
+  }
+}

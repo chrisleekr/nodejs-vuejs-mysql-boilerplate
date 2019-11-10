@@ -1,0 +1,59 @@
+{
+  "name": "nodejs-vuejs-boilerplate-api",
+  "version": "1.0.0",
+  "description": "API for Node.js + Vue.js boilerplate",
+  "main": "index.js",
+  "scripts": {
+    "start": "node server.js",
+    "dev": "nodemon server.js",
+    "lint": "eslint ./app --fix"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/chrisleekr/nodejs-vuejs-boilerplate.git"
+  },
+  "keywords": [
+    "Node.js",
+    "Vue.js",
+    "boilerplate"
+  ],
+  "author": "Chris Lee <git@chrislee.kr>",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/chrisleekr/nodejs-vuejs-boilerplate/issues"
+  },
+  "homepage": "https://github.com/chrisleekr/nodejs-vuejs-boilerplate#readme",
+  "devDependencies": {
+    "eslint": "^6.6.0",
+    "eslint-config-airbnb": "^18.0.1",
+    "eslint-config-prettier": "^6.5.0",
+    "eslint-plugin-import": "^2.18.2",
+    "eslint-plugin-jsx-a11y": "^6.2.3",
+    "eslint-plugin-node": "^10.0.0",
+    "eslint-plugin-prettier": "^3.1.1",
+    "eslint-plugin-promise": "^4.2.1",
+    "eslint-plugin-react": "^7.16.0",
+    "nodemon": "^1.19.4",
+    "prettier": "^1.18.2"
+  },
+  "dependencies": {
+    "bcryptjs": "^2.4.3",
+    "body-parser": "^1.19.0",
+    "bunyan": "^1.8.12",
+    "compression": "^1.7.4",
+    "cors": "^2.8.5",
+    "dotenv": "^8.2.0",
+    "express": "^4.17.1",
+    "express-requests-logger": "^2.0.6",
+    "express-session": "^1.17.0",
+    "express-validator": "^6.2.0",
+    "helmet": "^3.21.2",
+    "jsonwebtoken": "^8.5.1",
+    "lodash": "^4.17.15",
+    "moment": "^2.24.0",
+    "nodemailer": "^6.3.1",
+    "npm-check-updates": "^3.2.0",
+    "promise-mysql": "^4.1.1",
+    "uuid": "^3.3.3"
+  }
+}
