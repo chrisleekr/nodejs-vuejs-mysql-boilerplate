@@ -12,10 +12,10 @@ This is a boilerplate project. The project contains Node.js REST API and fronten
 ## Demo
 | Service        | Endpoint |
 | ------------- |-------------|
-| API           | [https://nvm-boilerplate.chrislee.kr/api](https://nvm-boilerplate.chrislee.kr/api)      |
-| Frontend      | [https://nvm-boilerplate.chrislee.kr/frontend](https://nvm-boilerplate.chrislee.kr/frontend) |
-| Backend       | [https://nvm-boilerplate.chrislee.kr/backend](https://nvm-boilerplate.chrislee.kr/backend) |
-| Mailhog       | [https://nvm-boilerplate.chrislee.kr/mailhog](https://nvm-boilerplate.chrislee.kr/mailhog) |
+| API           | [https://nvm-boilerplate.chrislee.kr/api/](https://nvm-boilerplate.chrislee.kr/api/)      |
+| Frontend      | [https://nvm-boilerplate.chrislee.kr/frontend/](https://nvm-boilerplate.chrislee.kr/frontend/) |
+| Backend       | [https://nvm-boilerplate.chrislee.kr/backend/](https://nvm-boilerplate.chrislee.kr/backend/) |
+| Mailhog       | [https://nvm-boilerplate.chrislee.kr/mailhog/](https://nvm-boilerplate.chrislee.kr/mailhog/) |
 
 
 ## How to start in your local environment
