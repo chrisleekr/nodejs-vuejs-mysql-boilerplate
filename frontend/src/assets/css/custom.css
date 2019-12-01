@@ -1,3 +1,7 @@
+body {
+  overflow-y: scroll;
+}
+
 .spinner {
   /* Spinner size and color */
   width: 1rem;

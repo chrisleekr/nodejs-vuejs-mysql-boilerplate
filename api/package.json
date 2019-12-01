@@ -14,7 +14,7 @@
   },
   "keywords": [
     "Node.js",
-    "Vue.js",
+    "REST API",
     "boilerplate"
   ],
   "author": "Chris Lee <git@chrislee.kr>",
@@ -34,7 +34,7 @@
     "eslint-plugin-promise": "^4.2.1",
     "eslint-plugin-react": "^7.16.0",
     "nodemon": "^1.19.4",
-    "prettier": "^1.18.2"
+    "prettier": "^1.19.1"
   },
   "dependencies": {
     "bcryptjs": "^2.4.3",
@@ -52,7 +52,6 @@
     "lodash": "^4.17.15",
     "moment": "^2.24.0",
     "nodemailer": "^6.3.1",
-    "npm-check-updates": "^3.2.0",
     "promise-mysql": "^4.1.1",
     "uuid": "^3.3.3"
   }

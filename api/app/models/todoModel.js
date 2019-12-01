@@ -235,7 +235,7 @@ const deleteOne = async id => {
         SET status = ?
         WHERE id = ?
       `,
-      [todoStatus.inactive, id]
+      [todoStatus.deleted, id]
     );
   } catch (e) {
     moduleLogger.error(e);

@@ -1,4 +1,4 @@
-# Node.js + Vue.js Boilerplate
+# Node.js + Vue.js + MySQL Boilerplate
 
 This is a boilerplate project. The project contains Node.js REST API and frontend developed by Vue.js with BootstrapVue.
 
@@ -6,10 +6,19 @@ This is a boilerplate project. The project contains Node.js REST API and fronten
   * Node.js, Express, Express Validator, JWT, Bunyan, Promise MySQL, Node Mailer
 * Frontend
   * Vue.js, Vuex, Vue Router, Vue Draggable, Vuelidate, BootstrapVue
+* Backend
+  * Vue.js, Vuex, Vue Router, Vuelidate, BootstrapVue
 
-[![VuejsBoilerplate.gif](https://s5.gifyu.com/images/VuejsBoilerplate.gif)](https://gifyu.com/image/vLfJ)
+## Demo
+| Service        | Endpoint |
+| ------------- |-------------|
+| API           | [https://nvm-boilerplate.chrislee.kr/api](https://nvm-boilerplate.chrislee.kr/api)      |
+| Frontend      | [https://nvm-boilerplate.chrislee.kr/frontend](https://nvm-boilerplate.chrislee.kr/frontend) |
+| Backend       | [https://nvm-boilerplate.chrislee.kr/backend](https://nvm-boilerplate.chrislee.kr/backend) |
+| Mailhog       | [https://nvm-boilerplate.chrislee.kr/mailhog](https://nvm-boilerplate.chrislee.kr/mailhog) |
 
-## How to start
+
+## How to start in your local environment
 
 ```bash
 $ docker-compose up -d
@@ -21,17 +30,18 @@ Once docker containers are up, then you can access services with below URL.
 | ------------- |-------------|
 | API           | [http://localhost/api](http://localhost/api)      |
 | Frontend      | [http://localhost/frontend](http://localhost/frontend) |
-| Mailhog       | [http://localhost:8025](http://localhost:8025) |
+| Backend       | [http://localhost/backend](http://localhost/backend) |
+| Mailhog       | [http://localhost/mailhog](http://localhost/mailhog) |
 | MySQL         | localhost:3307 |
 
 
-There are three users in the database initially. You can use them to login Frontend.
+There are three users in the database initially. You can use them to login Frontend/Backend.
 
-| Username      | Email          | Password   |
-| ------------- | -------------- | ---------  |
-| admin         | admin@boilerplate.local | 123456 |
-| staff         | staff@boilerplate.local | 123456 |
-| user          | user@boilerplate.local  | 123456 |
+| Service       | Username      | Email                   | Password  |
+| ------------- | ------------- | --------------          | --------- |
+| Backend       | admin         | admin@boilerplate.local | 123456    |
+| Backend       | staff         | staff@boilerplate.local | 123456    |
+| Frontend      | user          | user@boilerplate.local  | 123456    |
 
 ### API
 
@@ -46,24 +56,29 @@ To enable live change for the API, simply uncomment following lines in `docker-c
 
 Please make sure you run `npm install` in the `api` folder.
 
-### Frontend
+### Frontend & Backend
 
-Currently, Frontend docker container is configured to serve production mode due to the limitation of setting development environment of Vue.js in sub directory.
+Currently, Frontend and Backend docker container is configured to serve production mode due to the limitation of setting development environment of Vue.js in sub directory.
 
 If you want to have Hot Reload feature, then you should launch the Frontend separately by `npm run serve`.
 
 ```bash
 $ cd frontend
 $ npm run serve
+
+or 
+
+$ cd backend
+$ npm run serve
 ```
 
-Then access via your browser `http://localhost:8080`.
+Then access Frontend with `http://localhost:8080` and Backend with `http://localhost:8081` via your browser.
 
 ### Mailhog
 
 Currently, API is configured to point Mailhog to send an email. Any email sent by the API can be viewed in Mailhog web interface.
 
-Access via your browser `http://localhost:8025`
+Access via your browser `http://localhost/mailhog`
 
 ### MySQL
 
@@ -72,35 +87,25 @@ MySQL port is mapped to 3307.
 
 ## Features
 
-* API
-  * Authentication
-    * POST /login
-    * POST /register
-    * GET /register-confirm
-    * POST /password-reset-request
-    * GET /password-reset-verify
-    * POST /password-reset
-    * GET/POST /me
-  * User
-    * GET/POST /user
-    * GET/PATCH/DELETE /user/:id
-  * Todo
-    * GET/POST /todo
-    * GET/POST /todo/(pending|ongoing|completed|archived)
-    * GET/PATCH/DELETE /todo/:id
+- Frontend
+  - User registration
+  - Confirm user email address
+  - Reset user password
+  - User login/logout
+  - Manage todo
+  - Manage account information
 
-* Frontend
-  * Main page
-  * Login
-  * Register
-  * Register confirm
-  * Forget my password
-  * My account
-  * Update my account
-  * Todo
+- Backend
+  - Staff login/logout
+  - Staff permission mangement
+  - List todo
+  - Manage users
+  - Manage staffs
+  - Manage settings
+
 
 ## Todo
 
-* [ ] Backend
+* [ ] CI/CD
 * [ ] Unit tests
 * [ ] E2E tests

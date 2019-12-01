@@ -5,8 +5,11 @@
 Simply install npm packages and run serve
 
 ```bash
-$ npm install
-$ npm run serve
+npm install
+```
+
+```bash
+npm run serve
 ```
 
 Open the browser and go to [http://localhost:8080](http://localhost:8080)

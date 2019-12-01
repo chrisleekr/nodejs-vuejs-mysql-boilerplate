@@ -1,47 +1,94 @@
 const _ = require('lodash');
+const { matchedData } = require('express-validator');
 const todoModel = require('../models/todoModel');
+const userModel = require('../models/userModel');
 const { logger } = require('../helpers/logger');
 const {
-  handleValidationError,
+  validateRequest,
   handleCustomValidationError,
   handleNotFound,
-  handleSuccess
+  handleSuccess,
+  handleForbidden
 } = require('../helpers/response');
 const { getTokenData } = require('../helpers/authentication');
 
 const moduleLogger = logger.child({ module: 'todoController' });
 
+/**
+ * Return list of todos
+ *  - When user requests, it only returns todo list for the user.
+ *  - When staff requests, it returns all user's todo list.
+ */
 const listTodos = async (req, res) => {
   const tokenData = await getTokenData(req);
-  const validationResponse = handleValidationError(req, res);
-  if (validationResponse !== null) {
-    return validationResponse;
+
+  // Validate request
+  const validationRequest = await validateRequest(req, res, {
+    permissionKey: tokenData.role !== userModel.userRole.user ? 'manageTodo' : null
+  });
+
+  if (validationRequest !== null) {
+    return validationRequest;
   }
 
+  // Retrieve only valid parameters
+
+  const { state } = req.params;
+
+  const params = matchedData(req, {
+    includeOptionals: true,
+    onlyValidData: true
+  });
+
   const searchOptions = {
-    q: req.query.q || undefined,
-    user_id: tokenData.id
+    q: params.q || undefined
   };
-  if (req.params.state !== undefined && req.params.state !== '') {
-    searchOptions.state = req.params.state;
+
+  if (tokenData.role === userModel.userRole.user) {
+    searchOptions.user_id = tokenData.id;
+  }
+  if (state !== undefined && state !== '') {
+    searchOptions.state = state;
   }
 
   const result = await todoModel.findAll({
     searchOptions,
-    page: req.query.page || 1,
-    pageSize: req.query.page_size || 999999
+    page: params.page || 1,
+    pageSize: params.page_size || 999999
   });
   return handleSuccess(res, '', result);
 };
 
+/**
+ * Get single todo
+ *  - This request only can be performed by the user role.
+ */
 const getTodo = async (req, res) => {
   const tokenData = await getTokenData(req);
+
+  // Validate request
+  if (tokenData.role !== userModel.userRole.user) {
+    return handleForbidden(res, 'Only user can retrieve todo.');
+  }
+  const validationRequest = await validateRequest(req, res, {});
+  if (validationRequest !== null) {
+    return validationRequest;
+  }
+
+  // Retrieve only valid parameters
+  const params = matchedData(req, {
+    includeOptionals: true,
+    onlyValidData: true
+  });
+
+  const searchOptions = {
+    id: params.todoId,
+    user_id: tokenData.id,
+    status: todoModel.todoStatus.active
+  };
+
   const row = await todoModel.getOne({
-    searchOptions: {
-      id: req.params.todoId,
-      user_id: tokenData.id,
-      status: todoModel.todoStatus.active
-    }
+    searchOptions
   });
 
   if (_.isEmpty(row)) {
@@ -51,29 +98,47 @@ const getTodo = async (req, res) => {
   return handleSuccess(res, '', row);
 };
 
+/**
+ * Insert single todo
+ *  - This request only can be performed by the user role.
+ */
 const postTodo = async (req, res) => {
-  const validationResponse = handleValidationError(req, res);
-  if (validationResponse !== null) {
-    return validationResponse;
+  const tokenData = await getTokenData(req);
+
+  // Validate request
+  if (tokenData.role !== userModel.userRole.user) {
+    return handleForbidden(res, 'Only user can post todo.');
   }
+  const validationRequest = await validateRequest(req, res, {});
+  if (validationRequest !== null) {
+    return validationRequest;
+  }
+
+  // Retrieve only valid parameters
+  const { state } = req.params;
+  const params = matchedData(req, {
+    includeOptionals: true,
+    onlyValidData: true
+  });
 
   try {
     // Override user id
-    const tokenData = await getTokenData(req);
-    req.body.user_id = tokenData.id;
+    params.user_id = tokenData.id;
 
     // Get position
-    req.body.position = await todoModel.getMaxPosition({
-      searchOptions: {
-        user_id: tokenData.id,
-        state: req.body.state,
-        status: todoModel.todoStatus.active
-      }
+    const searchOptions = {
+      user_id: tokenData.id,
+      state,
+      status: todoModel.todoStatus.active
+    };
+
+    params.position = await todoModel.getMaxPosition({
+      searchOptions
     });
     // Override status
-    req.body.status = todoModel.todoStatus.active;
+    params.status = todoModel.todoStatus.active;
 
-    const result = await todoModel.insertOne(req.body);
+    const result = await todoModel.insertOne(params);
     return handleSuccess(res, '', result);
   } catch (e) {
     moduleLogger.error({ e }, 'Creating todo failed');
@@ -88,21 +153,36 @@ const postTodo = async (req, res) => {
   }
 };
 
+/**
+ * Post todo list
+ *  - This request only can be performed by the user role.
+ */
 const postTodos = async (req, res) => {
-  const validationResponse = handleValidationError(req, res);
-  if (validationResponse !== null) {
-    return validationResponse;
+  const tokenData = await getTokenData(req);
+
+  // Validate request
+  if (tokenData.role !== userModel.userRole.user) {
+    return handleForbidden(res, 'Only user can post list of todo.');
+  }
+  const validationRequest = await validateRequest(req, res, {});
+  if (validationRequest !== null) {
+    return validationRequest;
   }
 
   // Get state
   const { state } = req.params;
 
+  // Retrieve only valid parameters
+  const params = matchedData(req, {
+    includeOptionals: true,
+    onlyValidData: true
+  });
+
   // Get todo and assign state
-  const { todo } = req.body;
+  const { todo } = params;
 
   try {
     // Override user id
-    const tokenData = await getTokenData(req);
     const userId = tokenData.id;
 
     _.forEach(todo, (val, key) => {
@@ -130,23 +210,30 @@ const postTodos = async (req, res) => {
   }
 };
 
+/**
+ * Update single todo
+ *  - This request only can be performed by the user role.
+ */
 const patchTodo = async (req, res) => {
   const tokenData = await getTokenData(req);
 
-  const todo = await todoModel.getOne({
-    searchOptions: { id: req.params.todoId, user_id: tokenData.id, status: todoModel.todoStatus.active }
-  });
-  if (_.isEmpty(todo)) {
-    return handleNotFound(res, 'Todo does not exist in our database.');
+  // Validate request
+  if (tokenData.role !== userModel.userRole.user) {
+    return handleForbidden(res, 'Only user can patch todo.');
+  }
+  const validationRequest = await validateRequest(req, res, {});
+  if (validationRequest !== null) {
+    return validationRequest;
   }
 
-  const validationResponse = handleValidationError(req, res);
-  if (validationResponse !== null) {
-    return validationResponse;
-  }
+  // Retrieve only valid parameters
+  const params = matchedData(req, {
+    includeOptionals: true,
+    onlyValidData: true
+  });
 
   try {
-    const result = await todoModel.updateOne(req.params.todoId, req.body);
+    const result = await todoModel.updateOne(params.todoId, params);
     return handleSuccess(res, '', result);
   } catch (e) {
     moduleLogger.error({ e }, 'Updating todo failed');
@@ -161,19 +248,21 @@ const patchTodo = async (req, res) => {
   }
 };
 
+/**
+ * Delete single todo
+ *  - This request only can be performed by the user role.
+ */
 const deleteTodo = async (req, res) => {
   const tokenData = await getTokenData(req);
 
-  const todo = await todoModel.getOne({
-    searchOptions: { id: req.params.todoId, user_id: tokenData.id, status: todoModel.todoStatus.active }
-  });
-  if (_.isEmpty(todo)) {
-    return handleNotFound(res, 'Todo does not exist in our database.');
+  // Validate request
+  if (tokenData.role !== userModel.userRole.user) {
+    return handleForbidden(res, 'Only user can delete todo.');
   }
+  const validationRequest = await validateRequest(req, res, {});
 
-  const validationResponse = handleValidationError(req, res);
-  if (validationResponse !== null) {
-    return validationResponse;
+  if (validationRequest !== null) {
+    return validationRequest;
   }
 
   try {

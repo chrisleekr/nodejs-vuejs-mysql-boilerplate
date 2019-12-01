@@ -1,0 +1,109 @@
+body {
+  overflow-y: scroll;
+}
+
+.page-title {
+  padding-bottom: 0.5rem;
+  border-bottom: 1px solid #d9d9d9;
+  display: block;
+}
+
+.navbar-dark .navbar-nav .nav-link.router-link-exact-active {
+  color: #fff;
+  font-weight: bold;
+}
+
+.spinner {
+  /* Spinner size and color */
+  width: 1rem;
+  height: 1rem;
+  border-top-color: #444;
+  border-left-color: #444;
+
+  /* Additional spinner styles */
+  animation: spinner 400ms linear infinite;
+  border-bottom-color: transparent;
+  border-right-color: transparent;
+  border-style: solid;
+  border-width: 2px;
+  border-radius: 50%;
+  box-sizing: border-box;
+  display: inline-block;
+  vertical-align: middle;
+}
+
+/* Animation styles */
+@keyframes spinner {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
+}
+
+/* Optional — create your own variations! */
+.spinner-large {
+  width: 5rem;
+  height: 5rem;
+  border-width: 6px;
+}
+
+.spinner-slow {
+  animation: spinner 1s linear infinite;
+}
+
+.spinner-white {
+  border-top-color: #fff;
+  border-left-color: #fff;
+}
+
+.spinner-blue {
+  border-top-color: #09d;
+  border-left-color: #09d;
+}
+
+.page-title {
+  font-size: 1.5rem;
+  font-weight: bold;
+}
+
+.message-col {
+  white-space: pre;
+}
+
+.todo-pending-list {
+  color: #404040;
+}
+
+.todo-ongoing-list {
+  color: #000000;
+  font-weight: bold;
+}
+
+.todo-completed-list {
+  color: #7b7b7b;
+  text-decoration: line-through;
+}
+
+.todo-completed-span {
+  text-decoration: line-through;
+}
+
+.todo-completed-list {
+  color: #777;
+}
+
+.no-list-item {
+  font-style: italic;
+  font-size: 0.9rem;
+  color: #777;
+}
+
+.span-block {
+  display: block;
+}
+
+.span-help-text {
+  font-size: 0.7rem;
+}

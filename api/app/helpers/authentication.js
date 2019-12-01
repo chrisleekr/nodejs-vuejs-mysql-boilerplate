@@ -1,5 +1,7 @@
+const _ = require('lodash');
 const jwt = require('jsonwebtoken');
 const { logger } = require('./logger');
+const userModel = require('../models/userModel');
 
 const moduleLogger = logger.child({ module: 'authentication' });
 const secretKey = process.env.JWT_SECRET_KEY;
@@ -40,13 +42,31 @@ const isAuthenticated = async (req, res, next) => {
       moduleLogger.info('Verification failed. Return error.');
       return res.status(403).json({
         success: false,
-        status: 403,
+        status: 401,
         message: 'Please login before to continue.',
         data: {}
       });
     }
+
+    // get user to verify
+    const user = await userModel.getOne({
+      searchOptions: {
+        id: data.id,
+        role: data.role
+      }
+    });
+    if (_.isEmpty(user)) {
+      moduleLogger.info('User not found. Return error.');
+      return res.status(403).json({
+        success: false,
+        status: 401,
+        message: 'Please login before to continue.',
+        data: {}
+      });
+    }
+
     // data is available, it means verification succeed.
-    moduleLogger.debug({ data }, 'Verification succeed. Proceed to next.');
+    moduleLogger.debug({ data, user }, 'Verification succeed. Proceed to next.');
     return next();
   }
 

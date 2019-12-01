@@ -16,22 +16,21 @@ services:
       - ./nginx:/etc/nginx/html
     ports:
       - 80:80
-      - 443:443
 
   api:
     container_name: api
     build:
       context: ./api
       target: dev-stage
-      #target: production-stage
+      # target: production-stage
     depends_on:
       - mysql
     networks:
       - internal
-    ports:
-      - 3000:3000
-    # volumes:
-    #   - ./api:/srv
+    # ports:
+    #   - 3000:3000
+    volumes:
+      - ./api:/srv
     environment:
       - DB_HOST=mysql
       - DB_USER=root
@@ -42,7 +41,8 @@ services:
       - JWT_SECRET_KEY=aaGhu2foo7sheithePhai4Aef
       - JWT_EXPIRES_IN=1w
       - BCRYPT_SALTING_ROUND=10
-      - API_BASE_URL=http://localhost/api
+      - API_URL=http://localhost/api
+      - BACKEND_URL=http://localhost/backend
       - FRONTEND_URL=http://localhost/frontend
       - EMAIL_FROM_ADDRESS=support@boilerplate.local
       - EMAIL_FROM_NAME=Support
@@ -53,7 +53,7 @@ services:
       - SMTP_AUTH_PASS=
       - SMTP_DEBUG=true
       - SMTP_LOGGER=true
-
+      - TZ=Australia/Melbourne
 
   frontend:
     container_name: frontend
@@ -68,30 +68,42 @@ services:
     networks:
       - internal
 
+  backend:
+    container_name: backend
+    build:
+      context: ./backend
+      target: production-stage
+      args:
+        NODE_ENV: production
+        BASE_URL: /backend/
+    depends_on:
+      - mysql
+    networks:
+      - internal
+
   mysql:
     container_name: mysql
-    image: mysql:8
+    build:
+      context: ./mysql
     networks:
       - internal
     volumes:
-      - ./mysql/conf.d:/etc/mysql/conf.d
-      - ./mysql/sql:/docker-entrypoint-initdb.d
       - mysql_data:/var/lib/mysql
     ports:
       - 3307:3306
-    command: --default-authentication-plugin=mysql_native_password
     environment:
       MYSQL_ROOT_PASSWORD: root
       MYSQL_DATABASE: boilerplate 
+      TZ: Australia/Melbourne
 
   mailhog:
     container_name: mailhog
     image: mailhog/mailhog
     networks:
       - internal
-    ports: 
-      - 1025:1025 # smtp server
-      - 8025:8025 # web ui
+    # ports: 
+    #   - 1025:1025 # smtp server
+    #   - 8025:8025 # web ui
 
 networks:
   internal:

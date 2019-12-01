@@ -1,5 +1,5 @@
 # initial stage
-FROM node:12-alpine AS initial-stage
+FROM node:13-alpine AS initial-stage
 
 RUN apk add --no-cache --update \
   build-base \
@@ -38,7 +38,7 @@ WORKDIR /srv
 
 COPY . .
 
-RUN npm run build
+RUN npm run build --mode=production
 
 # production stage
 FROM nginx:stable-alpine AS production-stage
@@ -47,8 +47,7 @@ FROM nginx:stable-alpine AS production-stage
 COPY image-files/ /
 
 # Copy compiled
-ARG BASE_URL
-COPY --from=build-stage /srv/dist /usr/share/nginx/html/${BASE_URL}
+COPY --from=build-stage /srv/dist /usr/share/nginx/html/frontend/
 
 EXPOSE 80
 

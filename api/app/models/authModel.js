@@ -18,7 +18,15 @@ const processLogin = async (user, { ipAddress = '' } = {}) => {
     first_name: user.first_name,
     last_name: user.last_name,
     email: user.email,
-    role: user.role
+    role: user.role,
+    permission_keys: _.reduce(
+      user.permissions,
+      (acc, permission, _index) => {
+        acc.push(permission.permission_key);
+        return acc;
+      },
+      []
+    )
   };
 
   const jwtToken = generateToken(data);
@@ -34,10 +42,16 @@ const processLogin = async (user, { ipAddress = '' } = {}) => {
   return { auth_key: jwtToken };
 };
 
-const login = async (username, password, { ipAddress = '' } = {}) => {
+const login = async (username, password, roles = [userModel.userRole.user], { ipAddress = '' } = {}) => {
   const user = await userModel.getOne({
-    searchOptions: { usernameOrEmail: username, status: userModel.userStatus.active },
-    includePasswordHash: true
+    searchOptions: {
+      usernameOrEmail: username,
+      enabled: userModel.userEnabled.active,
+      status: userModel.userStatus.active,
+      roles
+    },
+    includePasswordHash: true,
+    includePermissions: true
   });
 
   if (user.length === 0) {
@@ -80,7 +94,10 @@ const login = async (username, password, { ipAddress = '' } = {}) => {
   return result;
 };
 
-const register = async ({ username, password, firstName, lastName, email, registrationIp, role, status } = {}) => {
+const register = async (
+  { username, password, firstName, lastName, email, registrationIp, role, status } = {},
+  { apiURL } = {}
+) => {
   const authKey = uuidv4();
 
   const result = await userModel.insertOne({
@@ -91,8 +108,13 @@ const register = async ({ username, password, firstName, lastName, email, regist
     last_name: lastName,
     password,
     email,
+    confirmed_at: null,
     registration_ip: registrationIp,
+    last_login_at: null,
+    last_login_ip: null,
+    blocked_at: null,
     role,
+    enabled: userModel.userEnabled.active,
     status
   });
 
@@ -103,7 +125,7 @@ const register = async ({ username, password, firstName, lastName, email, regist
     templatePath: 'app/templates/register-confirm.html',
     templateValues: {
       first_name: firstName,
-      verification_link: `${process.env.API_BASE_URL}/register-confirm?key=${authKey}`
+      verification_link: `${apiURL}/register-confirm?key=${authKey}`
     }
   });
   return result;
@@ -124,7 +146,7 @@ const registerConfirm = async ({ authKey } = {}) => {
   return result;
 };
 
-const passwordResetRequest = async ({ email } = {}) => {
+const passwordResetRequest = async ({ email } = {}, { apiURL } = {}) => {
   const user = await userModel.getOne({
     searchOptions: { email, status: userModel.userStatus.active }
   });
@@ -148,7 +170,7 @@ const passwordResetRequest = async ({ email } = {}) => {
     templatePath: 'app/templates/password-reset.html',
     templateValues: {
       first_name: user.first_name,
-      password_reset_link: `${process.env.API_BASE_URL}/password-reset-verify?key=${passwordResetToken}`
+      password_reset_link: `${apiURL}/password-reset-verify?key=${passwordResetToken}`
     }
   });
   return result;

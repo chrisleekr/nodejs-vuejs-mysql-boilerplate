@@ -34,7 +34,6 @@ class Mail {
   static replaceTemplateValues(content, templateValues) {
     let convertedContent = content;
     _.forEach(templateValues, (value, key) => {
-      console.log(`${value} => `, key);
       convertedContent = _.replace(convertedContent, new RegExp(`{${key}}`, 'g'), value);
     });
     return convertedContent;

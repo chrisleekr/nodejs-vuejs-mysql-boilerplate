@@ -18,8 +18,13 @@ const login = async (req, res) => {
     return validationResponse;
   }
 
+  const userRoles =
+    req.params.roleType === 'staff'
+      ? [userModel.userRole.administrator, userModel.userRole.staff]
+      : [userModel.userRole.user];
+
   try {
-    const result = await authModel.login(req.body.username, req.body.password, {
+    const result = await authModel.login(req.body.username, req.body.password, userRoles, {
       ipAddress: getIPAddress(req)
     });
 
@@ -43,17 +48,28 @@ const register = async (req, res) => {
     return validationResponse;
   }
 
+  const userRole = req.params.roleType === 'staff' ? userModel.userRole.staff : userModel.userRole.user;
+
+  let apiURL = `${process.env.API_URL}/user`;
+  if (req.params.roleType === 'staff') {
+    apiURL = `${process.env.API_URL}/staff`;
+  }
+
   try {
-    const result = await authModel.register({
-      username: req.body.username,
-      password: req.body.password,
-      firstName: req.body.first_name,
-      lastName: req.body.last_name,
-      email: req.body.email,
-      registrationIp: getIPAddress(req),
-      role: userModel.userRole.user,
-      status: userModel.userStatus.pending
-    });
+    const result = await authModel.register(
+      {
+        username: req.body.username,
+        password: req.body.password,
+        firstName: req.body.first_name,
+        lastName: req.body.last_name,
+        email: req.body.email,
+        registrationIp: getIPAddress(req),
+        role: userRole,
+        enabled: userModel.userEnabled.active,
+        status: userModel.userStatus.pending
+      },
+      { apiURL }
+    );
 
     return handleSuccess(res, 'You are successfully registered.', result);
   } catch (e) {
@@ -71,8 +87,14 @@ const register = async (req, res) => {
 
 const registerConfirm = async (req, res) => {
   const errors = validationResult(req);
+
+  let appURL = process.env.FRONTEND_URL;
+  if (req.params.roleType === 'staff') {
+    appURL = process.env.BACKEND_URL;
+  }
+
   if (!errors.isEmpty()) {
-    return handleRedirect(res, 302, `${process.env.FRONTEND_URL}/login?messageKey=registerConfirmValidationError`);
+    return handleRedirect(res, 302, `${appURL}/login?messageKey=registerConfirmValidationError`);
   }
 
   try {
@@ -80,10 +102,10 @@ const registerConfirm = async (req, res) => {
       authKey: req.query.key
     });
 
-    return handleRedirect(res, 302, `${process.env.FRONTEND_URL}/login?messageKey=registerConfirmSuccess`);
+    return handleRedirect(res, 302, `${appURL}/login?messageKey=registerConfirmSuccess`);
   } catch (e) {
     moduleLogger.error({ e }, 'Email confirmation failed');
-    return handleRedirect(res, 302, `${process.env.FRONTEND_URL}/login?messageKey=registerConfirmFailed`);
+    return handleRedirect(res, 302, `${appURL}/login?messageKey=registerConfirmFailed`);
   }
 };
 
@@ -93,10 +115,18 @@ const passwordResetRequest = async (req, res) => {
     return validationResponse;
   }
 
+  let apiURL = `${process.env.API_URL}/user`;
+  if (req.params.roleType === 'staff') {
+    apiURL = `${process.env.API_URL}/staff`;
+  }
+
   try {
-    const result = await authModel.passwordResetRequest({
-      email: req.body.email
-    });
+    const result = await authModel.passwordResetRequest(
+      {
+        email: req.body.email
+      },
+      { apiURL }
+    );
 
     return handleSuccess(
       res,
@@ -118,27 +148,25 @@ const passwordResetRequest = async (req, res) => {
 
 const passwordResetVerify = async (req, res) => {
   const errors = validationResult(req);
+
+  let appURL = process.env.FRONTEND_URL;
+  if (req.params.roleType === 'staff') {
+    appURL = process.env.BACKEND_URL;
+  }
+
   if (!errors.isEmpty()) {
-    return handleRedirect(
-      res,
-      302,
-      `${process.env.FRONTEND_URL}/password-reset-request?messageKey=passwordResetValidationError`
-    );
+    return handleRedirect(res, 302, `${appURL}/password-reset-request?messageKey=passwordResetValidationError`);
   }
 
   try {
     return handleRedirect(
       res,
       302,
-      `${process.env.FRONTEND_URL}/password-reset?messageKey=passwordResetTokenConfirmed&key=${req.query.key}`
+      `${appURL}/password-reset?messageKey=passwordResetTokenConfirmed&key=${req.query.key}`
     );
   } catch (e) {
     moduleLogger.error({ e }, 'Password reset token validation failed');
-    return handleRedirect(
-      res,
-      302,
-      `${process.env.FRONTEND_URL}/password-reset-request?messageKey=passwordResetRequestFailed`
-    );
+    return handleRedirect(res, 302, `${appURL}/password-reset-request?messageKey=passwordResetRequestFailed`);
   }
 };
 

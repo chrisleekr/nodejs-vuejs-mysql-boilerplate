@@ -1,0 +1,83 @@
+version: "3.7"
+
+services:
+  nginx:
+    container_name: nginx
+    image: $REGISTRY_DOMAIN/chrislee/nodejs-vuejs-boilerplate/nginx:latest
+    ports:
+      - "80:80"
+      - "443:443"
+    networks:
+      - internal
+
+  api:
+    container_name: api
+    image: $REGISTRY_DOMAIN/chrislee/nodejs-vuejs-boilerplate/api:latest
+    depends_on:
+      - mysql
+    networks:
+      - internal
+    environment:
+      - DB_HOST=mysql
+      - DB_USER=root
+      - DB_PASSWORD=root
+      - DB_NAME=boilerplate
+      - DB_CONNECTION_LIMIT=10
+      - DB_DEBUG=true
+      - JWT_SECRET_KEY=vsKpsTgstlhmg8yIA82d
+      - JWT_EXPIRES_IN=1w
+      - BCRYPT_SALTING_ROUND=10
+      - API_URL=https://$SERVICE_DOMAIN/api
+      - BACKEND_URL=https://$SERVICE_DOMAIN/backend
+      - FRONTEND_URL=https://$SERVICE_DOMAIN/frontend
+      - EMAIL_FROM_ADDRESS=support@$SERVICE_DOMAIN
+      - EMAIL_FROM_NAME=Support
+      - SMTP_HOST=mailhog
+      - SMTP_PORT=1025
+      - SMTP_SECURE=false
+      - SMTP_AUTH_USER=
+      - SMTP_AUTH_PASS=
+      - SMTP_DEBUG=true
+      - SMTP_LOGGER=true
+      - TZ=Australia/Melbourne
+
+  frontend:
+    container_name: frontend
+    image: $REGISTRY_DOMAIN/chrislee/nodejs-vuejs-boilerplate/frontend:latest
+    depends_on:
+      - mysql
+    networks:
+      - internal
+
+  backend:
+    container_name: backend
+    image: $REGISTRY_DOMAIN/chrislee/nodejs-vuejs-boilerplate/backend:latest
+    depends_on:
+      - mysql
+    networks:
+      - internal
+  
+  mysql:
+    container_name: mysql
+    image: $REGISTRY_DOMAIN/chrislee/nodejs-vuejs-boilerplate/mysql:latest
+    networks:
+      - internal
+    volumes:
+      - mysql_data:/var/lib/mysql
+    environment:
+      MYSQL_ROOT_PASSWORD: root
+      MYSQL_DATABASE: boilerplate 
+      TZ: Australia/Melbourne
+  
+  mailhog:
+    container_name: mailhog
+    image: mailhog/mailhog
+    networks:
+      - internal  
+
+networks:
+  internal:
+    driver: bridge
+
+volumes:
+  mysql_data:

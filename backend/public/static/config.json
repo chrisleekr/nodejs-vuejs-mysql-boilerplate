@@ -1,0 +1,8 @@
+{
+  "apiHost": "http://localhost/api",
+  "format": {
+    "timeZone": "Australia/Melbourne",
+    "dateTime": "YYYY-MM-DD HH:mm:ss",
+    "pickerDateTime": "yyyy-MM-dd HH:mm"
+  }
+}

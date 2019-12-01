@@ -1,8 +1,30 @@
 const moment = require('moment');
 const _ = require('lodash');
 const userModel = require('../../../models/userModel');
+const permissionModel = require('../../../models/permissionModel');
 
 module.exports = {
+  id: {
+    in: ['params'],
+    isNumeric: {
+      errorMessage: 'ID must be number',
+      options: { no_symbols: true }
+    },
+    custom: {
+      options: async (userId, { req }) => {
+        // Retrieve the user
+        const user = await userModel.getOne({
+          searchOptions: { id: userId, roles: userModel.getUserRoles(req.params.roleType) }
+        });
+
+        // If requested user does not exist, then return error
+        if (_.isEmpty(user)) {
+          throw new Error('User does not exist in the database.');
+        }
+        return true;
+      }
+    }
+  },
   first_name: {
     in: ['body'],
     isLength: {
@@ -23,7 +45,9 @@ module.exports = {
       errorMessage: 'Password should be at least 6 chars long.',
       options: { min: 6 }
     },
-    optional: { options: { nullable: true } }
+    optional: {
+      options: [{ checkFalsy: true }]
+    }
   },
   email: {
     in: ['body'],
@@ -37,7 +61,7 @@ module.exports = {
     },
     custom: {
       options: async (value, { req }) => {
-        if (value === undefined) {
+        if (_.isEmpty(value)) {
           return false;
         }
         // Check duplicated email except current user
@@ -57,12 +81,12 @@ module.exports = {
     in: ['body'],
     custom: {
       options: value => {
-        if (value === undefined) {
+        if (_.isEmpty(value)) {
           return true;
         }
 
-        if (moment(value, 'YYYY-MM-DD HH:mm:ss').isValid() === false) {
-          throw new Error('Confirmed date/time must be valid format. i.e. 2019-12-01 00:11:10');
+        if (moment(value, 'YYYY-MM-DD HH:mm').isValid() === false) {
+          throw new Error('Confirmed date/time must be valid format. i.e. 2019-12-01 00:11');
         }
 
         return true;
@@ -70,10 +94,10 @@ module.exports = {
     },
     customSanitizer: {
       options: value => {
-        if (value === undefined) {
+        if (_.isEmpty(value)) {
           return null;
         }
-        return moment(value, 'YYYY-MM-DD HH:mm:ss').format('YYYY-MM-DD HH:mm:ss');
+        return moment(value, 'YYYY-MM-DD HH:mm').format('YYYY-MM-DD HH:mm');
       }
     }
   },
@@ -81,12 +105,12 @@ module.exports = {
     in: ['body'],
     custom: {
       options: value => {
-        if (value === undefined) {
+        if (_.isEmpty(value)) {
           return true;
         }
 
-        if (moment(value, 'YYYY-MM-DD HH:mm:ss').isValid() === false) {
-          throw new Error('Blocked date/time must be valid format. i.e. 2019-12-01 00:11:10');
+        if (moment(value, 'YYYY-MM-DD HH:mm').isValid() === false) {
+          throw new Error('Blocked date/time must be valid format. i.e. 2019-12-01 00:11');
         }
 
         return true;
@@ -94,10 +118,10 @@ module.exports = {
     },
     customSanitizer: {
       options: value => {
-        if (value === undefined) {
+        if (_.isEmpty(value)) {
           return null;
         }
-        return moment(value, 'YYYY-MM-DD HH:mm:ss').format('YYYY-MM-DD HH:mm:ss');
+        return moment(value, 'YYYY-MM-DD HH:mm').format('YYYY-MM-DD HH:mm');
       }
     }
   },
@@ -114,13 +138,28 @@ module.exports = {
       }
     }
   },
-  status: {
+  permissions: {
+    in: ['body'],
+    custom: {
+      options: async userPermissionIds => {
+        const permissions = await permissionModel.findAll({});
+        _.each(userPermissionIds, permissionId => {
+          if (_.some(permissions, { id: permissionId }) === false) {
+            throw new Error('Permission must be valid.');
+          }
+        });
+
+        return true;
+      }
+    }
+  },
+  enabled: {
     in: ['body'],
     custom: {
       options: value => {
-        const valid = _.includes(userModel.userStatus, value);
+        const valid = _.includes(userModel.userEnabled, value);
         if (!valid) {
-          throw new Error('Status must be valid.');
+          throw new Error('Enabled must be valid.');
         }
 
         return true;

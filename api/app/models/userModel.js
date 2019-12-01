@@ -2,25 +2,38 @@ const _ = require('lodash');
 const bcrypt = require('bcryptjs');
 const { getPool, fetchWithPagination } = require('../helpers/database');
 const { logger } = require('../helpers/logger');
+const { findPermissionUsers } = require('./permissionModel');
 
 const moduleLogger = logger.child({ module: 'userModel' });
 
+// List of enabled
+const userEnabled = {
+  active: 1,
+  disabled: 0
+};
+
+// List of status
 const userStatus = {
   active: 10,
   deleted: 0,
   pending: -1
 };
 
+// List of role
 const userRole = {
   administrator: 99,
   staff: 50,
   user: 1
 };
 
+/**
+ * Find all users that matches search options
+ */
 const findAll = async ({
   searchOptions = {},
   orderBy = 'id ASC',
   includePasswordHash = false,
+  includePermissions = false,
   page = 1,
   pageSize = 10
 } = {}) => {
@@ -30,6 +43,7 @@ const findAll = async ({
   const where = [];
   const values = [];
 
+  // Force to get only active users
   where.push('status = ?');
   values.push(userStatus.active);
 
@@ -41,12 +55,16 @@ const findAll = async ({
           values.push(`%${value}%`);
         });
       }
+    } else if (key === 'roles') {
+      where.push(`(role IN (?))`);
+      values.push(value);
     } else {
       where.push(`${key} = ?`);
       values.push(value);
     }
   });
 
+  // Return password related fields only if includePasswordHash is set as true
   const passwordHash = includePasswordHash ? 'password_hash, password_reset_token' : '';
 
   const query = `
@@ -63,7 +81,25 @@ const findAll = async ({
       last_login_ip,
       blocked_at,
       role,
+      CASE
+        WHEN role = ${userRole.administrator} THEN "Administrator"
+        WHEN role = ${userRole.staff} THEN "Staff"
+        WHEN role = ${userRole.user} THEN "User"
+        ELSE "Unknown role"
+      END AS role_name,
+      enabled,
+      CASE
+        WHEN enabled = ${userEnabled.active} THEN "Active"
+        WHEN enabled = ${userEnabled.disabled} THEN "Disabled"
+        ELSE "Unknown enabled"
+      END AS enabled_name,
       status,
+      CASE
+        WHEN status = ${userStatus.active} THEN "Active"
+        WHEN status = ${userStatus.deleted} THEN "Deleted"
+        WHEN status = ${userStatus.pending} THEN "Pending"
+        ELSE "Unknown status"
+      END AS status_name,
       created_at,
       updated_at
     FROM user
@@ -76,6 +112,25 @@ const findAll = async ({
   try {
     // Get rows/pagination
     result = await fetchWithPagination(query, values, { page, pageSize });
+
+    // If to include permissions
+    if (includePermissions) {
+      // Create promise array to get permissions and append permissions to the row
+      const promises = result.rows.map(async row => {
+        if (row.role === userRole.staff) {
+          const newRow = row;
+          newRow.permissions = await findPermissionUsers({
+            searchOptions: {
+              'permission_user.user_id': newRow.id
+            }
+          });
+          return newRow;
+        }
+        return row;
+      });
+
+      await Promise.all(promises);
+    }
   } catch (e) {
     moduleLogger.error(e);
     throw e;
@@ -86,9 +141,13 @@ const findAll = async ({
   return result;
 };
 
+/**
+ * Insert new user
+ */
 const insertOne = async row => {
   let result = false;
   let passwordHash = null;
+  // If password is provided, then hash it
   if (row.password) {
     passwordHash = bcrypt.hashSync(row.password, bcrypt.genSaltSync(+process.env.BCRYPT_SALTING_ROUND));
   }
@@ -105,12 +164,18 @@ const insertOne = async row => {
           password_hash,
           password_reset_token,
           email,
+          confirmed_at,
           registration_ip,
           last_login_at,
           last_login_ip,
           blocked_at,
+          role,
+          enabled,
           status
         ) VALUES (
+          ?,
+          ?,
+          ?,
           ?,
           ?,
           ?,
@@ -135,10 +200,13 @@ const insertOne = async row => {
         passwordHash,
         row.password_reset_token,
         row.email,
+        row.confirmed_at,
         row.registration_ip,
         row.last_login_at,
         row.last_login_ip,
         row.blocked_at,
+        row.role,
+        row.enabled,
         row.status
       ]
     );
@@ -155,12 +223,22 @@ const insertOne = async row => {
   };
 };
 
-const getOne = async ({ searchOptions = {}, includePasswordHash = false, includeDeletedUser = false } = {}) => {
+/**
+ * Get single user
+ */
+const getOne = async ({
+  searchOptions = {},
+  includePasswordHash = false,
+  includeDeletedUser = false,
+  includePermissions = false
+} = {}) => {
   let row = {};
   const where = [];
   const values = [];
 
+  // If status is not specified and includeDeleteUser is set as false
   if (!searchOptions.status && includeDeletedUser === false) {
+    // Then retrieve the user who is not deleted
     where.push('status != ?');
     values.push(userStatus.deleted);
   }
@@ -173,12 +251,16 @@ const getOne = async ({ searchOptions = {}, includePasswordHash = false, include
     } else if (key === 'excludeId') {
       where.push(`(id != ?)`);
       values.push(value);
+    } else if (key === 'roles') {
+      where.push(`(role IN (?))`);
+      values.push(value);
     } else {
       where.push(`${key} = ?`);
       values.push(value);
     }
   });
 
+  // Return password related fields only if includePasswordHash is set as true
   const passwordHash = includePasswordHash ? 'password_hash, password_reset_token' : '';
 
   try {
@@ -197,7 +279,25 @@ const getOne = async ({ searchOptions = {}, includePasswordHash = false, include
           last_login_ip,
           blocked_at,
           role,
+          CASE
+            WHEN role = ${userRole.administrator} THEN "Administrator"
+            WHEN role = ${userRole.staff} THEN "Staff"
+            WHEN role = ${userRole.user} THEN "User"
+            ELSE "Unknown role"
+          END AS role_name,
+          enabled,
+          CASE
+            WHEN enabled = ${userEnabled.active} THEN "Active"
+            WHEN enabled = ${userEnabled.disabled} THEN "Disabled"
+            ELSE "Unknown enabled"
+          END AS enabled_name,
           status,
+          CASE
+            WHEN status = ${userStatus.active} THEN "Active"
+            WHEN status = ${userStatus.deleted} THEN "Deleted"
+            WHEN status = ${userStatus.pending} THEN "Pending"
+            ELSE "Unknown status"
+          END AS status_name,
           created_at,
           updated_at
         FROM
@@ -208,6 +308,24 @@ const getOne = async ({ searchOptions = {}, includePasswordHash = false, include
       `,
       values
     );
+
+    row = row[0] || [];
+
+    // If user is found and to include permissions
+    if (_.isEmpty(row) === false && includePermissions) {
+      // If user role is staff
+      if (row.role === userRole.staff) {
+        // Retrieve permission users and append to the user
+        row.permissions = await findPermissionUsers({
+          searchOptions: {
+            'permission_user.user_id': row.id
+          }
+        });
+      } else {
+        // If user role is not a staff, then just set a empty array
+        row.permissions = [];
+      }
+    }
   } catch (e) {
     moduleLogger.error(e);
     throw e;
@@ -215,19 +333,23 @@ const getOne = async ({ searchOptions = {}, includePasswordHash = false, include
 
   moduleLogger.debug({ row }, 'User row result');
 
-  return row[0] || [];
+  return row;
 };
 
+/**
+ * Update existing user
+ */
 const updateOne = async (id, row) => {
   let result = false;
 
   const fields = [];
   const values = [];
-
   _.forIn(row, (value, key) => {
     if (key === 'password') {
-      fields.push('password_hash = ?');
-      values.push(bcrypt.hashSync(row.password, bcrypt.genSaltSync(+process.env.BCRYPT_SALTING_ROUND)));
+      if (_.isEmpty(value) === false) {
+        fields.push('password_hash = ?');
+        values.push(bcrypt.hashSync(row.password, bcrypt.genSaltSync(+process.env.BCRYPT_SALTING_ROUND)));
+      }
     } else if (key !== 'id') {
       fields.push(`${key} = ?`);
       values.push(value);
@@ -256,10 +378,14 @@ const updateOne = async (id, row) => {
   moduleLogger.debug({ result }, 'Update user result');
 
   return {
-    result: true
+    result: true,
+    id
   };
 };
 
+/**
+ * Delete existing user
+ */
 const deleteOne = async id => {
   let result = false;
 
@@ -270,7 +396,7 @@ const deleteOne = async id => {
         SET status = ?
         WHERE id = ?
       `,
-      [userStatus.inactive, id]
+      [userStatus.deleted, id]
     );
   } catch (e) {
     moduleLogger.error(e);
@@ -284,4 +410,11 @@ const deleteOne = async id => {
   };
 };
 
-module.exports = { findAll, insertOne, getOne, updateOne, deleteOne, userRole, userStatus };
+// Set user roles based on the request type
+//    - staff: [administrator, staff]
+//    - user: [user]
+const getUserRoles = roleType => {
+  return roleType === 'staff' ? [userRole.administrator, userRole.staff] : [userRole.user];
+};
+
+module.exports = { findAll, insertOne, getOne, updateOne, deleteOne, userRole, userStatus, userEnabled, getUserRoles };

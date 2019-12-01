@@ -17,8 +17,8 @@
         <br />
         <p class="lead">
           Your password reset link is sent.
-          <br />To reset your password, please check your email and click the link to reset.
-          <br />If you cannot check in the inbox, then make sure you check your spam folder as well.
+          <br />To reset your password, please check your email and click the link to reset. <br />If you cannot check
+          in the inbox, then make sure you check your spam folder as well.
         </p>
       </b-card>
     </b-card-group>

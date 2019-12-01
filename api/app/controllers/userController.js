@@ -1,39 +1,67 @@
 const _ = require('lodash');
+const { matchedData } = require('express-validator');
 const userModel = require('../models/userModel');
+const permissionModel = require('../models/permissionModel');
 const { logger } = require('../helpers/logger');
-const {
-  handleValidationError,
-  handleCustomValidationError,
-  handleNotFound,
-  handleSuccess
-} = require('../helpers/response');
+const { validateRequest, handleCustomValidationError, handleNotFound, handleSuccess } = require('../helpers/response');
 const { getIPAddress } = require('../helpers/util');
 
 const moduleLogger = logger.child({ module: 'userController' });
 
+/**
+ * List users
+ */
 const listUsers = async (req, res) => {
-  const validationResponse = handleValidationError(req, res);
-  if (validationResponse !== null) {
-    return validationResponse;
+  // Validate request
+  const validationRequest = await validateRequest(req, res, {
+    permissionKey: req.params.roleType === 'staff' ? 'manageStaff' : 'manageUser'
+  });
+  if (validationRequest !== null) {
+    return validationRequest;
   }
 
+  // Retrieve only valid parameters
+  const params = matchedData(req, {
+    includeOptionals: true,
+    onlyValidData: true
+  });
+
+  // Retrieve user list
   const result = await userModel.findAll({
     searchOptions: {
-      q: req.query.q || undefined
+      q: params.q || undefined,
+      roles: userModel.getUserRoles(req.params.roleType)
     },
-    page: req.query.page || 1,
-    pageSize: req.query.page_size || 10
+    page: params.page || 1,
+    pageSize: params.page_size || 10,
+    includePermissions: req.params.roleType === 'staff'
   });
+
   return handleSuccess(res, '', result);
 };
 
+/**
+ * Get user
+ */
 const getUser = async (req, res) => {
+  // Validate request
+  const validationRequest = await validateRequest(req, res, {
+    permissionKey: req.params.roleType === 'staff' ? 'manageStaff' : 'manageUser'
+  });
+  if (validationRequest !== null) {
+    return validationRequest;
+  }
+
+  // Retrieve single user based on the id and roles
   const row = await userModel.getOne({
     searchOptions: {
-      id: req.params.id
-    }
+      id: req.params.id,
+      roles: userModel.getUserRoles(req.params.roleType)
+    },
+    includePermissions: req.params.roleType === 'staff'
   });
 
+  // If cannot find the user, then return error
   if (_.isEmpty(row)) {
     return handleNotFound(res, 'User does not exist in our database.');
   }
@@ -41,19 +69,51 @@ const getUser = async (req, res) => {
   return handleSuccess(res, '', row);
 };
 
+/**
+ * Create new user
+ */
 const postUser = async (req, res) => {
-  const validationResponse = handleValidationError(req, res);
-  if (validationResponse !== null) {
-    return validationResponse;
+  // Validate request
+  const validationRequest = await validateRequest(req, res, {
+    permissionKey: req.params.roleType === 'staff' ? 'manageStaff' : 'manageUser'
+  });
+
+  if (validationRequest !== null) {
+    return validationRequest;
   }
 
+  // Retrieve only valid parameters
+  const params = matchedData(req, {
+    includeOptionals: true,
+    onlyValidData: true
+  });
+
+  let permissionIds = [];
+  // If user role is staff and permissions field is defined,
+  // then get permissions to separated array and remove from parameters.
+  // This permission will be processed after update the user
+  if (params.role === userModel.userRole.staff && params.permissions) {
+    permissionIds = params.permissions;
+  }
+  delete params.permissions;
+
   try {
-    // get registration ip
-    if (!req.body.registration_ip) {
-      req.body.registration_ip = getIPAddress(req);
+    // Get registration ip if not provided
+    if (!params.registration_ip) {
+      params.registration_ip = getIPAddress(req);
     }
 
-    const result = await userModel.insertOne(req.body);
+    // Force to set active user only
+    params.status = userModel.userStatus.active;
+
+    // Insert new user to the database
+    const result = await userModel.insertOne(params);
+
+    // If permissionIds variable is not empty, then refresh permission users table
+    if (_.isEmpty(permissionIds) === false) {
+      await permissionModel.refreshPermissionUsers(result.id, permissionIds);
+    }
+
     return handleSuccess(res, '', result);
   } catch (e) {
     moduleLogger.error({ e }, 'Creating user failed');
@@ -68,19 +128,40 @@ const postUser = async (req, res) => {
   }
 };
 
+/**
+ * Update existing user
+ */
 const patchUser = async (req, res) => {
-  const user = await userModel.getOne({ searchOptions: { id: req.params.id } });
-  if (_.isEmpty(user)) {
-    return handleNotFound(res, 'User does not exist in our database.');
+  // Validate request
+  const validationRequest = await validateRequest(req, res, {
+    permissionKey: req.params.roleType === 'staff' ? 'manageStaff' : 'manageUser'
+  });
+  if (validationRequest !== null) {
+    return validationRequest;
   }
+  // Retrieve only valid parameters
+  const params = matchedData(req, {
+    includeOptionals: true,
+    onlyValidData: true
+  });
 
-  const validationResponse = handleValidationError(req, res);
-  if (validationResponse !== null) {
-    return validationResponse;
+  let permissionIds = [];
+  // If user role is staff and permissions field is defined,
+  // then get permissions to separated array and remove from parameters.
+  // This permission will be processed after update the user
+  if (params.role === userModel.userRole.staff && params.permissions) {
+    permissionIds = params.permissions;
   }
+  delete params.permissions;
 
   try {
-    const result = await userModel.updateOne(req.params.id, req.body);
+    // Update the user
+    const result = await userModel.updateOne(req.params.id, params);
+
+    // If it is staff, process permission user
+    if (params.role === userModel.userRole.staff) {
+      await permissionModel.refreshPermissionUsers(req.params.id, permissionIds);
+    }
     return handleSuccess(res, '', result);
   } catch (e) {
     moduleLogger.error({ e }, 'Updating user failed');
@@ -95,18 +176,20 @@ const patchUser = async (req, res) => {
   }
 };
 
+/**
+ * Delete existing user
+ */
 const deleteUser = async (req, res) => {
-  const user = await userModel.getOne({ searchOptions: { id: req.params.id } });
-  if (_.isEmpty(user)) {
-    return handleNotFound(res, 'User does not exist in our database.');
-  }
-
-  const validationResponse = handleValidationError(req, res);
-  if (validationResponse !== null) {
-    return validationResponse;
+  // Validate request
+  const validationRequest = await validateRequest(req, res, {
+    permissionKey: req.params.roleType === 'staff' ? 'manageStaff' : 'manageUser'
+  });
+  if (validationRequest !== null) {
+    return validationRequest;
   }
 
   try {
+    // Delete user
     const result = await userModel.deleteOne(req.params.id);
     return handleSuccess(res, '', result);
   } catch (e) {

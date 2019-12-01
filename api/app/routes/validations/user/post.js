@@ -1,6 +1,7 @@
 const moment = require('moment');
 const _ = require('lodash');
 const userModel = require('../../../models/userModel');
+const permissionModel = require('../../../models/permissionModel');
 
 module.exports = {
   username: {
@@ -10,17 +11,18 @@ module.exports = {
       negated: true
     },
     isLength: {
-      errorMessage: 'Username should be at least 200 chars long.',
-      options: { max: 200 }
+      errorMessage: 'Username must be between 3 and 15 character length.',
+      options: { min: 3, max: 15 }
     },
     custom: {
       options: async value => {
-        if (value === undefined) {
+        if (_.isEmpty(value)) {
           return false;
         }
         // Check duplicated username
         const user = await userModel.getOne({
-          searchOptions: { username: value }
+          searchOptions: { username: value },
+          includeDeletedUser: false
         });
 
         if (_.isEmpty(user) === false) {
@@ -79,7 +81,7 @@ module.exports = {
     },
     custom: {
       options: async value => {
-        if (value === undefined) {
+        if (_.isEmpty(value)) {
           return false;
         }
         // Check duplicated email
@@ -99,7 +101,7 @@ module.exports = {
     in: ['body'],
     custom: {
       options: value => {
-        if (value === undefined) {
+        if (_.isEmpty(value)) {
           return true;
         }
 
@@ -112,7 +114,7 @@ module.exports = {
     },
     customSanitizer: {
       options: value => {
-        if (value === undefined) {
+        if (_.isEmpty(value)) {
           return null;
         }
         return moment(value, 'YYYY-MM-DD HH:mm:ss').format('YYYY-MM-DD HH:mm:ss');
@@ -123,7 +125,7 @@ module.exports = {
     in: ['body'],
     custom: {
       options: value => {
-        if (value === undefined) {
+        if (_.isEmpty(value)) {
           return true;
         }
 
@@ -136,7 +138,7 @@ module.exports = {
     },
     customSanitizer: {
       options: value => {
-        if (value === undefined) {
+        if (_.isEmpty(value)) {
           return null;
         }
         return moment(value, 'YYYY-MM-DD HH:mm:ss').format('YYYY-MM-DD HH:mm:ss');
@@ -156,13 +158,28 @@ module.exports = {
       }
     }
   },
-  status: {
+  permissions: {
+    in: ['body'],
+    custom: {
+      options: async userPermissionIds => {
+        const permissions = await permissionModel.findAll({});
+        _.each(userPermissionIds, permissionId => {
+          if (_.some(permissions, { id: permissionId }) === false) {
+            throw new Error('Permission must be valid.');
+          }
+        });
+
+        return true;
+      }
+    }
+  },
+  enabled: {
     in: ['body'],
     custom: {
       options: value => {
-        const valid = _.includes(userModel.userStatus, value);
+        const valid = _.includes(userModel.userEnabled, value);
         if (!valid) {
-          throw new Error('Status must be valid.');
+          throw new Error('Enabled must be valid.');
         }
 
         return true;

@@ -40,11 +40,7 @@ app.use(
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
 
-require('./app/routes/indexRoutes')(app);
-require('./app/routes/authRoutes')(app);
-require('./app/routes/meRoutes')(app);
-require('./app/routes/userRoutes')(app);
-require('./app/routes/todoRoutes')(app);
+require('./app/routes/index')(app);
 
 // catch 404 and forward to error handler
 app.get('*', (_req, res) => {

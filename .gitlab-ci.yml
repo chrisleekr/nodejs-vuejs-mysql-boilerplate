@@ -1,0 +1,133 @@
+stages:
+  - build dev environment
+  - lint
+  - build production
+
+cache:
+  key: "$CI_PIPELINE_ID"
+  paths:
+    - /root/.npm
+    - node_modules
+
+
+.before_script_template: &before-script
+  before_script:
+    - echo "$DOCKER_PASSWORD" | docker login -u "$DOCKER_USERNAME" --password-stdin $REGISTRY_DOMAIN
+
+build-api:
+  stage: build dev environment
+  image: docker:stable
+  <<: *before-script
+  script:
+    - cd api 
+    - docker build . --target dev-stage -t $REGISTRY_DOMAIN/chrislee/nodejs-vuejs-boilerplate/api:dev
+    - docker push $REGISTRY_DOMAIN/chrislee/nodejs-vuejs-boilerplate/api:dev
+
+build-backend:
+  stage: build dev environment
+  image: docker:stable
+  <<: *before-script
+  variables:
+    NODE_ENV: development
+    BASE_URL: /backend/
+  script:
+    - cd backend
+    - docker build . --target build-stage --build-arg NODE_ENV=$NODE_ENV --build-arg BASE_URL=$BASE_URL -t $REGISTRY_DOMAIN/chrislee/nodejs-vuejs-boilerplate/backend:dev
+    - docker push $REGISTRY_DOMAIN/chrislee/nodejs-vuejs-boilerplate/backend:dev
+
+build-frontend:
+  stage: build dev environment
+  image: docker:stable
+  <<: *before-script
+  variables:
+    NODE_ENV: development
+    BASE_URL: /frontend/
+  script:
+    - cd frontend
+    - docker build . --target build-stage --build-arg NODE_ENV=$NODE_ENV --build-arg BASE_URL=$BASE_URL  -t $REGISTRY_DOMAIN/chrislee/nodejs-vuejs-boilerplate/frontend:dev
+    - docker push $REGISTRY_DOMAIN/chrislee/nodejs-vuejs-boilerplate/frontend:dev
+
+build-mysql:
+  stage: build dev environment
+  image: docker:stable
+  <<: *before-script
+  script:
+    - cd mysql
+    - docker build . -t $REGISTRY_DOMAIN/chrislee/nodejs-vuejs-boilerplate/mysql:dev
+    - docker push $REGISTRY_DOMAIN/chrislee/nodejs-vuejs-boilerplate/mysql:dev
+
+lint-api:
+  stage: lint
+  image: $REGISTRY_DOMAIN/chrislee/nodejs-vuejs-boilerplate/api:dev
+  script:
+    - cd api
+    - npm install
+    - npm run lint
+
+lint-backend:
+  stage: lint
+  image: $REGISTRY_DOMAIN/chrislee/nodejs-vuejs-boilerplate/backend:dev
+  script:
+    - cd backend
+    - npm install
+    - npm run lint
+
+lint-frontend:
+  stage: lint
+  image: $REGISTRY_DOMAIN/chrislee/nodejs-vuejs-boilerplate/frontend:dev
+  script:
+    - cd frontend
+    - npm install
+    - npm run lint
+
+production-api:
+  stage: build production
+  image: docker:stable
+  <<: *before-script
+  script:
+    - cd api 
+    - docker build . --target production-stage -t $REGISTRY_DOMAIN/chrislee/nodejs-vuejs-boilerplate/api:latest
+    - docker push $REGISTRY_DOMAIN/chrislee/nodejs-vuejs-boilerplate/api:latest
+
+production-backend:
+  stage: build production
+  image: docker:stable
+  <<: *before-script
+  variables:
+    NODE_ENV: production
+    BASE_URL: /backend/
+  script:
+    - cd backend
+    - docker build . --target production-stage --build-arg NODE_ENV=$NODE_ENV --build-arg BASE_URL=$BASE_URL  -t $REGISTRY_DOMAIN/chrislee/nodejs-vuejs-boilerplate/backend:latest
+    - docker push $REGISTRY_DOMAIN/chrislee/nodejs-vuejs-boilerplate/backend:latest
+
+production-frontend:
+  stage: build production
+  image: docker:stable
+  <<: *before-script
+  variables:
+    NODE_ENV: production
+    BASE_URL: /frontend/
+  script:
+    - cd frontend
+    - docker build . --target production-stage --build-arg NODE_ENV=$NODE_ENV --build-arg BASE_URL=$BASE_URL  -t $REGISTRY_DOMAIN/chrislee/nodejs-vuejs-boilerplate/frontend:latest
+    - docker push $REGISTRY_DOMAIN/chrislee/nodejs-vuejs-boilerplate/frontend:latest
+
+production-mysql:
+  stage: build production
+  image: docker:stable
+  <<: *before-script
+  script:
+    - cd mysql
+    - docker build . -t $REGISTRY_DOMAIN/chrislee/nodejs-vuejs-boilerplate/mysql:latest
+    - docker push $REGISTRY_DOMAIN/chrislee/nodejs-vuejs-boilerplate/mysql:latest
+
+
+production-nginx:
+  stage: build production
+  image: docker:stable
+  <<: *before-script
+  script:
+    - cd nginx
+    - docker build . -t $REGISTRY_DOMAIN/chrislee/nodejs-vuejs-boilerplate/nginx:latest
+    - docker push $REGISTRY_DOMAIN/chrislee/nodejs-vuejs-boilerplate/nginx:latest

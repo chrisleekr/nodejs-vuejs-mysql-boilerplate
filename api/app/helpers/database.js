@@ -9,7 +9,8 @@ const dbConfig = {
   user: process.env.DB_USER,
   password: process.env.DB_PASSWORD,
   database: process.env.DB_NAME,
-  debug: process.env.DB_DEBUG === 'true' ? ['ComQueryPacket', 'RowDataPacket'] : false
+  debug: process.env.DB_DEBUG === 'true' ? ['ComQueryPacket', 'RowDataPacket'] : false,
+  timezone: (new Date().getTimezoneOffset() / 60) * -1
 };
 moduleLogger.debug({ dbConfig });
 

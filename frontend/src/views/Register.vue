@@ -18,7 +18,7 @@
         <p class="lead">
           Thank you for registering.
           <br />
-To confirm your email address, please check your email and click the link we sent.
+          To confirm your email address, please check your email and click the link we sent.
           <br />If you cannot check in the inbox, then make sure you check your spam folder as well.
         </p>
       </b-card>
