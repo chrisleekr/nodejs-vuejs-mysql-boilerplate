@@ -29,8 +29,8 @@ services:
       - internal
     # ports:
     #   - 3000:3000
-    volumes:
-      - ./api:/srv
+    # volumes:
+    #   - ./api:/srv
     environment:
       - DB_HOST=mysql
       - DB_USER=root
@@ -62,11 +62,13 @@ services:
       target: production-stage
       args:
         NODE_ENV: production
-        BASE_URL: /frontend/
+        BASE_URL: /frontend/        
     depends_on:
       - mysql
     networks:
       - internal
+    environment:
+      - API_HOST=http://localhost/api
 
   backend:
     container_name: backend
@@ -76,10 +78,13 @@ services:
       args:
         NODE_ENV: production
         BASE_URL: /backend/
+        API_HOST: http://localhost/api
     depends_on:
       - mysql
     networks:
       - internal
+    environment:
+      - API_HOST=http://localhost/api
 
   mysql:
     container_name: mysql

@@ -24,3 +24,4 @@ yarn-error.log*
 *.sw?
 
 Dockerfile
+/public/static/config.json
