@@ -20,8 +20,8 @@ build-api:
   <<: *before-script
   script:
     - cd api 
-    - docker build . --target dev-stage -t $REGISTRY_DOMAIN/chrislee/nodejs-vuejs-boilerplate/api:dev
-    - docker push $REGISTRY_DOMAIN/chrislee/nodejs-vuejs-boilerplate/api:dev
+    - docker build . --target dev-stage -t $REGISTRY_DOMAIN/chrislee/nodejs-vuejs-mysql-boilerplate/api:dev
+    - docker push $REGISTRY_DOMAIN/chrislee/nodejs-vuejs-mysql-boilerplate/api:dev
 
 build-backend:
   stage: build dev environment
@@ -32,8 +32,8 @@ build-backend:
     BASE_URL: /backend/
   script:
     - cd backend
-    - docker build . --target build-stage --build-arg NODE_ENV=$NODE_ENV --build-arg BASE_URL=$BASE_URL -t $REGISTRY_DOMAIN/chrislee/nodejs-vuejs-boilerplate/backend:dev
-    - docker push $REGISTRY_DOMAIN/chrislee/nodejs-vuejs-boilerplate/backend:dev
+    - docker build . --target build-stage --build-arg NODE_ENV=$NODE_ENV --build-arg BASE_URL=$BASE_URL -t $REGISTRY_DOMAIN/chrislee/nodejs-vuejs-mysql-boilerplate/backend:dev
+    - docker push $REGISTRY_DOMAIN/chrislee/nodejs-vuejs-mysql-boilerplate/backend:dev
 
 build-frontend:
   stage: build dev environment
@@ -44,8 +44,8 @@ build-frontend:
     BASE_URL: /frontend/
   script:
     - cd frontend
-    - docker build . --target build-stage --build-arg NODE_ENV=$NODE_ENV --build-arg BASE_URL=$BASE_URL  -t $REGISTRY_DOMAIN/chrislee/nodejs-vuejs-boilerplate/frontend:dev
-    - docker push $REGISTRY_DOMAIN/chrislee/nodejs-vuejs-boilerplate/frontend:dev
+    - docker build . --target build-stage --build-arg NODE_ENV=$NODE_ENV --build-arg BASE_URL=$BASE_URL  -t $REGISTRY_DOMAIN/chrislee/nodejs-vuejs-mysql-boilerplate/frontend:dev
+    - docker push $REGISTRY_DOMAIN/chrislee/nodejs-vuejs-mysql-boilerplate/frontend:dev
 
 build-mysql:
   stage: build dev environment
@@ -53,12 +53,12 @@ build-mysql:
   <<: *before-script
   script:
     - cd mysql
-    - docker build . -t $REGISTRY_DOMAIN/chrislee/nodejs-vuejs-boilerplate/mysql:dev
-    - docker push $REGISTRY_DOMAIN/chrislee/nodejs-vuejs-boilerplate/mysql:dev
+    - docker build . -t $REGISTRY_DOMAIN/chrislee/nodejs-vuejs-mysql-boilerplate/mysql:dev
+    - docker push $REGISTRY_DOMAIN/chrislee/nodejs-vuejs-mysql-boilerplate/mysql:dev
 
 lint-api:
   stage: lint
-  image: $REGISTRY_DOMAIN/chrislee/nodejs-vuejs-boilerplate/api:dev
+  image: $REGISTRY_DOMAIN/chrislee/nodejs-vuejs-mysql-boilerplate/api:dev
   script:
     - cd api
     - npm install
@@ -66,7 +66,7 @@ lint-api:
 
 lint-backend:
   stage: lint
-  image: $REGISTRY_DOMAIN/chrislee/nodejs-vuejs-boilerplate/backend:dev
+  image: $REGISTRY_DOMAIN/chrislee/nodejs-vuejs-mysql-boilerplate/backend:dev
   script:
     - cd backend
     - npm install
@@ -74,7 +74,7 @@ lint-backend:
 
 lint-frontend:
   stage: lint
-  image: $REGISTRY_DOMAIN/chrislee/nodejs-vuejs-boilerplate/frontend:dev
+  image: $REGISTRY_DOMAIN/chrislee/nodejs-vuejs-mysql-boilerplate/frontend:dev
   script:
     - cd frontend
     - npm install
@@ -86,8 +86,8 @@ production-api:
   <<: *before-script
   script:
     - cd api 
-    - docker build . --target production-stage -t $REGISTRY_DOMAIN/chrislee/nodejs-vuejs-boilerplate/api:latest
-    - docker push $REGISTRY_DOMAIN/chrislee/nodejs-vuejs-boilerplate/api:latest
+    - docker build . --target production-stage -t $REGISTRY_DOMAIN/chrislee/nodejs-vuejs-mysql-boilerplate/api:latest
+    - docker push $REGISTRY_DOMAIN/chrislee/nodejs-vuejs-mysql-boilerplate/api:latest
 
 production-backend:
   stage: build production
@@ -98,8 +98,8 @@ production-backend:
     BASE_URL: /backend/
   script:
     - cd backend
-    - docker build . --target production-stage --build-arg NODE_ENV=$NODE_ENV --build-arg BASE_URL=$BASE_URL -t $REGISTRY_DOMAIN/chrislee/nodejs-vuejs-boilerplate/backend:latest
-    - docker push $REGISTRY_DOMAIN/chrislee/nodejs-vuejs-boilerplate/backend:latest
+    - docker build . --target production-stage --build-arg NODE_ENV=$NODE_ENV --build-arg BASE_URL=$BASE_URL -t $REGISTRY_DOMAIN/chrislee/nodejs-vuejs-mysql-boilerplate/backend:latest
+    - docker push $REGISTRY_DOMAIN/chrislee/nodejs-vuejs-mysql-boilerplate/backend:latest
 
 production-frontend:
   stage: build production
@@ -110,8 +110,8 @@ production-frontend:
     BASE_URL: /frontend/
   script:
     - cd frontend
-    - docker build . --target production-stage --build-arg NODE_ENV=$NODE_ENV --build-arg BASE_URL=$BASE_URL -t $REGISTRY_DOMAIN/chrislee/nodejs-vuejs-boilerplate/frontend:latest
-    - docker push $REGISTRY_DOMAIN/chrislee/nodejs-vuejs-boilerplate/frontend:latest
+    - docker build . --target production-stage --build-arg NODE_ENV=$NODE_ENV --build-arg BASE_URL=$BASE_URL -t $REGISTRY_DOMAIN/chrislee/nodejs-vuejs-mysql-boilerplate/frontend:latest
+    - docker push $REGISTRY_DOMAIN/chrislee/nodejs-vuejs-mysql-boilerplate/frontend:latest
 
 production-mysql:
   stage: build production
@@ -119,8 +119,8 @@ production-mysql:
   <<: *before-script
   script:
     - cd mysql
-    - docker build . -t $REGISTRY_DOMAIN/chrislee/nodejs-vuejs-boilerplate/mysql:latest
-    - docker push $REGISTRY_DOMAIN/chrislee/nodejs-vuejs-boilerplate/mysql:latest
+    - docker build . -t $REGISTRY_DOMAIN/chrislee/nodejs-vuejs-mysql-boilerplate/mysql:latest
+    - docker push $REGISTRY_DOMAIN/chrislee/nodejs-vuejs-mysql-boilerplate/mysql:latest
 
 
 production-nginx:
@@ -129,5 +129,5 @@ production-nginx:
   <<: *before-script
   script:
     - cd nginx
-    - docker build . -t $REGISTRY_DOMAIN/chrislee/nodejs-vuejs-boilerplate/nginx:latest
-    - docker push $REGISTRY_DOMAIN/chrislee/nodejs-vuejs-boilerplate/nginx:latest
+    - docker build . -t $REGISTRY_DOMAIN/chrislee/nodejs-vuejs-mysql-boilerplate/nginx:latest
+    - docker push $REGISTRY_DOMAIN/chrislee/nodejs-vuejs-mysql-boilerplate/nginx:latest
