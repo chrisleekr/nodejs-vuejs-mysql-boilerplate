@@ -6,7 +6,7 @@ import utils from '@/helper/utils';
 export default {
   async list({ type = 'user', query = {} } = {}) {
     const pickedQuery = _.pick(query, ['page', 'page_size', 'q']);
-    let url = `${configService.get('apiHost')}/${type}`;
+    let url = `${configService.get('apiUrl')}/${type}`;
     if (pickedQuery.length) {
       url += `?${utils.toQueryStrings(pickedQuery)}`;
     }
@@ -23,7 +23,7 @@ export default {
 
   async getOne({ type = 'user', userId }) {
     return axios
-      .get(`${configService.get('apiHost')}/${type}/${userId}`, {})
+      .get(`${configService.get('apiUrl')}/${type}/${userId}`, {})
       .then(response => {
         return response.data;
       })
@@ -34,7 +34,7 @@ export default {
 
   async postOne({ type = 'user', user } = {}) {
     return axios
-      .post(`${configService.get('apiHost')}/${type}`, user)
+      .post(`${configService.get('apiUrl')}/${type}`, user)
       .then(response => {
         return response.data;
       })
@@ -45,7 +45,7 @@ export default {
 
   async patchOne({ type = 'user', userId, newUser }) {
     return axios
-      .patch(`${configService.get('apiHost')}/${type}/${userId}`, newUser)
+      .patch(`${configService.get('apiUrl')}/${type}/${userId}`, newUser)
       .then(response => {
         return response.data;
       })
@@ -56,7 +56,7 @@ export default {
 
   async deleteOne({ type = 'user', userId }) {
     return axios
-      .delete(`${configService.get('apiHost')}/${type}/${userId}`)
+      .delete(`${configService.get('apiUrl')}/${type}/${userId}`)
       .then(response => {
         return response.data;
       })

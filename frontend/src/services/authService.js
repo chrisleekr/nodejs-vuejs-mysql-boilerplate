@@ -4,7 +4,7 @@ import configService from '@/services/configService';
 export default {
   async passwordReset({ key, password }) {
     return axios
-      .post(`${configService.get('apiHost')}/user/password-reset`, {
+      .post(`${configService.get('apiUrl')}/user/password-reset`, {
         key,
         password
       })
@@ -17,7 +17,7 @@ export default {
   },
   async passwordResetRequest({ email }) {
     return axios
-      .post(`${configService.get('apiHost')}/user/password-reset-request`, {
+      .post(`${configService.get('apiUrl')}/user/password-reset-request`, {
         email
       })
       .then(response => {
@@ -29,7 +29,7 @@ export default {
   },
   async register({ username, email, password, firstName, lastName }) {
     return axios
-      .post(`${configService.get('apiHost')}/user/register`, {
+      .post(`${configService.get('apiUrl')}/user/register`, {
         username,
         email,
         password,
@@ -45,7 +45,7 @@ export default {
   },
   async login(username, password) {
     return axios
-      .post(`${configService.get('apiHost')}/user/login`, {
+      .post(`${configService.get('apiUrl')}/user/login`, {
         username,
         password
       })

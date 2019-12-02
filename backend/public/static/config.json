@@ -1,5 +1,5 @@
 {
-  "apiHost": "http://localhost/api",
+  "apiUrl": "http://localhost/api",
   "format": {
     "timeZone": "Australia/Melbourne",
     "dateTime": "YYYY-MM-DD HH:mm:ss",

@@ -6,7 +6,7 @@ mkdir -p /srv/frontend/static
 
 cat <<EOT >> /srv/frontend/static/config.json
 {
-  "apiHost": "$API_HOST",
+  "apiUrl": "$API_URL",
   "format": {
     "dateTime": "YYYY-MM-DD HH:MM:SS"
   }
