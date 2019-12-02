@@ -78,7 +78,6 @@ services:
       args:
         NODE_ENV: production
         BASE_URL: /backend/
-        API_URL: http://localhost/api
     depends_on:
       - mysql
     networks:
