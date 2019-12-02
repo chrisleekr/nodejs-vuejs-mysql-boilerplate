@@ -3,7 +3,7 @@ import configService from '@/services/configService';
 
 export default {
   async list({ state = undefined } = {}) {
-    let url = `${configService.get('apiHost')}/todo`;
+    let url = `${configService.get('apiUrl')}/todo`;
     if (state) {
       url += `/${state}`;
     }

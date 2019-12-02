@@ -48,6 +48,8 @@ services:
       - mysql
     networks:
       - internal
+    environment:
+      - API_URL=https://$SERVICE_DOMAIN/api
 
   backend:
     container_name: backend
@@ -56,6 +58,8 @@ services:
       - mysql
     networks:
       - internal
+    environment:
+      - API_URL=https://$SERVICE_DOMAIN/api
   
   mysql:
     container_name: mysql

@@ -4,7 +4,7 @@ import configService from '@/services/configService';
 export default {
   async me() {
     return axios
-      .get(`${configService.get('apiHost')}/me`, {})
+      .get(`${configService.get('apiUrl')}/me`, {})
       .then(response => {
         return response.data;
       })
@@ -14,7 +14,7 @@ export default {
   },
   async updateMe(me) {
     return axios
-      .post(`${configService.get('apiHost')}/me`, me)
+      .post(`${configService.get('apiUrl')}/me`, me)
       .then(response => {
         return response.data;
       })

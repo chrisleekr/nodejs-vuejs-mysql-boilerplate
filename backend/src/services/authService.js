@@ -4,7 +4,7 @@ import configService from '@/services/configService';
 export default {
   async login(username, password) {
     return axios
-      .post(`${configService.get('apiHost')}/staff/login`, {
+      .post(`${configService.get('apiUrl')}/staff/login`, {
         username,
         password
       })

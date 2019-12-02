@@ -6,7 +6,7 @@ import utils from '@/helper/utils';
 export default {
   async list({ query = {} } = {}) {
     const pickedQuery = _.pick(query, ['page', 'page_size', 'q']);
-    let url = `${configService.get('apiHost')}/permission`;
+    let url = `${configService.get('apiUrl')}/permission`;
     if (pickedQuery.length) {
       url += `?${utils.toQueryStrings(pickedQuery)}`;
     }

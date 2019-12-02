@@ -3,7 +3,7 @@ import configService from '@/services/configService';
 
 export default {
   async list({ state = undefined } = {}) {
-    let url = `${configService.get('apiHost')}/todo`;
+    let url = `${configService.get('apiUrl')}/todo`;
     if (state) {
       url += `/${state}`;
     }
@@ -20,7 +20,7 @@ export default {
 
   async postOne({ todo }) {
     return axios
-      .post(`${configService.get('apiHost')}/todo`, todo)
+      .post(`${configService.get('apiUrl')}/todo`, todo)
       .then(response => {
         return response.data;
       })
@@ -31,7 +31,7 @@ export default {
 
   async postBulk({ state, todoList }) {
     return axios
-      .post(`${configService.get('apiHost')}/todo/${state}`, {
+      .post(`${configService.get('apiUrl')}/todo/${state}`, {
         todo: todoList
       })
       .then(response => {
@@ -44,7 +44,7 @@ export default {
 
   async deleteOne({ todoId }) {
     return axios
-      .delete(`${configService.get('apiHost')}/todo/${todoId}`)
+      .delete(`${configService.get('apiUrl')}/todo/${todoId}`)
       .then(response => {
         return response.data;
       })
