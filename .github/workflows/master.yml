@@ -1,0 +1,40 @@
+on: 
+  push:
+    branches:
+      # - master
+      - apply-actions
+
+jobs:
+  build-dev:
+    name: Build dev environment
+    runs-on: ubuntu-latest
+    env:
+      DOCKER_USERNAME: ${{ secrets.DOCKER_USERNAME }}
+      DOCKER_PASSWORD: ${{ secrets.DOCKER_PASSWORD }}
+      REGISTRY_DOMAIN: ${{ secrets.REGISTRY_DOMAIN }}
+    steps:
+      - name: login to registry
+        run: echo "$DOCKER_PASSWORD" | docker login -u "$DOCKER_USERNAME" --password-stdin $REGISTRY_DOMAIN
+      - name: checkout source code
+        uses: actions/checkout@master
+      - name: build api
+        run: |
+          ls -al
+          pwd
+          cd api 
+          docker build . --target dev-stage -t $REGISTRY_DOMAIN/chrisleekr/nodejs-vuejs-mysql-boilerplate:api-dev
+          docker push $REGISTRY_DOMAIN/chrisleekr/nodejs-vuejs-mysql-boilerplate:api-dev
+          
+  lint:
+    name: Lint projects
+    runs-on: ubuntu-latest
+    env:
+      REGISTRY_DOMAIN: ${{ secrets.REGISTRY_DOMAIN }}
+    steps:
+      - name: lint API
+        uses: docker://$REGISTRY_DOMAIN/chrisleekr/nodejs-vuejs-mysql-boilerplate:api-dev
+        run: |
+          ls -al
+          pwd
+          npm install
+          npm run lint
