@@ -16,12 +16,18 @@ jobs:
       - name: checkout source code
         uses: actions/checkout@master
       - name: docker hub login
-        uses: actions/docker/login@master
+        run: |
+          echo "$DOCKER_PASSWORD" | docker login -u "$DOCKER_USERNAME" --password-stdin $REGISTRY_DOMAIN
       - name: build api image
-        uses: actions/docker/cli@master
-        with: 
-          args: build ./api --target dev-stage -t $REGISTRY_DOMAIN/chrisleekr/nodejs-vuejs-mysql-boilerplate:api-dev
-      - name: push api dev image
-        uses: actions/docker/cli@master
-        with: 
-          args:  push $REGISTRY_DOMAIN/chrisleekr/nodejs-vuejs-mysql-boilerplate:api-dev
+        run: |
+          ls -al 
+          pwd
+          cd api
+          docker build ./api --target dev-stage -t $REGISTRY_DOMAIN/chrisleekr/nodejs-vuejs-mysql-boilerplate:api-dev
+          docker push $REGISTRY_DOMAIN/chrisleekr/nodejs-vuejs-mysql-boilerplate:api-dev
+
+  # lint:
+  #   name: Lint projects
+  #   runs-on: ubuntu-latest
+  #   container:
+  #     image
