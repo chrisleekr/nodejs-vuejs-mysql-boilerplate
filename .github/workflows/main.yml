@@ -1,0 +1,14 @@
+on: push
+
+jobs:
+  build:
+    name: Hello world action
+    runs-on: ubuntu-latest
+    steps:
+      - name: checkout source code
+        container: docker:stable
+        uses: actions/checkout@master
+      - name: where am I
+        run: pwd
+      - name: what is it in
+        run: ls -al
