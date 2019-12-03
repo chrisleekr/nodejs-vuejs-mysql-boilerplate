@@ -3,7 +3,7 @@ version: "3.7"
 services:
   nginx:
     container_name: nginx
-    image: $REGISTRY_DOMAIN/chrisleekr/nodejs-vuejs-mysql-boilerplate:nginx-latest
+    image: $REGISTRY_DOMAIN/chrisleekr/nodejs-vuejs-mysql-boilerplate:nginx-dev
     ports:
       - "80:80"
       - "443:443"
@@ -12,7 +12,7 @@ services:
 
   api:
     container_name: api
-    image: $REGISTRY_DOMAIN/chrisleekr/nodejs-vuejs-mysql-boilerplate:api-latest
+    image: $REGISTRY_DOMAIN/chrisleekr/nodejs-vuejs-mysql-boilerplate:api-dev
     depends_on:
       - mysql
     networks:
@@ -43,7 +43,7 @@ services:
 
   frontend:
     container_name: frontend
-    image: $REGISTRY_DOMAIN/chrisleekr/nodejs-vuejs-mysql-boilerplate:frontend-latest
+    image: $REGISTRY_DOMAIN/chrisleekr/nodejs-vuejs-mysql-boilerplate:frontend-dev
     depends_on:
       - mysql
     networks:
@@ -53,7 +53,7 @@ services:
 
   backend:
     container_name: backend
-    image: $REGISTRY_DOMAIN/chrisleekr/nodejs-vuejs-mysql-boilerplate:backend-latest
+    image: $REGISTRY_DOMAIN/chrisleekr/nodejs-vuejs-mysql-boilerplate:backend-dev
     depends_on:
       - mysql
     networks:
@@ -63,7 +63,7 @@ services:
   
   mysql:
     container_name: mysql
-    image: $REGISTRY_DOMAIN/chrisleekr/nodejs-vuejs-mysql-boilerplate:mysql-latest
+    image: $REGISTRY_DOMAIN/chrisleekr/nodejs-vuejs-mysql-boilerplate:mysql-dev
     networks:
       - internal
     volumes:
