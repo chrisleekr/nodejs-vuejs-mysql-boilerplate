@@ -50,6 +50,7 @@ services:
       - internal
     environment:
       - API_URL=https://$SERVICE_DOMAIN/api
+    command: npm run serve
 
   backend:
     container_name: backend
@@ -60,6 +61,7 @@ services:
       - internal
     environment:
       - API_URL=https://$SERVICE_DOMAIN/api
+    command: npm run serve
   
   mysql:
     container_name: mysql
