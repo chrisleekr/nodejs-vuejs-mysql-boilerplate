@@ -1,11 +1,13 @@
 # API for Node.js + Vue.js boilerplate
 
+Node.js, Express, Express Validator, JWT, Bunyan, Promise MySQL, Node Mailer, Jest, Supertest
+
 ## How to start development
 
 1. Install npm packages
 
    ```bash
-   $ npm install
+   npm install
    ```
 
 2. Uncomment **volumes** in the `docker-compose.yml` file

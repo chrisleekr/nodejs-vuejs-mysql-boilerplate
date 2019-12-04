@@ -1,0 +1,17 @@
+{
+  "editor.insertSpaces": true,
+  "editor.formatOnSave": true,
+  "files.trimTrailingWhitespace": true,
+  "files.exclude": {
+    ".git": true,
+    ".build": true,
+    "**/.DS_Store": true,
+    "build/**/*.js": {
+      "when": "$(basename).ts"
+    }
+  },
+  "files.insertFinalNewline": true,
+  "search.exclude": {
+    "**/node_modules": true
+  }
+}
