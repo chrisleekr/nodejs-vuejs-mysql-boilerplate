@@ -63,6 +63,7 @@ lint-api:
     - cd api
     - npm install
     - npm run lint
+    - npm run test
 
 lint-backend:
   stage: lint

@@ -50,6 +50,7 @@
     "eslint-config-airbnb": "^18.0.1",
     "eslint-config-prettier": "^6.7.0",
     "eslint-plugin-import": "^2.18.2",
+    "eslint-plugin-jest": "^23.1.1",
     "eslint-plugin-jsx-a11y": "^6.2.3",
     "eslint-plugin-node": "^10.0.0",
     "eslint-plugin-prettier": "^3.1.1",
@@ -62,6 +63,27 @@
     "prettier": "^1.19.1",
     "supertest": "^4.0.2"
   },
+  "jest": {
+    "testEnvironment": "node",
+    "resetMocks": true,
+    "collectCoverageFrom": [
+      "**/*.js",
+      "!**/node_modules/**",
+      "!**/__tests__/**",
+      "!**/coverage/**"
+    ],
+    "testPathIgnorePatterns": [
+      "/node_modules/"
+    ],
+    "coverageThreshold": {
+      "global": {
+        "branches": 50,
+        "functions": 50,
+        "lines": 50,
+        "statements": 50
+      }
+    }
+  },
   "husky": {
     "hooks": {
       "pre-commit": "lint-staged"
@@ -71,12 +93,6 @@
     "*.js": [
       "prettier --write",
       "git add"
-    ]
-  },
-  "jest": {
-    "testEnvironment": "node",
-    "coveragePathIgnorePatterns": [
-      "/node_modules/"
     ]
   }
 }

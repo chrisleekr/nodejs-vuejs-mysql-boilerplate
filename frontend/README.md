@@ -1,5 +1,7 @@
 # Frontend for Node.js + Vue.js boilerplate
 
+Vue.js, Vuex, Vue Router, Vuelidate, BootstrapVue
+
 ## How to start development
 
 Simply install npm packages and run serve

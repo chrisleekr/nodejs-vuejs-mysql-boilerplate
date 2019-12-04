@@ -29,8 +29,8 @@ services:
       - internal
     # ports:
     #   - 3000:3000
-    # volumes:
-    #   - ./api:/srv
+    volumes:
+      - ./api:/srv
     environment:
       - DB_HOST=mysql
       - DB_USER=root

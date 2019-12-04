@@ -5,8 +5,8 @@ env:
   SERVICE_DOMAIN: localhost
 
 jobs:
-  build-dev:
-    name: Build dev environment
+  build:
+    name: Build/test and push
     runs-on: ubuntu-latest
     env:
       DOCKER_USERNAME: ${{ secrets.DOCKER_USERNAME }}
@@ -49,6 +49,9 @@ jobs:
       - name: Lint API 
         run: |
           docker exec api npm run lint
+      - name: Test API 
+        run: |
+          docker exec api npm run test
       - name: Lint backend 
         run: |
           docker exec backend npm run lint

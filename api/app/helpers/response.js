@@ -8,7 +8,7 @@ const emitValidationResponse = (res, errorArray) => {
   return res.status(422).json({
     success: false,
     status: 422,
-    message: errorArray.length === 1 ? 'There is a validation error.' : 'There are validation errors',
+    message: errorArray.length === 1 ? 'There is a validation error.' : 'There are validation errors.',
     data: errorArray
   });
 };
@@ -52,7 +52,7 @@ const handleForbidden = (res, message) => {
   });
 };
 
-const handleRedirect = (res, status = 302, url) => {
+const handleRedirect = (res, status, url) => {
   return res.redirect(status, url);
 };
 
@@ -104,9 +104,9 @@ const validateRequest = async (req, res, options) => {
 module.exports = {
   handleValidationError,
   handleCustomValidationError,
-  handleNotFound,
   handleSuccess,
+  handleNotFound,
+  handleForbidden,
   handleRedirect,
-  validateRequest,
-  handleForbidden
+  validateRequest
 };
