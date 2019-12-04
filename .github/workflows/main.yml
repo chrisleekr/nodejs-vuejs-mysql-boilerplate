@@ -1,0 +1,87 @@
+on: [push]
+
+env:
+  REGISTRY_DOMAIN: ${{ secrets.REGISTRY_DOMAIN }}
+  SERVICE_DOMAIN: localhost
+
+jobs:
+  build-dev:
+    name: Build dev environment
+    runs-on: ubuntu-latest
+    env:
+      DOCKER_USERNAME: ${{ secrets.DOCKER_USERNAME }}
+      DOCKER_PASSWORD: ${{ secrets.DOCKER_PASSWORD }}
+    steps:
+      - name: Checkout source code
+        uses: actions/checkout@master
+      - name: docker hub login
+        run: |
+          echo "$DOCKER_PASSWORD" | docker login -u "$DOCKER_USERNAME" --password-stdin $REGISTRY_DOMAIN
+      - name: Build nginx image
+        run: |
+          cd nginx
+          docker build . -t $REGISTRY_DOMAIN/chrisleekr/nodejs-vuejs-mysql-boilerplate:nginx-dev
+          docker push $REGISTRY_DOMAIN/chrisleekr/nodejs-vuejs-mysql-boilerplate:nginx-dev
+      - name: Build api dev image
+        run: |
+          cd api
+          docker build . --target dev-stage -t $REGISTRY_DOMAIN/chrisleekr/nodejs-vuejs-mysql-boilerplate:api-dev
+          docker push $REGISTRY_DOMAIN/chrisleekr/nodejs-vuejs-mysql-boilerplate:api-dev
+      - name: Build frontend dev image
+        run: |
+          cd frontend
+          docker build . --target build-stage --build-arg NODE_ENV=$NODE_ENV --build-arg BASE_URL=$BASE_URL -t $REGISTRY_DOMAIN/chrisleekr/nodejs-vuejs-mysql-boilerplate:frontend-dev
+          docker push $REGISTRY_DOMAIN/chrisleekr/nodejs-vuejs-mysql-boilerplate:frontend-dev
+      - name: Build backend dev image
+        run: |
+          cd backend
+          docker build . --target build-stage --build-arg NODE_ENV=$NODE_ENV --build-arg BASE_URL=$BASE_URL -t $REGISTRY_DOMAIN/chrisleekr/nodejs-vuejs-mysql-boilerplate:backend-dev
+          docker push $REGISTRY_DOMAIN/chrisleekr/nodejs-vuejs-mysql-boilerplate:backend-dev
+      - name: Build mysql dev image
+        run: |
+          cd mysql
+          docker build . -t $REGISTRY_DOMAIN/chrisleekr/nodejs-vuejs-mysql-boilerplate:mysql-dev
+          docker push $REGISTRY_DOMAIN/chrisleekr/nodejs-vuejs-mysql-boilerplate:mysql-dev
+      - name: Run docker compose for dev
+        run: |
+          docker-compose -f docker-compose.actions.yml pull
+          docker-compose -f docker-compose.actions.yml up -d
+      - name: Lint API 
+        run: |
+          docker exec api npm run lint
+      - name: Lint backend 
+        run: |
+          docker exec backend npm run lint
+      - name: Lint frontend 
+        run: |
+          docker exec frontend npm run lint
+      - name: Build nginx image
+        if: github.ref == 'refs/heads/master'
+        run: |
+          cd nginx
+          docker build . -t $REGISTRY_DOMAIN/chrisleekr/nodejs-vuejs-mysql-boilerplate:nginx-latest
+          docker push $REGISTRY_DOMAIN/chrisleekr/nodejs-vuejs-mysql-boilerplate:nginx-latest
+      - name: Build api latest image
+        if: github.ref == 'refs/heads/master'
+        run: |
+          cd api
+          docker build . --target production-stage -t $REGISTRY_DOMAIN/chrisleekr/nodejs-vuejs-mysql-boilerplate:api-latest
+          docker push $REGISTRY_DOMAIN/chrisleekr/nodejs-vuejs-mysql-boilerplate:api-latest
+      - name: Build frontend latest image
+        if: github.ref == 'refs/heads/master'
+        run: |
+          cd frontend
+          docker build . --target production-stage --build-arg NODE_ENV=$NODE_ENV --build-arg BASE_URL=$BASE_URL -t $REGISTRY_DOMAIN/chrisleekr/nodejs-vuejs-mysql-boilerplate:frontend-latest
+          docker push $REGISTRY_DOMAIN/chrisleekr/nodejs-vuejs-mysql-boilerplate:frontend-latest
+      - name: Build backend latest image
+        if: github.ref == 'refs/heads/master'
+        run: |
+          cd backend
+          docker build . --target production-stage --build-arg NODE_ENV=$NODE_ENV --build-arg BASE_URL=$BASE_URL -t $REGISTRY_DOMAIN/chrisleekr/nodejs-vuejs-mysql-boilerplate:backend-latest
+          docker push $REGISTRY_DOMAIN/chrisleekr/nodejs-vuejs-mysql-boilerplate:backend-latest
+      - name: Build mysql latest image
+        if: github.ref == 'refs/heads/master'
+        run: |
+          cd mysql
+          docker build . -t $REGISTRY_DOMAIN/chrisleekr/nodejs-vuejs-mysql-boilerplate:mysql-latest
+          docker push $REGISTRY_DOMAIN/chrisleekr/nodejs-vuejs-mysql-boilerplate:mysql-latest
