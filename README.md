@@ -3,7 +3,7 @@
 This is a boilerplate project. The project contains Node.js REST API and frontend/backend developed by Vue.js with BootstrapVue.
 
 * API
-  * Node.js, Express, Express Validator, JWT, Bunyan, Promise MySQL, Node Mailer
+  * Node.js, Express, Express Validator, JWT, Bunyan, Promise MySQL, Node Mailer, Jest, Supertest
 * Frontend
   * Vue.js, Vuex, Vue Router, Vue Draggable, Vuelidate, BootstrapVue
 * Backend
@@ -63,13 +63,13 @@ Currently, Frontend and Backend docker container is configured to serve producti
 If you want to have Hot Reload feature, then you should launch the Frontend separately by `npm run serve`.
 
 ```bash
-$ cd frontend
-$ npm run serve
+cd frontend
+npm run serve
 
-or 
+# or
 
-$ cd backend
-$ npm run serve
+cd backend
+npm run serve
 ```
 
 Then access Frontend with `http://localhost:8080` and Backend with `http://localhost:8081` via your browser.
@@ -87,25 +87,27 @@ MySQL port is mapped to 3307.
 
 ## Features
 
-- Frontend
-  - User registration
-  - Confirm user email address
-  - Reset user password
-  - User login/logout
-  - Manage todo
-  - Manage account information
+* Frontend
+  * User registration
+  * Confirm user email address
+  * Reset user password
+  * User login/logout
+  * Manage todo
+  * Manage account information
 
-- Backend
-  - Staff login/logout
-  - Staff permission mangement
-  - List todo
-  - Manage users
-  - Manage staffs
-  - Manage settings
+* Backend
+  * Staff login/logout
+  * Staff permission mangement
+  * List todo
+  * Manage users
+  * Manage staffs
+  * Manage settings
 
+* CI/CD
+  * Gitlab: .gitlab-ci.yml
+  * Github: .github/workflows/main.yml
 
 ## Todo
 
-* [ ] CI/CD
 * [ ] Unit tests
 * [ ] E2E tests

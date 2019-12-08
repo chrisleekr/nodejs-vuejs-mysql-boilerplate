@@ -29,10 +29,11 @@ services:
       - internal
     # ports:
     #   - 3000:3000
-    # volumes:
-    #   - ./api:/srv
+    volumes:
+      - ./api:/srv
     environment:
       - DB_HOST=mysql
+      - DB_PORT=3306
       - DB_USER=root
       - DB_PASSWORD=root
       - DB_NAME=boilerplate

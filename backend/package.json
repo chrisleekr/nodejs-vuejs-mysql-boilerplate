@@ -1,10 +1,10 @@
 {
-  "name": "nodejs-vuejs-boilerplate-backend",
+  "name": "nodejs-vuejs-mysql-boilerplate-backend",
   "version": "1.0.0",
   "description": "Backend for Node.js + Vue.js boilerplate",
   "repository": {
     "type": "git",
-    "url": "https://github.com/chrisleekr/nodejs-vuejs-boilerplate.git"
+    "url": "https://github.com/chrisleekr/nodejs-vuejs-mysql-boilerplate.git"
   },
   "keywords": [
     "Node.js",
@@ -14,9 +14,9 @@
   "author": "Chris Lee <git@chrislee.kr>",
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/chrisleekr/nodejs-vuejs-boilerplate/issues"
+    "url": "https://github.com/chrisleekr/nodejs-vuejs-mysql-boilerplate/issues"
   },
-  "homepage": "https://github.com/chrisleekr/nodejs-vuejs-boilerplate#readme",
+  "homepage": "https://github.com/chrisleekr/nodejs-vuejs-mysql-boilerplate#readme",
   "scripts": {
     "serve": "vue-cli-service serve --port 8081",
     "build": "vue-cli-service build",

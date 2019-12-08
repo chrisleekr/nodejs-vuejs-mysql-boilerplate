@@ -1,5 +1,7 @@
 # Backend for Node.js + Vue.js boilerplate
 
+Vue.js, Vuex, Vue Router, Vue Draggable, Vuelidate, BootstrapVue
+
 ## How to start for development
 
 ```bash

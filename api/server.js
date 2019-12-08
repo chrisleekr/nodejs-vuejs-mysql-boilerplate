@@ -47,6 +47,8 @@ app.get('*', (_req, res) => {
   res.send({ success: false, status: 404, message: 'Page not found.', data: {} }, 404);
 });
 
-app.listen(port);
+const server = app.listen(port);
 
 logger.info(`API server started on: ${port}`);
+
+module.exports = { app, server };
