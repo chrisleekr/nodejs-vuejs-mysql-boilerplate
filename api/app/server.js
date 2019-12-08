@@ -6,7 +6,7 @@ const helmet = require('helmet');
 const compression = require('compression');
 const bodyParser = require('body-parser');
 const audit = require('express-requests-logger');
-const { logger } = require('./app/helpers/logger');
+const { logger } = require('./helpers/logger');
 
 const app = express();
 
@@ -40,7 +40,7 @@ app.use(
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
 
-require('./app/routes/index')(app);
+require('./routes/index')(app);
 
 // catch 404 and forward to error handler
 app.get('*', (_req, res) => {

@@ -21,8 +21,8 @@ services:
     container_name: api
     build:
       context: ./api
-      target: dev-stage
-      # target: production-stage
+      # target: dev-stage
+      target: production-stage
     depends_on:
       - mysql
     networks:

@@ -15,19 +15,20 @@ EXPOSE 3000
 
 CMD [ "npm", "run", "dev" ]
 
+# build stage
+FROM dev-stage AS build-stage
+
+RUN npm install --production
+
+RUN npm run build
+
 # production stage
 FROM node:13-alpine AS production-stage
 
-RUN apk update && apk add --no-cache python make g++
-
 WORKDIR /srv
 
-COPY package*.json ./
-
-RUN npm install --proudction
-
-COPY . .
+COPY --from=build-stage /srv /srv
 
 EXPOSE 3000
 
-CMD [ "npm", "start" ]`
+CMD [ "node", "dist/server.js"]
