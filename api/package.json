@@ -5,9 +5,9 @@
   "main": "index.js",
   "scripts": {
     "start": "node server.js",
-    "dev": "nodemon server.js",
+    "dev": "cross-env NODE_ENV=development nodemon server.js",
     "lint": "eslint ./app --fix",
-    "test": "jest --coverage"
+    "test": "cross-env NODE_ENV=test jest --coverage --detectOpenHandles"
   },
   "repository": {
     "type": "git",
@@ -39,13 +39,14 @@
     "jsonwebtoken": "^8.5.1",
     "lodash": "^4.17.15",
     "moment": "^2.24.0",
-    "nodemailer": "^6.3.1",
+    "nodemailer": "^6.4.0",
     "promise-mysql": "^4.1.1",
     "uuid": "^3.3.3"
   },
   "devDependencies": {
     "@types/jest": "^24.0.23",
     "@types/node": "^12.12.14",
+    "cross-env": "^6.0.3",
     "eslint": "^6.7.2",
     "eslint-config-airbnb": "^18.0.1",
     "eslint-config-prettier": "^6.7.0",
@@ -66,6 +67,7 @@
   "jest": {
     "testEnvironment": "node",
     "resetMocks": true,
+    "globalSetup": "./jest.setup.js",
     "collectCoverageFrom": [
       "**/*.js",
       "!**/node_modules/**",
@@ -74,15 +76,7 @@
     ],
     "testPathIgnorePatterns": [
       "/node_modules/"
-    ],
-    "coverageThreshold": {
-      "global": {
-        "branches": 50,
-        "functions": 50,
-        "lines": 50,
-        "statements": 50
-      }
-    }
+    ]
   },
   "husky": {
     "hooks": {

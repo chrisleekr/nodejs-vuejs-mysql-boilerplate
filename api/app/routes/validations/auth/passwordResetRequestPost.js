@@ -18,9 +18,6 @@ module.exports = {
     },
     custom: {
       options: async value => {
-        if (value === undefined) {
-          return false;
-        }
         // Check duplicated email
         const user = await userModel.getOne({
           searchOptions: { email: value },

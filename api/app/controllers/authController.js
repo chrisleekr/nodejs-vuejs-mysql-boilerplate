@@ -48,12 +48,9 @@ const register = async (req, res) => {
     return validationResponse;
   }
 
-  const userRole = req.params.roleType === 'staff' ? userModel.userRole.staff : userModel.userRole.user;
+  const userRole = userModel.userRole.user;
 
-  let apiURL = `${process.env.API_URL}/user`;
-  if (req.params.roleType === 'staff') {
-    apiURL = `${process.env.API_URL}/staff`;
-  }
+  const apiURL = `${process.env.API_URL}/user`;
 
   try {
     const result = await authModel.register(
@@ -88,10 +85,7 @@ const register = async (req, res) => {
 const registerConfirm = async (req, res) => {
   const errors = validationResult(req);
 
-  let appURL = process.env.FRONTEND_URL;
-  if (req.params.roleType === 'staff') {
-    appURL = process.env.BACKEND_URL;
-  }
+  const appURL = process.env.FRONTEND_URL;
 
   if (!errors.isEmpty()) {
     return handleRedirect(res, 302, `${appURL}/login?messageKey=registerConfirmValidationError`);
@@ -115,10 +109,7 @@ const passwordResetRequest = async (req, res) => {
     return validationResponse;
   }
 
-  let apiURL = `${process.env.API_URL}/user`;
-  if (req.params.roleType === 'staff') {
-    apiURL = `${process.env.API_URL}/staff`;
-  }
+  const apiURL = `${process.env.API_URL}/user`;
 
   try {
     const result = await authModel.passwordResetRequest(
@@ -149,25 +140,17 @@ const passwordResetRequest = async (req, res) => {
 const passwordResetVerify = async (req, res) => {
   const errors = validationResult(req);
 
-  let appURL = process.env.FRONTEND_URL;
-  if (req.params.roleType === 'staff') {
-    appURL = process.env.BACKEND_URL;
-  }
+  const appURL = process.env.FRONTEND_URL;
 
   if (!errors.isEmpty()) {
     return handleRedirect(res, 302, `${appURL}/password-reset-request?messageKey=passwordResetValidationError`);
   }
 
-  try {
-    return handleRedirect(
-      res,
-      302,
-      `${appURL}/password-reset?messageKey=passwordResetTokenConfirmed&key=${req.query.key}`
-    );
-  } catch (e) {
-    moduleLogger.error({ e }, 'Password reset token validation failed');
-    return handleRedirect(res, 302, `${appURL}/password-reset-request?messageKey=passwordResetRequestFailed`);
-  }
+  return handleRedirect(
+    res,
+    302,
+    `${appURL}/password-reset?messageKey=passwordResetTokenConfirmed&key=${req.query.key}`
+  );
 };
 
 const passwordReset = async (req, res) => {

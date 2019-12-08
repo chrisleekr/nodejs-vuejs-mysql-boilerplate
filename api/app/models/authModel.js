@@ -11,7 +11,7 @@ const mail = require('../helpers/mail');
 
 const moduleLogger = logger.child({ module: 'authModel' });
 
-const processLogin = async (user, { ipAddress = '' } = {}) => {
+const processLogin = async (user, { ipAddress }) => {
   // Update auth_key, auth_key, last_login_at, last_login_ip
   const data = {
     id: user.id,
@@ -30,6 +30,7 @@ const processLogin = async (user, { ipAddress = '' } = {}) => {
   };
 
   const jwtToken = generateToken(data);
+
   const newUser = {
     id: user.id,
     last_login_at: moment().format('YYYY-MM-DD HH:mm:ss'),
@@ -95,8 +96,8 @@ const login = async (username, password, roles = [userModel.userRole.user], { ip
 };
 
 const register = async (
-  { username, password, firstName, lastName, email, registrationIp, role, status } = {},
-  { apiURL } = {}
+  { username, password, firstName, lastName, email, registrationIp, role, status },
+  { apiURL }
 ) => {
   const authKey = uuidv4();
 
@@ -131,7 +132,7 @@ const register = async (
   return result;
 };
 
-const registerConfirm = async ({ authKey } = {}) => {
+const registerConfirm = async ({ authKey }) => {
   const user = await userModel.getOne({
     searchOptions: { auth_key: authKey, status: userModel.userStatus.pending }
   });
@@ -146,14 +147,13 @@ const registerConfirm = async ({ authKey } = {}) => {
   return result;
 };
 
-const passwordResetRequest = async ({ email } = {}, { apiURL } = {}) => {
+const passwordResetRequest = async ({ email }, { apiURL }) => {
   const user = await userModel.getOne({
     searchOptions: { email, status: userModel.userStatus.active }
   });
 
   if (_.isEmpty(user)) {
     moduleLogger.error({ user }, 'Cannot find requested user');
-
     throw new Error('The system could not find the requested user.');
   }
 
@@ -176,7 +176,7 @@ const passwordResetRequest = async ({ email } = {}, { apiURL } = {}) => {
   return result;
 };
 
-const passwordReset = async ({ password, passwordResetToken } = {}) => {
+const passwordReset = async ({ password, passwordResetToken }) => {
   const user = await userModel.getOne({
     searchOptions: { password_reset_token: passwordResetToken, status: userModel.userStatus.active }
   });
