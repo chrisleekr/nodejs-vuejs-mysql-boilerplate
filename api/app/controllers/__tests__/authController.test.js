@@ -1,7 +1,7 @@
 const supertest = require('supertest');
 const uuidv4 = require('uuid/v4');
 
-const { app, server } = require('../../../server');
+const { app, server } = require('../../server');
 const authModel = require('../../models/authModel');
 const userModel = require('../../models/userModel');
 const { getPool } = require('../../helpers/database');

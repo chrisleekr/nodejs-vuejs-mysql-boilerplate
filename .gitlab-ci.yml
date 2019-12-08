@@ -80,7 +80,9 @@ lint-test:
     - docker exec api npm run lint
     - docker exec api npm run test
     - docker exec backend npm run lint
+    - docker exec backend npm run test:unit
     - docker exec frontend npm run lint
+    - docker exec frontend npm run test:unit
 
 production-api:
   stage: build production
