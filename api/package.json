@@ -83,7 +83,7 @@
     "resetMocks": true,
     "globalSetup": "./jest.setup.js",
     "collectCoverageFrom": [
-      "**/*.js",
+      "api/**/*.js",
       "!**/node_modules/**",
       "!**/__tests__/**",
       "!**/coverage/**"

@@ -27,9 +27,9 @@ services:
       - JWT_SECRET_KEY=vsKpsTgstlhmg8yIA82d
       - JWT_EXPIRES_IN=1w
       - BCRYPT_SALTING_ROUND=10
-      - API_URL=https://$SERVICE_DOMAIN/api
-      - BACKEND_URL=https://$SERVICE_DOMAIN/backend
-      - FRONTEND_URL=https://$SERVICE_DOMAIN/frontend
+      - API_URL=http://$SERVICE_DOMAIN/api
+      - BACKEND_URL=http://$SERVICE_DOMAIN/backend
+      - FRONTEND_URL=http://$SERVICE_DOMAIN/frontend
       - EMAIL_FROM_ADDRESS=support@$SERVICE_DOMAIN
       - EMAIL_FROM_NAME=Support
       - SMTP_HOST=mailhog
@@ -49,7 +49,7 @@ services:
     networks:
       - internal
     environment:
-      - API_URL=https://$SERVICE_DOMAIN/api
+      - API_URL=http://$SERVICE_DOMAIN/api
 
   backend:
     container_name: backend
@@ -59,7 +59,7 @@ services:
     networks:
       - internal
     environment:
-      - API_URL=https://$SERVICE_DOMAIN/api
+      - API_URL=http://$SERVICE_DOMAIN/api
   
   mysql:
     container_name: mysql

@@ -20,7 +20,7 @@ build-nginx:
   <<: *before-script
   script:
     - cd nginx 
-    - docker build . -t $REGISTRY_DOMAIN/chrisleekr/nodejs-vuejs-mysql-boilerplate:nginx-dev
+    - docker build --no-cache . -t $REGISTRY_DOMAIN/chrisleekr/nodejs-vuejs-mysql-boilerplate:nginx-dev
     - docker push $REGISTRY_DOMAIN/chrisleekr/nodejs-vuejs-mysql-boilerplate:nginx-dev
 
 build-api:
@@ -29,7 +29,7 @@ build-api:
   <<: *before-script
   script:
     - cd api 
-    - docker build . --target dev-stage -t $REGISTRY_DOMAIN/chrisleekr/nodejs-vuejs-mysql-boilerplate:api-dev
+    - docker build --no-cache . --target dev-stage -t $REGISTRY_DOMAIN/chrisleekr/nodejs-vuejs-mysql-boilerplate:api-dev
     - docker push $REGISTRY_DOMAIN/chrisleekr/nodejs-vuejs-mysql-boilerplate:api-dev
 
 build-frontend:
@@ -41,7 +41,7 @@ build-frontend:
     BASE_URL: /frontend/
   script:
     - cd frontend
-    - docker build . --target build-stage --build-arg NODE_ENV=$NODE_ENV --build-arg BASE_URL=/frontend/  -t $REGISTRY_DOMAIN/chrisleekr/nodejs-vuejs-mysql-boilerplate:frontend-dev
+    - docker build --no-cache . --target build-stage --build-arg NODE_ENV=$NODE_ENV --build-arg BASE_URL=/frontend/  -t $REGISTRY_DOMAIN/chrisleekr/nodejs-vuejs-mysql-boilerplate:frontend-dev
     - docker push $REGISTRY_DOMAIN/chrisleekr/nodejs-vuejs-mysql-boilerplate:frontend-dev
 
 build-backend:
@@ -53,7 +53,7 @@ build-backend:
     BASE_URL: /backend/
   script:
     - cd backend
-    - docker build . --target build-stage --build-arg NODE_ENV=$NODE_ENV --build-arg BASE_URL=/backend/ -t $REGISTRY_DOMAIN/chrisleekr/nodejs-vuejs-mysql-boilerplate:backend-dev
+    - docker build --no-cache . --target build-stage --build-arg NODE_ENV=$NODE_ENV --build-arg BASE_URL=/backend/ -t $REGISTRY_DOMAIN/chrisleekr/nodejs-vuejs-mysql-boilerplate:backend-dev
     - docker push $REGISTRY_DOMAIN/chrisleekr/nodejs-vuejs-mysql-boilerplate:backend-dev
 
 build-mysql:
@@ -90,7 +90,7 @@ production-api:
   <<: *before-script
   script:
     - cd api 
-    - docker build . --target production-stage -t $REGISTRY_DOMAIN/chrisleekr/nodejs-vuejs-mysql-boilerplate:api-latest
+    - docker build --no-cache . --target production-stage -t $REGISTRY_DOMAIN/chrisleekr/nodejs-vuejs-mysql-boilerplate:api-latest
     - docker push $REGISTRY_DOMAIN/chrisleekr/nodejs-vuejs-mysql-boilerplate:api-latest
 
 production-backend:
@@ -102,7 +102,7 @@ production-backend:
     BASE_URL: /backend/
   script:
     - cd backend
-    - docker build . --target production-stage --build-arg NODE_ENV=$NODE_ENV --build-arg BASE_URL=/backend/ -t $REGISTRY_DOMAIN/chrisleekr/nodejs-vuejs-mysql-boilerplate:backend-latest
+    - docker build --no-cache . --target production-stage --build-arg NODE_ENV=$NODE_ENV --build-arg BASE_URL=/backend/ -t $REGISTRY_DOMAIN/chrisleekr/nodejs-vuejs-mysql-boilerplate:backend-latest
     - docker push $REGISTRY_DOMAIN/chrisleekr/nodejs-vuejs-mysql-boilerplate:backend-latest
 
 production-frontend:
@@ -114,7 +114,7 @@ production-frontend:
     BASE_URL: /frontend/
   script:
     - cd frontend
-    - docker build . --target production-stage --build-arg NODE_ENV=$NODE_ENV --build-arg BASE_URL=/frontend/ -t $REGISTRY_DOMAIN/chrisleekr/nodejs-vuejs-mysql-boilerplate:frontend-latest
+    - docker build --no-cache . --target production-stage --build-arg NODE_ENV=$NODE_ENV --build-arg BASE_URL=/frontend/ -t $REGISTRY_DOMAIN/chrisleekr/nodejs-vuejs-mysql-boilerplate:frontend-latest
     - docker push $REGISTRY_DOMAIN/chrisleekr/nodejs-vuejs-mysql-boilerplate:frontend-latest
 
 production-mysql:
