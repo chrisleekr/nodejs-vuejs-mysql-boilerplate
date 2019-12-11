@@ -22,7 +22,7 @@ const RouterViewStub = {
 
 describe('App.vue', () => {
   let wrapper;
-  beforeAll(() => {
+  beforeEach(() => {
     const $route = {
       path: '/login',
       name: 'login',

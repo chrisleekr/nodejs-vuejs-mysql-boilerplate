@@ -1,5 +1,5 @@
 <template>
-  <footer class="mt-4 pt-4 my-md-5 pt-md-5 border-top">
+  <footer class="footer mt-4 pt-4 my-md-5 pt-md-5 border-top">
     <div class="row">
       <div class="col-12 col-md">
         <img class="mb-2" src="../assets/images/bootstrap-vue.png" alt width="24" height="24" />
