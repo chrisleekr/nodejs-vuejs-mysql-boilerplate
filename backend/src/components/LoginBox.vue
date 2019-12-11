@@ -1,5 +1,5 @@
 <template>
-  <b-form @submit.stop.prevent="onSubmit">
+  <b-form @submit.stop.prevent="onSubmit" class="login-box">
     <b-form-group id="group-username" label label-for="input-username" description>
       <b-form-input
         id="input-username"
@@ -8,12 +8,13 @@
         required
         placeholder="Enter username"
         :state="$v.form.username.$dirty ? !$v.form.username.$error : null"
+        class="from-input input-username"
         :class="{ 'border-danger': errorMessages }"
       ></b-form-input>
 
-      <b-form-invalid-feedback id="input-username-invalid"
-        >Please enter your username or email address.</b-form-invalid-feedback
-      >
+      <b-form-invalid-feedback id="input-username-invalid" class="invalid-feedback invalid-feedback-username">
+        Please enter your username or email address.
+      </b-form-invalid-feedback>
     </b-form-group>
 
     <b-form-group id="group-password" label label-for="input-password" description>
@@ -24,9 +25,12 @@
         required
         placeholder="Enter password"
         :state="$v.form.password.$dirty ? !$v.form.password.$error : null"
+        class="from-input input-password"
         :class="{ 'border-danger': errorMessages }"
       ></b-form-input>
-      <b-form-invalid-feedback id="input-password-invalid">Please enter your password.</b-form-invalid-feedback>
+      <b-form-invalid-feedback id="input-password-invalid" class="invalid-feedback invalid-feedback-password">
+        Please enter your password.
+      </b-form-invalid-feedback>
     </b-form-group>
 
     <template v-if="successMessages || errorMessages">
@@ -38,7 +42,7 @@
 
     <b-row>
       <b-col>
-        <b-button type="submit" variant="primary" :disabled="$v.form.$invalid || loading">
+        <b-button class="btn-login" type="submit" variant="primary" :disabled="$v.form.$invalid || loading">
           <span class="spinner spinner-white" v-if="loading"></span>
           Login
         </b-button>

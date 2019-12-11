@@ -72,7 +72,9 @@
           </b-form-group>
 
           <b-form-group id="group-meta-desc" label-for="input-meta-desc">
-            <template v-slot:label>Description</template>
+            <template v-slot:label>
+              Description
+            </template>
             <b-form-textarea
               id="input-meta-desc"
               v-model="form.metaDesc"
@@ -92,7 +94,9 @@
           </b-form-group>
 
           <b-form-group id="group-meta-attribute" label-for="input-meta-attribute" v-if="form.metaType === 'select'">
-            <template v-slot:label>Attributes</template>
+            <template v-slot:label
+              >Attributes</template
+            >
 
             <b-form-textarea
               id="input-meta-attribute"

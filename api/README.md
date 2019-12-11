@@ -1,6 +1,6 @@
 # API for Node.js + Vue.js boilerplate
 
-Node.js, Express, Express Validator, JWT, Bunyan, Promise MySQL, Node Mailer, Jest, Supertest
+Node.js, Express, Webpack, Express Validator, JWT, Bunyan, Promise MySQL, Node Mailer, Jest, Supertest, Nodemon
 
 ## How to start development
 
@@ -68,7 +68,7 @@ Node.js, Express, Express Validator, JWT, Bunyan, Promise MySQL, Node Mailer, Je
 ## Todo
 
 - [x] Add pagination to list
-- [ ] Unit test
+- [x] Unit test
 - [ ] E2E test
 - [ ] File uploader
 - [ ] Add Swagger

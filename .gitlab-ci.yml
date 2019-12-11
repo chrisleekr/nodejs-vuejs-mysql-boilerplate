@@ -65,7 +65,7 @@ build-mysql:
     - docker build . -t $REGISTRY_DOMAIN/chrisleekr/nodejs-vuejs-mysql-boilerplate:mysql-dev
     - docker push $REGISTRY_DOMAIN/chrisleekr/nodejs-vuejs-mysql-boilerplate:mysql-dev
 
-lint-test:
+testing-and-linting:
   stage: testing
   image: docker/compose:latest
   <<: *before-script
@@ -125,7 +125,6 @@ production-mysql:
     - cd mysql
     - docker build . -t $REGISTRY_DOMAIN/chrisleekr/nodejs-vuejs-mysql-boilerplate:mysql-latest
     - docker push $REGISTRY_DOMAIN/chrisleekr/nodejs-vuejs-mysql-boilerplate:mysql-latest
-
 
 production-nginx:
   stage: build production

@@ -98,7 +98,9 @@
         </b-form-group>
 
         <b-form-group id="group-confirmed-at" label-for="input-confirmed-at">
-          <template v-slot:label>Confirmed At (Y-M-D H:M)</template>
+          <template v-slot:label>
+            Confirmed At (Y-M-D H:M)
+          </template>
 
           <datetime
             type="datetime"
@@ -140,7 +142,9 @@
         </b-form-group>
 
         <b-form-group id="group-blocked-at" label-for="input-blocked-at">
-          <template v-slot:label>Blocked At (Y-M-D H:M)</template>
+          <template v-slot:label
+            >Blocked At (Y-M-D H:M)</template
+          >
 
           <datetime
             type="datetime"
