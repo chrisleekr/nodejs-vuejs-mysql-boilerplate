@@ -18,6 +18,7 @@ RUN apk add --no-cache --update \
   make \
   nasm \
   gifsicle \
+  python \
   && rm -rf /var/cache/apk/*
 
 WORKDIR /srv

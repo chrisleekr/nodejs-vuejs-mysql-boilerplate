@@ -1,38 +1,28 @@
 require('dotenv').config();
-
 const express = require('express');
 const cors = require('cors');
 const helmet = require('helmet');
 const compression = require('compression');
 const bodyParser = require('body-parser');
-const audit = require('express-requests-logger');
+const bunyanMiddleware = require('bunyan-middleware');
 const { logger } = require('./helpers/logger');
 
 const app = express();
 
 const port = process.env.PORT || 3000;
-
 app.set('trust proxy', true);
 app.use(helmet());
 app.use(cors());
 app.use(compression());
 app.use(
-  audit({
+  bunyanMiddleware({
+    headerName: 'X-Request-Id',
+    propertyName: 'reqId',
+    logName: 'reqId',
+    obscureHeaders: ['authorization'],
     logger,
-    excludeURLs: [],
-    request: {
-      maskBody: ['password'],
-      excludeHeaders: [],
-      excludeBody: [],
-      maskHeaders: ['authorization'],
-      maxBodyLength: 0
-    },
-    response: {
-      maskBody: ['authKey'],
-      excludeHeaders: [],
-      excludeBody: [],
-      maskHeaders: [],
-      maxBodyLength: 0
+    additionalRequestFinishData: (_req, _res) => {
+      return {};
     }
   })
 );

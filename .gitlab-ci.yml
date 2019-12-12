@@ -83,6 +83,7 @@ testing-and-linting:
     - docker exec backend npm run test:unit
     - docker exec frontend npm run lint
     - docker exec frontend npm run test:unit
+    - docker exec frontend npm run test:e2e -- --headless
 
 production-api:
   stage: build production

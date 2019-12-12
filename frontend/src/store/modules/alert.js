@@ -8,13 +8,13 @@ const state = {
 };
 
 const actions = {
-  success({ commit }, { showType, position = 'bottom-end', title, text }) {
+  success({ commit }, { showType, position, title, text }) {
     commit('success', { showType, position, title, text });
   },
-  info({ commit }, { showType, position = 'bottom-end', title, text }) {
+  info({ commit }, { showType, position, title, text }) {
     commit('info', { showType, position, title, text });
   },
-  error({ commit }, { showType, position = 'bottom-end', title, text }) {
+  error({ commit }, { showType, position, title, text }) {
     commit('error', { showType, position, title, text });
   },
   setMessage({ commit }, { type, message }) {
