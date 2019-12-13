@@ -7,7 +7,7 @@ This is a boilerplate project. The project contains Node.js REST API and fronten
 * Frontend
   * Vue.js, Vuex, Vue Router, Vue Draggable, Vuelidate, BootstrapVue, Jest, Cypress
 * Backend
-  * Vue.js, Vuex, Vue Router, Vuelidate, BootstrapVue, Jest
+  * Vue.js, Vuex, Vue Router, Vuelidate, BootstrapVue, Jest, Cypress
 
 ## Demo
 

@@ -10,23 +10,27 @@
 
       <b-collapse id="nav-collapse" is-nav>
         <b-navbar-nav>
-          <b-nav-item :to="{ path: '/' }">
+          <b-nav-item :to="{ path: '/' }" data-cy="nav-bar-dashboard">
             <font-awesome-icon :icon="['fas', 'tachometer-alt']" class="mr-1" />Dashboard
           </b-nav-item>
-          <b-nav-item :to="{ path: '/todo' }">
+          <b-nav-item :to="{ path: '/todo' }" data-cy="nav-bar-todo">
             <font-awesome-icon :icon="['fas', 'list-alt']" class="mr-1" />Todo
           </b-nav-item>
-          <b-nav-item :to="{ path: '/user' }" v-if="showNavigation('manageUser')">
+          <b-nav-item :to="{ path: '/user' }" v-if="showNavigation('manageUser')" data-cy="nav-bar-user">
             <font-awesome-icon :icon="['fas', 'portrait']" class="mr-1" />Users
           </b-nav-item>
-          <b-nav-item :to="{ path: '/staff' }" v-if="showNavigation('manageStaff')">
+          <b-nav-item :to="{ path: '/staff' }" v-if="showNavigation('manageStaff')" data-cy="nav-bar-staff">
             <font-awesome-icon :icon="['fas', 'user']" class="mr-1" />Staffs
           </b-nav-item>
-          <b-nav-item-dropdown right v-if="showNavigation('manageSetting')">
+          <b-nav-item-dropdown right v-if="showNavigation('manageSetting')" data-cy="nav-bar-manage-setting">
             <template v-slot:button-content>
               <font-awesome-icon :icon="['fas', 'cog']" class="mr-1" />Settings
             </template>
-            <b-dropdown-item :to="{ path: '/setting' }" v-if="showNavigation('manageSetting')">
+            <b-dropdown-item
+              :to="{ path: '/setting' }"
+              v-if="showNavigation('manageSetting')"
+              data-cy="nav-bar-general-settings"
+            >
               General Settings
             </b-dropdown-item>
           </b-nav-item-dropdown>
@@ -34,9 +38,9 @@
 
         <!-- Right aligned nav items -->
         <b-navbar-nav class="ml-auto">
-          <b-nav-item v-if="user">Welcome, {{ user.first_name }}</b-nav-item>
+          <b-nav-item v-if="user" data-cy="nav-bar-welcome-text">Welcome, {{ user.first_name }}</b-nav-item>
 
-          <b-nav-item :to="{ path: '/logout' }" link-classes="btn btn-grey mx-1">
+          <b-nav-item :to="{ path: '/logout' }" link-classes="btn btn-grey mx-1" data-cy="nav-bar-logout">
             <font-awesome-icon :icon="['fas', 'sign-out-alt']" class="mr-1" />Logout
           </b-nav-item>
         </b-navbar-nav>

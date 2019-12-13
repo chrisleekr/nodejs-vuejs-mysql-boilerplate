@@ -1,24 +1,20 @@
 # initial stage
-FROM node:13-alpine AS initial-stage
+FROM node:13 AS initial-stage
 
-RUN apk add --no-cache --update \
-  build-base \
-  libtool \
-  autoconf \
-  automake \
-  bash \
-  g++ \
-  lcms2-dev \
+RUN apt-get update -y && \
+  apt-get install -yq \
+  cmake \
+  build-essential \
   libpng-dev \
-  libc6-compat \
-  libjpeg-turbo-dev \
-  libpng-dev \
-  gcc \
-  g++ \
-  make \
-  nasm \
+  libjpeg-dev \
   gifsicle \
-  && rm -rf /var/cache/apk/*
+  xvfb \
+  libgtk-3-dev \
+  libnotify-dev \
+  libgconf-2-4 \
+  libnss3 \
+  libxss1 \
+  libasound2
 
 WORKDIR /srv
 
@@ -36,9 +32,14 @@ ENV BASE_URL=${BASE_URL}
 
 WORKDIR /srv
 
+# Add configuration files
+COPY image-files/ /
+
 COPY . .
 
 RUN npm run build --mode=production
+
+ENTRYPOINT [ "docker-entrypoint.dev.sh" ]
 
 # production stage
 FROM nginx:stable-alpine AS production-stage

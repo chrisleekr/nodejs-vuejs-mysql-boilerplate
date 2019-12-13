@@ -10,6 +10,8 @@ describe('authController', () => {
   let request;
   let response;
 
+  const frontendURL = process.env.FRONTEND_URL;
+
   beforeAll(async () => {
     request = supertest(app);
   });
@@ -366,9 +368,7 @@ describe('authController', () => {
         });
 
         it('triggers expected header', () => {
-          expect(response.header.location).toBe(
-            'http://localhost/frontend/login?messageKey=registerConfirmValidationError'
-          );
+          expect(response.header.location).toBe(`${frontendURL}/login?messageKey=registerConfirmValidationError`);
         });
       });
 
@@ -383,9 +383,7 @@ describe('authController', () => {
         });
 
         it('triggers expected header', () => {
-          expect(response.header.location).toBe(
-            'http://localhost/frontend/login?messageKey=registerConfirmValidationError'
-          );
+          expect(response.header.location).toBe(`${frontendURL}/login?messageKey=registerConfirmValidationError`);
         });
       });
     });
@@ -409,7 +407,7 @@ describe('authController', () => {
       });
 
       it('triggers expected header', () => {
-        expect(response.header.location).toBe('http://localhost/frontend/login?messageKey=registerConfirmFailed');
+        expect(response.header.location).toBe(`${frontendURL}/login?messageKey=registerConfirmFailed`);
       });
     });
 
@@ -430,7 +428,7 @@ describe('authController', () => {
       });
 
       it('triggers expected header', () => {
-        expect(response.header.location).toBe('http://localhost/frontend/login?messageKey=registerConfirmSuccess');
+        expect(response.header.location).toBe(`${frontendURL}/login?messageKey=registerConfirmSuccess`);
       });
     });
   });
@@ -625,7 +623,7 @@ describe('authController', () => {
 
         it('triggers expected header', () => {
           expect(response.header.location).toBe(
-            'http://localhost/frontend/password-reset-request?messageKey=passwordResetValidationError'
+            `${frontendURL}/password-reset-request?messageKey=passwordResetValidationError`
           );
         });
       });
@@ -641,7 +639,7 @@ describe('authController', () => {
 
         it('triggers expected header', () => {
           expect(response.header.location).toBe(
-            'http://localhost/frontend/password-reset-request?messageKey=passwordResetValidationError'
+            `${frontendURL}/password-reset-request?messageKey=passwordResetValidationError`
           );
         });
       });
@@ -658,7 +656,7 @@ describe('authController', () => {
 
         it('triggers expected header', () => {
           expect(response.header.location).toBe(
-            'http://localhost/frontend/password-reset-request?messageKey=passwordResetValidationError'
+            `${frontendURL}/password-reset-request?messageKey=passwordResetValidationError`
           );
         });
       });
@@ -680,7 +678,7 @@ describe('authController', () => {
 
       it('triggers expected header', () => {
         expect(response.header.location).toBe(
-          `http://localhost/frontend/password-reset?messageKey=passwordResetTokenConfirmed&key=valid-key`
+          `${frontendURL}/password-reset?messageKey=passwordResetTokenConfirmed&key=valid-key`
         );
       });
     });
