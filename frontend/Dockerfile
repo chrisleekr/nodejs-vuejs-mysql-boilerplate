@@ -47,7 +47,7 @@ FROM nginx:stable-alpine AS production-stage
 # Add configuration files
 COPY image-files/ /
 
-RUN chmod +x /usr/local/bin/docker-entrypoint.sh
+RUN chmod +x /usr/local/bin/docker-entrypoint*.sh
 ENV PATH /usr/local/bin:$PATH
 
 COPY --from=build-stage /srv/dist /srv/frontend/
