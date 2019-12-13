@@ -1,6 +1,6 @@
 # Frontend for Node.js + Vue.js boilerplate
 
-Vue.js, Vuex, Vue Router, Vuelidate, BootstrapVue
+Vue.js, Vuex, Vue Router, Vuelidate, BootstrapVue, Jest, Cypress
 
 ## How to start development
 
@@ -29,6 +29,6 @@ Open the browser and go to [http://localhost:8080](http://localhost:8080)
 
 ## Todo
 
-- [ ] Unit tests
-- [ ] E2E tests
+- [x] Unit tests
+- [x] E2E tests
 - [ ] File upload

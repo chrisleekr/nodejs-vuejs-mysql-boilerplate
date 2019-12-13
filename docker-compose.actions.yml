@@ -6,7 +6,7 @@ services:
     image: $REGISTRY_DOMAIN/chrisleekr/nodejs-vuejs-mysql-boilerplate:nginx-dev
     networks:
       - internal
-
+    
   api:
     container_name: api
     image: $REGISTRY_DOMAIN/chrisleekr/nodejs-vuejs-mysql-boilerplate:api-dev
@@ -24,9 +24,9 @@ services:
       - JWT_SECRET_KEY=vsKpsTgstlhmg8yIA82d
       - JWT_EXPIRES_IN=1w
       - BCRYPT_SALTING_ROUND=10
-      - API_URL=http://$SERVICE_DOMAIN/api
-      - BACKEND_URL=http://$SERVICE_DOMAIN/backend
-      - FRONTEND_URL=http://$SERVICE_DOMAIN/frontend
+      - API_URL=http://api:3000
+      - BACKEND_URL=http://backend:8080
+      - FRONTEND_URL=http://frontend:8080
       - EMAIL_FROM_ADDRESS=support@$SERVICE_DOMAIN
       - EMAIL_FROM_NAME=Support
       - SMTP_HOST=mailhog
@@ -46,7 +46,7 @@ services:
     networks:
       - internal
     environment:
-      - API_URL=http://$SERVICE_DOMAIN/api
+      - API_URL=http://api:3000
     command: npm run serve
 
   backend:
@@ -57,7 +57,7 @@ services:
     networks:
       - internal
     environment:
-      - API_URL=http://$SERVICE_DOMAIN/api
+      - API_URL=http://api:3000
     command: npm run serve
   
   mysql:

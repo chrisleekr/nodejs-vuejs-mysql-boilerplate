@@ -5,9 +5,9 @@ This is a boilerplate project. The project contains Node.js REST API and fronten
 * API
   * Node.js, Express, Webpack, Express Validator, JWT, Bunyan, Promise MySQL, Node Mailer, Jest, Supertest, Nodemon
 * Frontend
-  * Vue.js, Vuex, Vue Router, Vue Draggable, Vuelidate, BootstrapVue
+  * Vue.js, Vuex, Vue Router, Vue Draggable, Vuelidate, BootstrapVue, Jest, Cypress
 * Backend
-  * Vue.js, Vuex, Vue Router, Vuelidate, BootstrapVue
+  * Vue.js, Vuex, Vue Router, Vuelidate, BootstrapVue, Jest, Cypress
 
 ## Demo
 
@@ -133,5 +133,5 @@ MySQL port is mapped to 3307.
 
 ## Todo
 
-* [ ] Unit tests
-* [ ] E2E tests
+* [x] Unit tests
+* [x] E2E tests

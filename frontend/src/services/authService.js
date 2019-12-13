@@ -15,6 +15,7 @@ export default {
         throw e;
       });
   },
+
   async passwordResetRequest({ email }) {
     return axios
       .post(`${configService.get('apiUrl')}/user/password-reset-request`, {
@@ -27,6 +28,7 @@ export default {
         throw e;
       });
   },
+
   async register({ username, email, password, firstName, lastName }) {
     return axios
       .post(`${configService.get('apiUrl')}/user/register`, {
@@ -43,6 +45,7 @@ export default {
         throw e;
       });
   },
+
   async login(username, password) {
     return axios
       .post(`${configService.get('apiUrl')}/user/login`, {

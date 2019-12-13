@@ -1,5 +1,12 @@
 module.exports = {
   preset: '@vue/cli-plugin-unit-jest',
   collectCoverage: true,
-  collectCoverageFrom: ['**/*.{js,vue}', '!**/node_modules/**', '!**/tests/**']
+  collectCoverageFrom: [
+    'src/**/*.{js,vue}',
+    '!**/node_modules/**',
+    '!**/tests/**',
+    '!**/coverage/**',
+    '!src/main.js',
+    '!src/registerServiceWorker.js'
+  ]
 };
