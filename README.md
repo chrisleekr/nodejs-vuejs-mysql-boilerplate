@@ -1,4 +1,4 @@
-# Node.js + Vue.js + MySQL Boilerplate
+# Node.js (REST API) + Vue.js (Frontend/Backend) + MySQL Boilerplate
 
 This is a boilerplate project. The project contains Node.js REST API and frontend/backend developed by Vue.js with BootstrapVue.
 
