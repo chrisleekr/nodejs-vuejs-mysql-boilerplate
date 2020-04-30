@@ -27,6 +27,7 @@ import {
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome';
 import { Datetime } from 'vue-datetime';
 import 'vue-datetime/dist/vue-datetime.css';
+import ConfigService from '@/services/configService';
 
 import App from './App.vue';
 import router from './router';
@@ -35,8 +36,6 @@ import './registerServiceWorker';
 
 import SimpleLayout from './views/Layout/SimpleLayout.vue';
 import BackendLayout from './views/Layout/BackendLayout.vue';
-
-import ConfigService from '@/services/configService';
 
 Vue.config.productionTip = false;
 
