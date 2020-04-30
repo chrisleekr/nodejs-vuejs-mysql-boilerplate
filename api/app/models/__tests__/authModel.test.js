@@ -19,9 +19,9 @@ jest.mock('moment', () => () => ({
   format: jest.fn().mockReturnValue('2019-12-06 00:11:22')
 }));
 
-jest.mock('uuid/v4', () => () => {
-  return 'my-uuid';
-});
+jest.mock('uuid', () => ({
+  v4: () => 'my-uuid'
+}));
 
 jest.mock('../../helpers/authentication');
 
