@@ -1,8 +1,7 @@
+import store from '@/store';
 import Vue from 'vue';
 import Router from 'vue-router';
 import Home from '../views/Home.vue';
-
-import store from '@/store';
 
 Vue.use(Router);
 

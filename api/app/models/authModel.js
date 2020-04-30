@@ -1,12 +1,12 @@
 const _ = require('lodash');
 const bcrypt = require('bcryptjs');
 const moment = require('moment');
-const uuidv4 = require('uuid/v4');
+const { v4: uuidv4 } = require('uuid');
 
 const { logger } = require('../helpers/logger');
 const { generateToken } = require('../helpers/authentication');
 
-const userModel = require('../models/userModel');
+const userModel = require('./userModel');
 const mail = require('../helpers/mail');
 
 const moduleLogger = logger.child({ module: 'authModel' });
