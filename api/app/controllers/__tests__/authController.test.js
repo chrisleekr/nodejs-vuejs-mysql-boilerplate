@@ -1,5 +1,5 @@
 const supertest = require('supertest');
-const uuidv4 = require('uuid/v4');
+const { v4: uuidv4 } = require('uuid');
 
 const { app, server } = require('../../server');
 const authModel = require('../../models/authModel');
