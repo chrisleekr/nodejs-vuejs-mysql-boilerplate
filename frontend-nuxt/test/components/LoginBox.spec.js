@@ -32,6 +32,9 @@ describe('LoginBox.vue', () => {
       state: {
         loading: false
       },
+      getters: {
+        isLoggedIn: () => true
+      },
       actions: {
         login: jest.fn(),
         logout: jest.fn()
@@ -72,9 +75,6 @@ describe('LoginBox.vue', () => {
   describe('if isLoggedIn is true', () => {
     beforeEach(() => {
       store = new Vuex.Store({
-        getters: {
-          isLoggedIn: () => true
-        },
         modules: {
           alert: alertModule,
           auth: authModule
@@ -92,9 +92,6 @@ describe('LoginBox.vue', () => {
   describe('onSubmit', () => {
     beforeEach(() => {
       store = new Vuex.Store({
-        getters: {
-          isLoggedIn: () => true
-        },
         modules: {
           alert: alertModule,
           auth: authModule
