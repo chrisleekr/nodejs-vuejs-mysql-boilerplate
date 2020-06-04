@@ -21,16 +21,15 @@ services:
     container_name: api
     build:
       context: ./api
-      target: dev-stage
-      # target: production-stage
+      target: production-stage
     depends_on:
       - mysql
     networks:
       - internal
     # ports:
     #   - 3000:3000
-    volumes:
-      - ./api:/srv
+    # volumes:
+    #   - ./api:/srv
     environment:
       - DB_HOST=mysql
       - DB_PORT=3306
