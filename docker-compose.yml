@@ -1,11 +1,11 @@
-version: "3.7"
+version: '3.7'
 
 services:
   nginx:
     container_name: nginx
     depends_on:
       - api
-      - frontend
+      - frontend-nuxt
       - mysql
     build:
       context: ./nginx
@@ -44,7 +44,7 @@ services:
       - BCRYPT_SALTING_ROUND=10
       - API_URL=http://localhost/api
       - BACKEND_URL=http://localhost/backend
-      - FRONTEND_URL=http://localhost/frontend
+      - FRONTEND_URL=http://localhost/frontend-nuxt
       - EMAIL_FROM_ADDRESS=support@boilerplate.local
       - EMAIL_FROM_NAME=Support
       - SMTP_HOST=mailhog
@@ -56,19 +56,35 @@ services:
       - SMTP_LOGGER=true
       - TZ=Australia/Melbourne
 
-  frontend:
-    container_name: frontend
+  frontend-nuxt:
+    container_name: frontend-nuxt
     build:
-      context: ./frontend
+      context: ./frontend-nuxt
       target: production-stage
       args:
-        NODE_ENV: production
-        BASE_URL: /frontend/        
+        BASE_URL: /frontend-nuxt/
     depends_on:
       - mysql
     networks:
       - internal
     environment:
+      - BASE_URL=/frontend-nuxt/
+      - API_URL=http://localhost/api
+
+  frontend-vue:
+    container_name: frontend-vue
+    build:
+      context: ./frontend-vue
+      target: production-stage
+      args:
+        NODE_ENV: production
+        BASE_URL: /frontend-vue/
+    depends_on:
+      - mysql
+    networks:
+      - internal
+    environment:
+      - BASE_URL=/frontend-vue/
       - API_URL=http://localhost/api
 
   backend:
@@ -98,7 +114,7 @@ services:
       - 3307:3306
     environment:
       MYSQL_ROOT_PASSWORD: root
-      MYSQL_DATABASE: boilerplate 
+      MYSQL_DATABASE: boilerplate
       TZ: Australia/Melbourne
 
   mailhog:
@@ -106,7 +122,7 @@ services:
     image: mailhog/mailhog
     networks:
       - internal
-    # ports: 
+    # ports:
     #   - 1025:1025 # smtp server
     #   - 8025:8025 # web ui
 

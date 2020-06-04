@@ -1,0 +1,158 @@
+<template>
+  <b-form
+    class="login-box"
+    data-cy="login-form"
+    @submit.stop.prevent="onSubmit"
+  >
+    <b-form-group
+      id="group-username"
+      label
+      label-for="input-username"
+      description
+    >
+      <b-form-input
+        id="input-username"
+        v-model="form.username"
+        type="text"
+        placeholder="Enter username"
+        :state="
+          isBrowser && $v.form.username.$dirty ? !$v.form.username.$error : null
+        "
+        data-cy="login-username"
+        class="from-input input-username"
+        :class="{ 'border-danger': errorMessages }"
+      ></b-form-input>
+
+      <b-form-invalid-feedback
+        id="input-username-invalid"
+        data-cy="login-username-invalid"
+      >
+        Please enter your username or email address.
+      </b-form-invalid-feedback>
+    </b-form-group>
+
+    <b-form-group
+      id="group-password"
+      label
+      label-for="input-password"
+      description
+    >
+      <b-form-input
+        id="input-password"
+        v-model="form.password"
+        type="password"
+        placeholder="Enter password"
+        :state="
+          isBrowser && $v.form.password.$dirty ? !$v.form.password.$error : null
+        "
+        data-cy="login-password"
+        class="from-input input-password"
+        :class="{ 'border-danger': errorMessages }"
+      ></b-form-input>
+      <b-form-invalid-feedback
+        id="input-password-invalid"
+        data-cy="login-password-invalid"
+      >
+        Please enter your password.
+      </b-form-invalid-feedback>
+    </b-form-group>
+
+    <template v-if="successMessages || errorMessages">
+      <b-row class="mb-2">
+        <b-col
+          v-if="successMessages"
+          data-cy="login-success-message"
+          class="text-primary message-col"
+        >
+          {{ successMessages }}
+        </b-col>
+        <b-col
+          v-if="errorMessages"
+          data-cy="login-error-message"
+          class="text-danger message-col"
+        >
+          {{ errorMessages }}
+        </b-col>
+      </b-row>
+    </template>
+
+    <b-row>
+      <b-col>
+        <b-button
+          data-cy="login-button"
+          class="btn-login"
+          type="submit"
+          variant="primary"
+          :disabled="loading"
+        >
+          <span v-if="loading" class="spinner spinner-white"></span>
+          Login
+        </b-button>
+      </b-col>
+      <b-col class="text-right">
+        <b-link :to="{ path: '/find-password' }">Forgot password?</b-link>
+      </b-col>
+    </b-row>
+  </b-form>
+</template>
+
+<script>
+import { mapState, mapGetters, mapActions } from 'vuex'
+import { required, minLength } from 'vuelidate/lib/validators'
+
+export default {
+  name: 'LoginBox',
+  asyncData() {
+    return { isBrowser: process.browser }
+  },
+  data() {
+    return {
+      isBrowser: false,
+      form: {
+        username: '',
+        password: ''
+      }
+    }
+  },
+  validations: {
+    form: {
+      username: {
+        required
+      },
+      password: {
+        required,
+        minLength: minLength(6)
+      }
+    }
+  },
+  computed: {
+    ...mapGetters('alert', ['errorMessages', 'successMessages']),
+    ...mapState('auth', ['loading']),
+    ...mapGetters('auth', ['isLoggedIn'])
+  },
+  mounted() {
+    this.isBrowser = process.browser
+
+    if (this.isLoggedIn) {
+      // Already logged in
+      this.logout({ router: this.$router, slient: true })
+    }
+  },
+  methods: {
+    ...mapActions('auth', ['login', 'logout']),
+    onSubmit() {
+      this.$v.form.$touch()
+      if (this.$v.form.$anyError) {
+        return false
+      }
+
+      // Form submit logic
+      this.login({
+        username: this.form.username,
+        password: this.form.password,
+        router: this.$router
+      })
+    }
+  }
+}
+</script>
