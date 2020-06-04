@@ -100,7 +100,7 @@ testing-and-linting:
     - docker exec frontend-vue npm run lint
     - docker exec frontend-vue npm run test:unit
     - docker exec frontend-vue npm run test:e2e -- --headless
-    - docker exec frontend-nuxt npm run lint
+    - docker exec frontend-nuxt npm run test
 
 production-api:
   stage: build production

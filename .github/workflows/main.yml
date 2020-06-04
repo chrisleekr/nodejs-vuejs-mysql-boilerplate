@@ -69,15 +69,18 @@ jobs:
       - name: E2E test backend
         run: |
           docker exec backend npm run test:e2e -- --headless
-      - name: Lint frontend
+      - name: Lint frontend vue
         run: |
-          docker exec frontend npm run lint
-      - name: Unit test frontend
+          docker exec frontend-vue npm run lint
+      - name: Unit test frontend vue
         run: |
-          docker exec frontend npm run test:unit
-      - name: E2E test frontend
+          docker exec frontend-vue npm run test:unit
+      - name: E2E test frontend vue
         run: |
-          docker exec frontend npm run test:e2e -- --headless
+          docker exec frontend-vue npm run test:e2e -- --headless
+      - name: Unit test frontend nuxt
+        run: |
+          docker exec frontend-nuxt npm run test
       - name: Build nginx image
         if: github.ref == 'refs/heads/master'
         run: |
