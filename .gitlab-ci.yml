@@ -4,12 +4,11 @@ stages:
   - build production
 
 cache:
-  key: "$CI_PIPELINE_ID"
+  key: '$CI_PIPELINE_ID'
   paths:
     - /root/.cache
     - /root/.npm
     - node_modules
-
 
 .before_script_template: &before-script
   before_script:
@@ -20,7 +19,7 @@ build-nginx:
   image: docker:stable
   <<: *before-script
   script:
-    - cd nginx 
+    - cd nginx
     - docker build . -t $REGISTRY_DOMAIN/chrisleekr/nodejs-vuejs-mysql-boilerplate:nginx-dev
     - docker push $REGISTRY_DOMAIN/chrisleekr/nodejs-vuejs-mysql-boilerplate:nginx-dev
 
@@ -29,21 +28,35 @@ build-api:
   image: docker:stable
   <<: *before-script
   script:
-    - cd api 
+    - cd api
     - docker build . --target dev-stage -t $REGISTRY_DOMAIN/chrisleekr/nodejs-vuejs-mysql-boilerplate:api-dev
     - docker push $REGISTRY_DOMAIN/chrisleekr/nodejs-vuejs-mysql-boilerplate:api-dev
 
-build-frontend:
+build-frontend-nuxt:
   stage: build dev environment
   image: docker:stable
   <<: *before-script
   variables:
     NODE_ENV: development
-    BASE_URL: /frontend/
+    BASE_URL: /frontend-nuxt/
   script:
-    - cd frontend
-    - docker build . --target build-stage --build-arg NODE_ENV=$NODE_ENV --build-arg BASE_URL=/frontend/  -t $REGISTRY_DOMAIN/chrisleekr/nodejs-vuejs-mysql-boilerplate:frontend-dev
-    - docker push $REGISTRY_DOMAIN/chrisleekr/nodejs-vuejs-mysql-boilerplate:frontend-dev
+    - cd frontend-nuxt
+    - docker build . --target build-stage --build-arg BASE_URL=/frontend-nuxt/  -t
+      $REGISTRY_DOMAIN/chrisleekr/nodejs-vuejs-mysql-boilerplate:frontend-nuxt-dev
+    - docker push $REGISTRY_DOMAIN/chrisleekr/nodejs-vuejs-mysql-boilerplate:frontend-nuxt-dev
+
+build-frontend-vue:
+  stage: build dev environment
+  image: docker:stable
+  <<: *before-script
+  variables:
+    NODE_ENV: development
+    BASE_URL: /frontend-vue/
+  script:
+    - cd frontend-vue
+    - docker build . --target build-stage --build-arg NODE_ENV=$NODE_ENV --build-arg BASE_URL=/frontend-vue/  -t
+      $REGISTRY_DOMAIN/chrisleekr/nodejs-vuejs-mysql-boilerplate:frontend-vue-dev
+    - docker push $REGISTRY_DOMAIN/chrisleekr/nodejs-vuejs-mysql-boilerplate:frontend-vue-dev
 
 build-backend:
   stage: build dev environment
@@ -54,7 +67,8 @@ build-backend:
     BASE_URL: /backend/
   script:
     - cd backend
-    - docker build . --target build-stage --build-arg NODE_ENV=$NODE_ENV --build-arg BASE_URL=/backend/ -t $REGISTRY_DOMAIN/chrisleekr/nodejs-vuejs-mysql-boilerplate:backend-dev
+    - docker build . --target build-stage --build-arg NODE_ENV=$NODE_ENV --build-arg BASE_URL=/backend/ -t
+      $REGISTRY_DOMAIN/chrisleekr/nodejs-vuejs-mysql-boilerplate:backend-dev
     - docker push $REGISTRY_DOMAIN/chrisleekr/nodejs-vuejs-mysql-boilerplate:backend-dev
 
 build-mysql:
@@ -71,28 +85,29 @@ testing-and-linting:
   image: docker/compose:latest
   <<: *before-script
   services:
-    - docker:dind   
+    - docker:dind
   variables:
-    SERVICE_DOMAIN: localhost 
+    SERVICE_DOMAIN: localhost
   script:
     - docker-compose -f docker-compose.actions.yml pull
-    - docker-compose -f docker-compose.actions.yml down -t1 -v
+    - docker-compose -f docker-compose.actions.yml down -t1 -v --remove-orphans
     - docker-compose -f docker-compose.actions.yml up -d
     - docker exec api npm run lint
     - docker exec api npm run test
     - docker exec backend npm run lint
     - docker exec backend npm run test:unit
     - docker exec backend npm run test:e2e -- --headless
-    - docker exec frontend npm run lint
-    - docker exec frontend npm run test:unit
-    - docker exec frontend npm run test:e2e -- --headless
+    - docker exec frontend-vue npm run lint
+    - docker exec frontend-vue npm run test:unit
+    - docker exec frontend-vue npm run test:e2e -- --headless
+    - docker exec frontend-nuxt npm run test
 
 production-api:
   stage: build production
   image: docker:stable
   <<: *before-script
   script:
-    - cd api 
+    - cd api
     - docker build . --target production-stage -t $REGISTRY_DOMAIN/chrisleekr/nodejs-vuejs-mysql-boilerplate:api-latest
     - docker push $REGISTRY_DOMAIN/chrisleekr/nodejs-vuejs-mysql-boilerplate:api-latest
 
@@ -105,20 +120,35 @@ production-backend:
     BASE_URL: /backend/
   script:
     - cd backend
-    - docker build . --target production-stage --build-arg NODE_ENV=$NODE_ENV --build-arg BASE_URL=/backend/ -t $REGISTRY_DOMAIN/chrisleekr/nodejs-vuejs-mysql-boilerplate:backend-latest
+    - docker build . --target production-stage --build-arg NODE_ENV=$NODE_ENV --build-arg BASE_URL=/backend/ -t
+      $REGISTRY_DOMAIN/chrisleekr/nodejs-vuejs-mysql-boilerplate:backend-latest
     - docker push $REGISTRY_DOMAIN/chrisleekr/nodejs-vuejs-mysql-boilerplate:backend-latest
 
-production-frontend:
+production-frontend-nuxt:
   stage: build production
   image: docker:stable
   <<: *before-script
   variables:
     NODE_ENV: production
-    BASE_URL: /frontend/
+    BASE_URL: /frontend-nuxt/
   script:
-    - cd frontend
-    - docker build . --target production-stage --build-arg NODE_ENV=$NODE_ENV --build-arg BASE_URL=/frontend/ -t $REGISTRY_DOMAIN/chrisleekr/nodejs-vuejs-mysql-boilerplate:frontend-latest
-    - docker push $REGISTRY_DOMAIN/chrisleekr/nodejs-vuejs-mysql-boilerplate:frontend-latest
+    - cd frontend-nuxt
+    - docker build . --target production-stage --build-arg BASE_URL=/frontend-nuxt/ -t
+      $REGISTRY_DOMAIN/chrisleekr/nodejs-vuejs-mysql-boilerplate:frontend-nuxt-latest
+    - docker push $REGISTRY_DOMAIN/chrisleekr/nodejs-vuejs-mysql-boilerplate:frontend-nuxt-latest
+
+production-frontend-vue:
+  stage: build production
+  image: docker:stable
+  <<: *before-script
+  variables:
+    NODE_ENV: production
+    BASE_URL: /frontend-vue/
+  script:
+    - cd frontend-vue
+    - docker build . --target production-stage --build-arg NODE_ENV=$NODE_ENV --build-arg BASE_URL=/frontend-vue/ -t
+      $REGISTRY_DOMAIN/chrisleekr/nodejs-vuejs-mysql-boilerplate:frontend-vue-latest
+    - docker push $REGISTRY_DOMAIN/chrisleekr/nodejs-vuejs-mysql-boilerplate:frontend-vue-latest
 
 production-mysql:
   stage: build production

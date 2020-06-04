@@ -1,12 +1,12 @@
-version: "3.7"
+version: '3.7'
 
 services:
   nginx:
     container_name: nginx
     image: $REGISTRY_DOMAIN/chrisleekr/nodejs-vuejs-mysql-boilerplate:nginx-latest
     ports:
-      - "80:80"
-      - "443:443"
+      - '80:80'
+      - '443:443'
     networks:
       - internal
 
@@ -29,7 +29,7 @@ services:
       - BCRYPT_SALTING_ROUND=10
       - API_URL=http://$SERVICE_DOMAIN/api
       - BACKEND_URL=http://$SERVICE_DOMAIN/backend
-      - FRONTEND_URL=http://$SERVICE_DOMAIN/frontend
+      - FRONTEND_URL=http://$SERVICE_DOMAIN/frontend-nuxt
       - EMAIL_FROM_ADDRESS=support@$SERVICE_DOMAIN
       - EMAIL_FROM_NAME=Support
       - SMTP_HOST=mailhog
@@ -41,14 +41,26 @@ services:
       - SMTP_LOGGER=true
       - TZ=Australia/Melbourne
 
-  frontend:
-    container_name: frontend
-    image: $REGISTRY_DOMAIN/chrisleekr/nodejs-vuejs-mysql-boilerplate:frontend-latest
+  frontend-nuxt:
+    container_name: frontend-nuxt
+    image: $REGISTRY_DOMAIN/chrisleekr/nodejs-vuejs-mysql-boilerplate:frontend-nuxt-latest
     depends_on:
       - mysql
     networks:
       - internal
     environment:
+      - BASE_URL=/frontend-nuxt/
+      - API_URL=http://$SERVICE_DOMAIN/api
+
+  frontend-vue:
+    container_name: frontend-vue
+    image: $REGISTRY_DOMAIN/chrisleekr/nodejs-vuejs-mysql-boilerplate:frontend-vue-latest
+    depends_on:
+      - mysql
+    networks:
+      - internal
+    environment:
+      - BASE_URL=/frontend-vue/
       - API_URL=http://$SERVICE_DOMAIN/api
 
   backend:
@@ -60,7 +72,7 @@ services:
       - internal
     environment:
       - API_URL=http://$SERVICE_DOMAIN/api
-  
+
   mysql:
     container_name: mysql
     image: $REGISTRY_DOMAIN/chrisleekr/nodejs-vuejs-mysql-boilerplate:mysql-latest
@@ -70,14 +82,14 @@ services:
       - mysql_data:/var/lib/mysql
     environment:
       MYSQL_ROOT_PASSWORD: root
-      MYSQL_DATABASE: boilerplate 
+      MYSQL_DATABASE: boilerplate
       TZ: Australia/Melbourne
-  
+
   mailhog:
     container_name: mailhog
     image: mailhog/mailhog
     networks:
-      - internal  
+      - internal
 
 networks:
   internal:

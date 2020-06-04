@@ -1,4 +1,4 @@
-version: "3.7"
+version: '3.7'
 
 services:
   nginx:
@@ -6,7 +6,7 @@ services:
     image: $REGISTRY_DOMAIN/chrisleekr/nodejs-vuejs-mysql-boilerplate:nginx-dev
     networks:
       - internal
-    
+
   api:
     container_name: api
     image: $REGISTRY_DOMAIN/chrisleekr/nodejs-vuejs-mysql-boilerplate:api-dev
@@ -38,9 +38,21 @@ services:
       - SMTP_LOGGER=true
       - TZ=Australia/Melbourne
 
-  frontend:
-    container_name: frontend
-    image: $REGISTRY_DOMAIN/chrisleekr/nodejs-vuejs-mysql-boilerplate:frontend-dev
+  frontend-nuxt:
+    container_name: frontend-nuxt
+    image: $REGISTRY_DOMAIN/chrisleekr/nodejs-vuejs-mysql-boilerplate:frontend-nuxt-dev
+    depends_on:
+      - mysql
+    networks:
+      - internal
+    environment:
+      - API_URL=http://api:3000
+      - FORMAT_DATETIME="YYYY-MM-DD HH:MM:SS"
+    command: npm run dev
+
+  frontend-vue:
+    container_name: frontend-vue
+    image: $REGISTRY_DOMAIN/chrisleekr/nodejs-vuejs-mysql-boilerplate:frontend-vue-dev
     depends_on:
       - mysql
     networks:
@@ -59,7 +71,7 @@ services:
     environment:
       - API_URL=http://api:3000
     command: npm run serve
-  
+
   mysql:
     container_name: mysql
     image: $REGISTRY_DOMAIN/chrisleekr/nodejs-vuejs-mysql-boilerplate:mysql-dev
@@ -69,14 +81,14 @@ services:
       - mysql_data:/var/lib/mysql
     environment:
       MYSQL_ROOT_PASSWORD: root
-      MYSQL_DATABASE: boilerplate 
+      MYSQL_DATABASE: boilerplate
       TZ: Australia/Melbourne
-  
+
   mailhog:
     container_name: mailhog
     image: mailhog/mailhog
     networks:
-      - internal  
+      - internal
 
 networks:
   internal:
