@@ -73,8 +73,8 @@
     "@nuxtjs/stylelint-module": "^4.0.0",
     "stylelint": "^13.6.1",
     "@vue/test-utils": "^1.0.3",
-    "babel-jest": "^26.1.0",
-    "jest": "~>26.1.0",
+    "babel-jest": "^26.0.1",
+    "jest": "~>24.9.0",
     "vue-jest": "^4.0.0-0",
     "node-sass": "^4.14.1",
     "sass-loader": "^9.0.2"
