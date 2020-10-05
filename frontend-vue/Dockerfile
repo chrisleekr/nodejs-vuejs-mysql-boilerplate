@@ -32,14 +32,9 @@ ENV BASE_URL=${BASE_URL}
 
 WORKDIR /srv
 
-# Add configuration files
-COPY image-files/ /
-
 COPY . .
 
 RUN npm run build --mode=production
-
-ENTRYPOINT [ "docker-entrypoint.dev.sh" ]
 
 # production stage
 FROM nginx:stable-alpine AS production-stage
@@ -47,10 +42,8 @@ FROM nginx:stable-alpine AS production-stage
 # Add configuration files
 COPY image-files/ /
 
-RUN chmod +x /usr/local/bin/docker-entrypoint*.sh
-ENV PATH /usr/local/bin:$PATH
-
-COPY --from=build-stage /srv/dist /srv/frontend-vue/
+# Add configuration files
+COPY --from=build-stage /srv/dist /srv
 
 EXPOSE 80
 

@@ -2,13 +2,15 @@
 
 set -e
 
-mkdir -p /srv/frontend-vue/static
+mkdir -p /srv/static
 
-cat <<EOT > /srv/frontend-vue/static/config.json
+cat <<EOT > /srv/static/config.json
 {
   "apiUrl": "$API_URL",
   "format": {
-    "dateTime": "YYYY-MM-DD HH:MM:SS"
+    "timeZone": "Australia/Melbourne",
+    "dateTime": "YYYY-MM-DD HH:mm:ss",
+    "pickerDateTime": "yyyy-MM-dd HH:mm"
   }
 }
 EOT
