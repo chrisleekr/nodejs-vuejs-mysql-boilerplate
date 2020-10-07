@@ -30,11 +30,16 @@ ARG BASE_URL
 ENV NODE_ENV=${NODE_ENV}
 ENV BASE_URL=${BASE_URL}
 
+# Add configuration files
+COPY image-files/ /
+
 WORKDIR /srv
 
 COPY . .
 
 RUN npm run build --mode=production
+
+ENTRYPOINT [ "docker-entrypoint.dev.sh" ]
 
 # production stage
 FROM nginx:stable-alpine AS production-stage
