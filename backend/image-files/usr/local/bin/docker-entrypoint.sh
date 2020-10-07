@@ -2,9 +2,9 @@
 
 set -e
 
-mkdir -p /srv/backend/static
+mkdir -p /srv/static
 
-cat <<EOT > /srv/backend/static/config.json
+cat <<EOT > /srv/static/config.json
 {
   "apiUrl": "$API_URL",
   "format": {

@@ -20,11 +20,6 @@ jobs:
       - name: docker hub login
         run: |
           echo "$DOCKER_PASSWORD" | docker login -u "$DOCKER_USERNAME" --password-stdin $REGISTRY_DOMAIN
-      - name: Build nginx image
-        run: |
-          cd nginx
-          docker build . -t $REGISTRY_DOMAIN/chrisleekr/nodejs-vuejs-mysql-boilerplate:nginx-dev
-          docker push $REGISTRY_DOMAIN/chrisleekr/nodejs-vuejs-mysql-boilerplate:nginx-dev
       - name: Build api dev image
         run: |
           cd api
@@ -38,12 +33,12 @@ jobs:
       - name: Build frontend vue dev image
         run: |
           cd frontend-vue
-          docker build . --target build-stage --build-arg NODE_ENV=$NODE_ENV --build-arg BASE_URL=/frontend-vue/ -t $REGISTRY_DOMAIN/chrisleekr/nodejs-vuejs-mysql-boilerplate:frontend-vue-dev
+          docker build . --target build-stage --build-arg NODE_ENV=development --build-arg BASE_URL=/frontend-vue/ -t $REGISTRY_DOMAIN/chrisleekr/nodejs-vuejs-mysql-boilerplate:frontend-vue-dev
           docker push $REGISTRY_DOMAIN/chrisleekr/nodejs-vuejs-mysql-boilerplate:frontend-vue-dev
       - name: Build backend dev image
         run: |
           cd backend
-          docker build . --target build-stage --build-arg NODE_ENV=$NODE_ENV --build-arg BASE_URL=/backend/ -t $REGISTRY_DOMAIN/chrisleekr/nodejs-vuejs-mysql-boilerplate:backend-dev
+          docker build . --target build-stage --build-arg NODE_ENV=development --build-arg BASE_URL=/backend/ -t $REGISTRY_DOMAIN/chrisleekr/nodejs-vuejs-mysql-boilerplate:backend-dev
           docker push $REGISTRY_DOMAIN/chrisleekr/nodejs-vuejs-mysql-boilerplate:backend-dev
       - name: Build mysql dev image
         run: |
@@ -81,12 +76,6 @@ jobs:
       - name: Unit test frontend nuxt
         run: |
           docker exec frontend-nuxt npm run test
-      - name: Build nginx image
-        if: github.ref == 'refs/heads/master'
-        run: |
-          cd nginx
-          docker build . -t $REGISTRY_DOMAIN/chrisleekr/nodejs-vuejs-mysql-boilerplate:nginx-latest
-          docker push $REGISTRY_DOMAIN/chrisleekr/nodejs-vuejs-mysql-boilerplate:nginx-latest
       - name: Build api latest image
         if: github.ref == 'refs/heads/master'
         run: |

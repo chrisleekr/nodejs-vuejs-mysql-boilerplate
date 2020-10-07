@@ -30,10 +30,10 @@ ARG BASE_URL
 ENV NODE_ENV=${NODE_ENV}
 ENV BASE_URL=${BASE_URL}
 
-WORKDIR /srv
-
 # Add configuration files
 COPY image-files/ /
+
+WORKDIR /srv
 
 COPY . .
 
@@ -47,10 +47,8 @@ FROM nginx:stable-alpine AS production-stage
 # Add configuration files
 COPY image-files/ /
 
-RUN chmod +x /usr/local/bin/docker-entrypoint*.sh
-ENV PATH /usr/local/bin:$PATH
-
-COPY --from=build-stage /srv/dist /srv/frontend-vue/
+# Add configuration files
+COPY --from=build-stage /srv/dist /srv
 
 EXPOSE 80
 

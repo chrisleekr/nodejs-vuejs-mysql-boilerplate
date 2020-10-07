@@ -48,6 +48,4 @@ EXPOSE 3000
 
 ENTRYPOINT [ "docker-entrypoint.sh" ]
 
-RUN npm run build
-
 CMD ["npm", "start"]

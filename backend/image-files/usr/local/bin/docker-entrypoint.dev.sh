@@ -2,7 +2,7 @@
 
 set -e
 
-mkdir -p /srv/public/static
+mkdir -p /srv/static
 
 cat <<EOT > /srv/public/static/config.json
 {

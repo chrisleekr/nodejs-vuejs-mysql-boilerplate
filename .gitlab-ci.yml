@@ -4,7 +4,7 @@ stages:
   - build production
 
 cache:
-  key: '$CI_PIPELINE_ID'
+  key: "$CI_PIPELINE_ID"
   paths:
     - /root/.cache
     - /root/.npm
@@ -13,15 +13,6 @@ cache:
 .before_script_template: &before-script
   before_script:
     - echo "$DOCKER_PASSWORD" | docker login -u "$DOCKER_USERNAME" --password-stdin $REGISTRY_DOMAIN
-
-build-nginx:
-  stage: build dev environment
-  image: docker:stable
-  <<: *before-script
-  script:
-    - cd nginx
-    - docker build . -t $REGISTRY_DOMAIN/chrisleekr/nodejs-vuejs-mysql-boilerplate:nginx-dev
-    - docker push $REGISTRY_DOMAIN/chrisleekr/nodejs-vuejs-mysql-boilerplate:nginx-dev
 
 build-api:
   stage: build dev environment
@@ -158,12 +149,3 @@ production-mysql:
     - cd mysql
     - docker build . -t $REGISTRY_DOMAIN/chrisleekr/nodejs-vuejs-mysql-boilerplate:mysql-latest
     - docker push $REGISTRY_DOMAIN/chrisleekr/nodejs-vuejs-mysql-boilerplate:mysql-latest
-
-production-nginx:
-  stage: build production
-  image: docker:stable
-  <<: *before-script
-  script:
-    - cd nginx
-    - docker build . -t $REGISTRY_DOMAIN/chrisleekr/nodejs-vuejs-mysql-boilerplate:nginx-latest
-    - docker push $REGISTRY_DOMAIN/chrisleekr/nodejs-vuejs-mysql-boilerplate:nginx-latest

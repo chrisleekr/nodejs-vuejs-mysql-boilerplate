@@ -1,11 +1,20 @@
-version: '3.7'
+version: "3.7"
 
 services:
   nginx:
     container_name: nginx
-    image: $REGISTRY_DOMAIN/chrisleekr/nodejs-vuejs-mysql-boilerplate:nginx-dev
+    image: nginx:stable
+    depends_on:
+      - api
+      - frontend-nuxt
+      - frontend-vue
+      - mysql
     networks:
       - internal
+    volumes:
+      - ./nginx/image-files/etc/nginx/nginx.conf:/etc/nginx/nginx.conf
+    ports:
+      - 80:80
 
   api:
     container_name: api
