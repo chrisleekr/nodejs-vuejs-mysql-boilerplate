@@ -24,7 +24,8 @@
     "start": "cross-env NODE_ENV=production node server/index.js",
     "generate": "nuxt generate",
     "lint": "eslint --ext .js,.vue --ignore-path .gitignore .",
-    "test": "jest"
+    "test": "jest",
+    "prod": "npm run build && npm run start"
   },
   "lint-staged": {
     "*.{js,vue}": "npm run lint",
