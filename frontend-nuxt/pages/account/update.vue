@@ -4,7 +4,7 @@
       <h1 class="page-title">Update my account</h1>
       <b-card-group deck>
         <b-card>
-          <template v-slot:header>
+          <template #header>
             <strong>Your information</strong>
           </template>
 
@@ -187,6 +187,12 @@ export default {
       }
     }
   },
+  head() {
+    return {
+      title: 'Update my account',
+      meta: []
+    }
+  },
   computed: {
     ...mapGetters('alert', ['errorMessages', 'successMessages']),
     ...mapState('user', ['loading', 'user'])
@@ -221,12 +227,6 @@ export default {
         },
         router: this.$router
       })
-    }
-  },
-  head() {
-    return {
-      title: 'Update my account',
-      meta: []
     }
   }
 }

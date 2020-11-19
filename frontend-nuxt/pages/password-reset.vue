@@ -35,11 +35,23 @@ import PasswordResetBox from '@/components/PasswordResetBox.vue'
 
 export default {
   name: 'PasswordReset',
-  middleware: ['guest-only'],
   components: { PasswordResetBox },
+  middleware: ['guest-only'],
   data() {
     return {
       authKey: ''
+    }
+  },
+  head() {
+    return {
+      title: 'Reset Password',
+      meta: [
+        {
+          hid: 'description',
+          name: 'description',
+          content: 'Reset your password.'
+        }
+      ]
     }
   },
   computed: {
@@ -67,18 +79,6 @@ export default {
   methods: {
     ...mapActions('auth', ['handleAuthMessageKey']),
     ...mapActions('alert', ['error'])
-  },
-  head() {
-    return {
-      title: 'Reset Password',
-      meta: [
-        {
-          hid: 'description',
-          name: 'description',
-          content: 'Reset your password.'
-        }
-      ]
-    }
   }
 }
 </script>

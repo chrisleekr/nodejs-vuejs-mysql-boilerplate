@@ -4,7 +4,8 @@ This is a boilerplate project. The project contains Node.js REST API and fronten
 BootstrapVue.
 
 - API
-  - Node.js, Express, Webpack, Express Validator, JWT, Bunyan, Promise MySQL, Node Mailer, Jest, Supertest, Nodemon
+  - Node.js, Express, Webpack, Express Validator, JWT, Bunyan, Promise MySQL, Node Mailer, Jest, Supertest, Nodemon, DB
+    migrate
 - Frontend - Nuxt.js
   - Nuxt.js, Vue.js, Vuex, Vuelidate, BootstrapVue, Jest
 - Frontend - Vue.js
@@ -117,10 +118,13 @@ Access via your browser `http://localhost/mailhog`
 
 ### MySQL
 
-In the folder `mysql/sql`, there is a SQL file called `inital.sql`, which will become initial database table/rows. MySQL
-port is mapped to 3307.
+MySQL port is mapped to 3307.
 
 ## Features
+
+- API
+
+  - Database migration
 
 - Frontend - Vue.js
 

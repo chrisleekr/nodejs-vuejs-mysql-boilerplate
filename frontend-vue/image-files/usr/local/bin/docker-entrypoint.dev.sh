@@ -8,7 +8,9 @@ cat <<EOT > /srv/public/static/config.json
 {
   "apiUrl": "$API_URL",
   "format": {
-    "dateTime": "YYYY-MM-DD HH:MM:SS"
+    "timeZone": "Australia/Melbourne",
+    "dateTime": "YYYY-MM-DD HH:mm:ss",
+    "pickerDateTime": "yyyy-MM-dd HH:mm"
   }
 }
 EOT

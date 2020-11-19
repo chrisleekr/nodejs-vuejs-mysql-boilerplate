@@ -34,14 +34,8 @@ import FindPasswordBox from '@/components/FindPasswordBox.vue'
 
 export default {
   name: 'FindPassword',
-  middleware: ['guest-only'],
   components: { FindPasswordBox },
-  computed: {
-    ...mapState('auth', ['isPasswordResetRequested'])
-  },
-  mounted() {
-    this.$store.commit('alert/clear')
-  },
+  middleware: ['guest-only'],
   head() {
     return {
       title: 'Find my password',
@@ -53,6 +47,12 @@ export default {
         }
       ]
     }
+  },
+  computed: {
+    ...mapState('auth', ['isPasswordResetRequested'])
+  },
+  mounted() {
+    this.$store.commit('alert/clear')
   }
 }
 </script>

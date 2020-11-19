@@ -1,6 +1,6 @@
 const _ = require('lodash');
 const { validationResult } = require('express-validator');
-const { getTokenData } = require('../helpers/authentication');
+const { getTokenData } = require('./authentication');
 const userModel = require('../models/userModel');
 const permissionModel = require('../models/permissionModel');
 

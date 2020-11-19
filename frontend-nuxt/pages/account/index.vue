@@ -4,7 +4,7 @@
       <h1 class="page-title">My account</h1>
       <b-card-group deck>
         <b-card>
-          <template v-slot:header>
+          <template #header>
             <strong>Your information</strong>
           </template>
 
@@ -29,7 +29,7 @@
               label="Last login at"
             ></b-form-group>
           </div>
-          <template v-if="!loading && user" v-slot:footer>
+          <template v-if="!loading && user" #footer>
             <b-link :to="{ path: '/account/update' }" class="btn btn-primary"
               >Update information</b-link
             >
@@ -46,6 +46,12 @@ import { mapState, mapActions } from 'vuex'
 export default {
   name: 'Account',
   middleware: ['require-auth'],
+  head() {
+    return {
+      title: 'My account',
+      meta: []
+    }
+  },
   computed: {
     ...mapState('user', ['loading', 'user'])
   },
@@ -54,12 +60,6 @@ export default {
   },
   methods: {
     ...mapActions('user', ['me'])
-  },
-  head() {
-    return {
-      title: 'My account',
-      meta: []
-    }
   }
 }
 </script>

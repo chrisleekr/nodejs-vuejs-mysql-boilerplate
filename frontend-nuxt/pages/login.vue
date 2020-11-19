@@ -34,19 +34,8 @@ import LoginBox from '@/components/LoginBox.vue'
 
 export default {
   name: 'Login',
-  middleware: ['guest-only'],
   components: { LoginBox },
-  mounted() {
-    this.$store.commit('alert/clear')
-
-    if (this.$route.query.messageKey) {
-      this.handleAuthMessageKey({ messageKey: this.$route.query.messageKey })
-    }
-  },
-  methods: {
-    ...mapActions('auth', ['handleAuthMessageKey'])
-  },
-
+  middleware: ['guest-only'],
   head() {
     return {
       title: 'Login',
@@ -58,6 +47,16 @@ export default {
         }
       ]
     }
+  },
+  mounted() {
+    this.$store.commit('alert/clear')
+
+    if (this.$route.query.messageKey) {
+      this.handleAuthMessageKey({ messageKey: this.$route.query.messageKey })
+    }
+  },
+  methods: {
+    ...mapActions('auth', ['handleAuthMessageKey'])
   }
 }
 </script>

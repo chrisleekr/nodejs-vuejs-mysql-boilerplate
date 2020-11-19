@@ -81,15 +81,19 @@ services:
 
   mysql:
     container_name: mysql
-    image: $REGISTRY_DOMAIN/chrisleekr/nodejs-vuejs-mysql-boilerplate:mysql-latest
+    image: mysql:8.0
     networks:
       - internal
+    ports:
+      - 3307:3306
     volumes:
+      - ./mysql/conf.d:/etc/mysql/conf.d
       - mysql_data:/var/lib/mysql
+    command: --default-authentication-plugin=mysql_native_password
     environment:
-      MYSQL_ROOT_PASSWORD: root
-      MYSQL_DATABASE: boilerplate
-      TZ: Australia/Melbourne
+      - MYSQL_ROOT_PASSWORD=root
+      - MYSQL_DATABASE=boilerplate
+      - TZ=Australia/Melbourne
 
   mailhog:
     container_name: mailhog

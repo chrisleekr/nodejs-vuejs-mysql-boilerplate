@@ -11,5 +11,16 @@
     "react": {
       "version": "999.999.999"
     }
-  }
+  },
+  "overrides": [
+    {
+      "files": ["migrations/**/*.js"],
+      "rules": {
+        "no-console": "off",
+        "no-underscore-dangle": "off",
+        "no-unused-vars": "off",
+        "consistent-return": "off"
+      }
+    }
+  ]
 }
