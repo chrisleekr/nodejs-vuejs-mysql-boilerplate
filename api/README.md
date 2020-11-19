@@ -1,6 +1,6 @@
 # API for Node.js + Vue.js boilerplate
 
-Node.js, Express, Webpack, Express Validator, JWT, Bunyan, Promise MySQL, Node Mailer, Jest, Supertest, Nodemon
+Node.js, Express, Webpack, Express Validator, JWT, Bunyan, Promise MySQL, Node Mailer, Jest, Supertest, Nodemon, DB Migrate
 
 ## How to start development
 
@@ -12,6 +12,10 @@ Node.js, Express, Webpack, Express Validator, JWT, Bunyan, Promise MySQL, Node M
 
 2. Uncomment **volumes** in the `docker-compose.yml` file
 3. Access via `http://localhost/api`
+
+## How to manage migration
+
+[https://db-migrate.readthedocs.io/en/latest/](https://db-migrate.readthedocs.io/en/latest/)
 
 ## Routes
 
@@ -46,6 +50,7 @@ Node.js, Express, Webpack, Express Validator, JWT, Bunyan, Promise MySQL, Node M
 
 ## Features
 
+- Database migration
 - Frontend
   - User registration
   - Confirm user's email address

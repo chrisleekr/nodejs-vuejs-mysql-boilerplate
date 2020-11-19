@@ -45,11 +45,17 @@ import TodoAddBox from '@/components/TodoAddBox.vue'
 
 export default {
   name: 'Todo',
-  middleware: ['require-auth'],
   components: { TodoBox, TodoAddBox },
+  middleware: ['require-auth'],
   data() {
     return {
       title: 'Todo Page'
+    }
+  },
+  head() {
+    return {
+      title: 'Todo Page',
+      meta: []
     }
   },
   computed: {
@@ -89,12 +95,6 @@ export default {
         todoId: todo.id,
         router: this.$router
       }).then(() => this.list({}))
-    }
-  },
-  head() {
-    return {
-      title: 'Todo Page',
-      meta: []
     }
   }
 }

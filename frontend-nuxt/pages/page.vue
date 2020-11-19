@@ -11,6 +11,18 @@
 <script>
 export default {
   name: 'Page',
+  head() {
+    return {
+      title: this.pageTitle,
+      meta: [
+        {
+          hid: 'description',
+          name: 'description',
+          content: 'Page description'
+        }
+      ]
+    }
+  },
   computed: {
     pageTitle() {
       const { pageName } = this.$route.meta
@@ -24,18 +36,6 @@ export default {
           (pageId ? ` ${pageId}` : '')
       }
       return pageTitle
-    }
-  },
-  head() {
-    return {
-      title: this.pageTitle,
-      meta: [
-        {
-          hid: 'description',
-          name: 'description',
-          content: 'Page description'
-        }
-      ]
     }
   }
 }

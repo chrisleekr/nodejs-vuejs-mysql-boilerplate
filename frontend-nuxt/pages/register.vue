@@ -34,25 +34,25 @@ import RegisterBox from '@/components/RegisterBox.vue'
 
 export default {
   name: 'Register',
-  middleware: ['guest-only'],
   components: { RegisterBox },
+  middleware: ['guest-only'],
   computed: {
+    head() {
+      return {
+        title: 'Register',
+        meta: [
+          {
+            hid: 'description',
+            name: 'description',
+            content: 'Register your account.'
+          }
+        ]
+      }
+    },
     ...mapState('auth', ['isRegistered'])
   },
   mounted() {
     this.$store.commit('alert/clear')
-  },
-  head() {
-    return {
-      title: 'Register',
-      meta: [
-        {
-          hid: 'description',
-          name: 'description',
-          content: 'Register your account.'
-        }
-      ]
-    }
   }
 }
 </script>

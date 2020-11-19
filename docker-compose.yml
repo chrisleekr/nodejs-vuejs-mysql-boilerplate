@@ -20,13 +20,11 @@ services:
     container_name: api
     build:
       context: ./api
-      target: production-stage
+      target: dev-stage
     depends_on:
       - mysql
     networks:
       - internal
-    # ports:
-    #   - 3000:3000
     # volumes:
     #   - ./api:/srv
     environment:
@@ -62,12 +60,13 @@ services:
       args:
         BASE_URL: /frontend-nuxt/
     depends_on:
-      - mysql
+      - api
     networks:
       - internal
     environment:
       - BASE_URL=/frontend-nuxt/
       - API_URL=http://localhost/api
+    command: npm run dev
 
   frontend-vue:
     container_name: frontend-vue
@@ -78,7 +77,7 @@ services:
         NODE_ENV: production
         BASE_URL: /frontend-vue/
     depends_on:
-      - mysql
+      - api
     networks:
       - internal
     environment:
@@ -94,7 +93,7 @@ services:
         NODE_ENV: production
         BASE_URL: /backend/
     depends_on:
-      - mysql
+      - api
     networks:
       - internal
     environment:
@@ -103,27 +102,25 @@ services:
 
   mysql:
     container_name: mysql
-    build:
-      context: ./mysql
+    image: mysql:8.0
     networks:
       - internal
-    volumes:
-      - mysql_data:/var/lib/mysql
     ports:
       - 3307:3306
+    volumes:
+      - ./mysql/conf.d:/etc/mysql/conf.d
+      - mysql_data:/var/lib/mysql
+    command: --default-authentication-plugin=mysql_native_password
     environment:
-      MYSQL_ROOT_PASSWORD: root
-      MYSQL_DATABASE: boilerplate
-      TZ: Australia/Melbourne
+      - MYSQL_ROOT_PASSWORD=root
+      - MYSQL_DATABASE=boilerplate
+      - TZ=Australia/Melbourne
 
   mailhog:
     container_name: mailhog
     image: mailhog/mailhog
     networks:
       - internal
-    # ports:
-    #   - 1025:1025 # smtp server
-    #   - 8025:8025 # web ui
 
 networks:
   internal:

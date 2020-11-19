@@ -9,10 +9,11 @@ cache:
     - /root/.cache
     - /root/.npm
     - node_modules
+    - vendor
 
 .before_script_template: &before-script
   before_script:
-    - echo "$DOCKER_PASSWORD" | docker login -u "$DOCKER_USERNAME" --password-stdin $REGISTRY_DOMAIN
+    - echo "$CI_BUILD_TOKEN" | docker login -u gitlab-ci-token --password-stdin $REGISTRY_DOMAIN
 
 build-api:
   stage: build dev environment
@@ -62,21 +63,14 @@ build-backend:
       $REGISTRY_DOMAIN/chrisleekr/nodejs-vuejs-mysql-boilerplate:backend-dev
     - docker push $REGISTRY_DOMAIN/chrisleekr/nodejs-vuejs-mysql-boilerplate:backend-dev
 
-build-mysql:
-  stage: build dev environment
-  image: docker:stable
-  <<: *before-script
-  script:
-    - cd mysql
-    - docker build . -t $REGISTRY_DOMAIN/chrisleekr/nodejs-vuejs-mysql-boilerplate:mysql-dev
-    - docker push $REGISTRY_DOMAIN/chrisleekr/nodejs-vuejs-mysql-boilerplate:mysql-dev
-
 testing-and-linting:
   stage: testing
   image: docker/compose:latest
   <<: *before-script
   services:
-    - docker:dind
+    - docker:18-dind
+  tags:
+    - dind
   variables:
     SERVICE_DOMAIN: localhost
   script:
@@ -141,11 +135,3 @@ production-frontend-vue:
       $REGISTRY_DOMAIN/chrisleekr/nodejs-vuejs-mysql-boilerplate:frontend-vue-latest
     - docker push $REGISTRY_DOMAIN/chrisleekr/nodejs-vuejs-mysql-boilerplate:frontend-vue-latest
 
-production-mysql:
-  stage: build production
-  image: docker:stable
-  <<: *before-script
-  script:
-    - cd mysql
-    - docker build . -t $REGISTRY_DOMAIN/chrisleekr/nodejs-vuejs-mysql-boilerplate:mysql-latest
-    - docker push $REGISTRY_DOMAIN/chrisleekr/nodejs-vuejs-mysql-boilerplate:mysql-latest

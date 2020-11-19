@@ -1,6 +1,6 @@
 <template>
   <b-card class="mb-3">
-    <template v-slot:header>
+    <template #header>
       <h6 class="mb-0">
         {{ cardHeader }}
         <span v-if="loading" class="spinner"></span>

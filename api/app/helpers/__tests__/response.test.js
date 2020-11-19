@@ -4,7 +4,7 @@ const expressValidator = require('express-validator');
 
 const response = require('../response');
 
-const authentication = require('../../helpers/authentication');
+const authentication = require('../authentication');
 const userModel = require('../../models/userModel');
 const permissionModel = require('../../models/permissionModel');
 
