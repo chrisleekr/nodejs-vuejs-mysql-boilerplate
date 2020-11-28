@@ -16,11 +16,47 @@ services:
     ports:
       - 80:80
 
+  mysql:
+    container_name: mysql
+    image: mysql:8.0
+    networks:
+      - internal
+    ports:
+      - 3307:3306
+    volumes:
+      - ./mysql/conf.d:/etc/mysql/conf.d
+      - mysql_data:/var/lib/mysql
+    command: --default-authentication-plugin=mysql_native_password
+    environment:
+      - MYSQL_ROOT_PASSWORD=root
+      - MYSQL_DATABASE=boilerplate
+      - TZ=Australia/Melbourne
+
+  migration:
+    container_name: migration
+    image: $REGISTRY_DOMAIN/chrisleekr/nodejs-vuejs-mysql-boilerplate:api-latest
+    depends_on:
+      - mysql
+    networks:
+      - internal
+    environment:
+      - DB_HOST=mysql
+      - DB_PORT=3306
+      - DB_USER=root
+      - DB_PASSWORD=root
+      - DB_NAME=boilerplate
+      - DB_CONNECTION_LIMIT=10
+      - DB_DEBUG=true
+      - TZ=Australia/Melbourne
+    command:
+      - /usr/local/bin/migration.sh
+
   api:
     container_name: api
     image: $REGISTRY_DOMAIN/chrisleekr/nodejs-vuejs-mysql-boilerplate:api-latest
     depends_on:
       - mysql
+      - migration
     networks:
       - internal
     environment:
@@ -78,22 +114,6 @@ services:
       - internal
     environment:
       - API_URL=http://$SERVICE_DOMAIN/api
-
-  mysql:
-    container_name: mysql
-    image: mysql:8.0
-    networks:
-      - internal
-    ports:
-      - 3307:3306
-    volumes:
-      - ./mysql/conf.d:/etc/mysql/conf.d
-      - mysql_data:/var/lib/mysql
-    command: --default-authentication-plugin=mysql_native_password
-    environment:
-      - MYSQL_ROOT_PASSWORD=root
-      - MYSQL_DATABASE=boilerplate
-      - TZ=Australia/Melbourne
 
   mailhog:
     container_name: mailhog
