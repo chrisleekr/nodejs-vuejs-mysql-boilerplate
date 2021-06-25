@@ -1,6 +1,6 @@
 import { createLocalVue, shallowMount } from '@vue/test-utils'
 
-import BootstrapVue from 'bootstrap-vue'
+import { BootstrapVue } from 'bootstrap-vue'
 
 import index from '@/pages/index.vue'
 

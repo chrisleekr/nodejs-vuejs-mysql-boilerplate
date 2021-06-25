@@ -63,6 +63,14 @@ build-backend:
       $REGISTRY_DOMAIN/chrisleekr/nodejs-vuejs-mysql-boilerplate:backend-dev
     - docker push $REGISTRY_DOMAIN/chrisleekr/nodejs-vuejs-mysql-boilerplate:backend-dev
 
+lint-dockerfile:
+  stage: testing
+  image: hadolint/hadolint:latest
+  script:
+    - hadolint api/Dockerfile
+    - hadolint frontend-nuxt/Dockerfile
+    - hadolint frontend-vue/Dockerfile
+
 testing-and-linting:
   stage: testing
   image: docker/compose:latest

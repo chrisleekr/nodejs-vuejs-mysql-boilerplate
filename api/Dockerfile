@@ -1,11 +1,15 @@
 # development stage
-FROM node:13-alpine AS dev-stage
+FROM node:16-alpine3.13 AS dev-stage
 
-RUN apk update && apk add --no-cache python make g++ mysql-client
+RUN apk update && \
+  apk add --no-cache \
+  python3=3.8.10-r0 \
+  make=4.3-r0 \
+  g++=10.2.1_pre1-r3 \
+  mysql-client=10.5.11-r0
 
 # Add configuration files
 COPY image-files/ /
-
 
 WORKDIR /srv
 
@@ -24,15 +28,14 @@ CMD [ "npm", "run", "dev" ]
 # build stage
 FROM dev-stage AS build-stage
 
-
-RUN npm install --production
-
-RUN npm run build
+RUN npm install --production && \
+  npm run build && \
+  npm audit fix
 
 # production stage
-FROM node:13-alpine AS production-stage
+FROM node:16-alpine3.13 AS production-stage
 
-RUN apk update && apk add --no-cache mysql-client
+RUN apk update && apk add --no-cache mysql-client=10.5.10-r0
 
 # Add configuration files
 COPY image-files/ /

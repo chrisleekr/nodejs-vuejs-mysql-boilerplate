@@ -14,10 +14,10 @@ jobs:
     steps:
       - name: Checkout source code
         uses: actions/checkout@master
-      - name: set inotify
+      - name: Set inotify
         run: |
           echo fs.inotify.max_user_watches=524288 | sudo tee -a /etc/sysctl.conf && sudo sysctl -p
-      - name: docker hub login
+      - name: Login DockerHub
         run: |
           echo "$DOCKER_PASSWORD" | docker login -u "$DOCKER_USERNAME" --password-stdin $REGISTRY_DOMAIN
       - name: Build api dev image
@@ -40,6 +40,18 @@ jobs:
           cd backend
           docker build . --target build-stage --build-arg NODE_ENV=development --build-arg BASE_URL=/backend/ -t $REGISTRY_DOMAIN/chrisleekr/nodejs-vuejs-mysql-boilerplate:backend-dev
           docker push $REGISTRY_DOMAIN/chrisleekr/nodejs-vuejs-mysql-boilerplate:backend-dev
+      - name: Lint Dockerfile for api
+        uses: hadolint/hadolint-action@v1.5.0
+        with:
+          dockerfile: api/Dockerfile
+      - name: Lint Dockerfile for frontend-nuxt
+        uses: hadolint/hadolint-action@v1.5.0
+        with:
+          dockerfile: frontend-nuxt/Dockerfile
+      - name: Lint Dockerfile for vue
+        uses: hadolint/hadolint-action@v1.5.0
+        with:
+          dockerfile: frontend-vue/Dockerfile
       - name: Run docker compose for dev
         run: |
           docker-compose -f docker-compose.actions.yml pull

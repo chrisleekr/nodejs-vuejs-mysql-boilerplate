@@ -22,6 +22,8 @@ export default {
 </script>
 
 <style lang="scss">
+@import '../src/assets/css/custom.css';
+
 #app {
   // prettier-ignore
   font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, 'Noto Sans', sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol', 'Noto Color Emoji';
@@ -30,6 +32,4 @@ export default {
   color: #2c3e50;
   padding-top: 4.5rem;
 }
-
-@import '../src/assets/css/custom.css';
 </style>
