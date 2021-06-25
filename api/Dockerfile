@@ -28,14 +28,15 @@ CMD [ "npm", "run", "dev" ]
 # build stage
 FROM dev-stage AS build-stage
 
-RUN npm install --production && \
-  npm run build && \
-  npm audit fix
+RUN npm install && \
+  npm run build
 
 # production stage
 FROM node:16-alpine3.13 AS production-stage
 
-RUN apk update && apk add --no-cache mysql-client=10.5.10-r0
+RUN apk update && \
+  apk add --no-cache \
+    mysql-client=10.5.11-r0
 
 # Add configuration files
 COPY image-files/ /
