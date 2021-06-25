@@ -146,8 +146,7 @@ export const actions = {
           {
             showType: 'toast',
             title: 'Success',
-            text:
-              'You are now verified. Please use your username/password to login.'
+            text: 'You are now verified. Please use your username/password to login.'
           },
           { root: true }
         )

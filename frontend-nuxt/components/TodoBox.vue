@@ -27,7 +27,12 @@
         <b-list-group-item
           v-for="(todo, index) in todoList"
           :key="todo.id"
-          class="todo-list-item d-flex justify-content-between align-items-center"
+          class="
+            todo-list-item
+            d-flex
+            justify-content-between
+            align-items-center
+          "
           :class="{
             'todo-pending-list': todo.state === 'pending',
             'todo-ongoing-list': todo.state === 'ongoing',
