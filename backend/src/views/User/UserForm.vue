@@ -15,7 +15,6 @@
 <script>
 import { mapState, mapActions } from 'vuex';
 import UserFormBox from '@/components/UserFormBox.vue';
-import router from '@/router';
 
 export default {
   name: 'UserForm',
@@ -32,7 +31,7 @@ export default {
       await this.getOne({
         type: 'user',
         userId: this.userId,
-        router
+        router: this.$router
       });
     }
   },
@@ -54,7 +53,7 @@ export default {
       this.postOne({
         type: 'user',
         user,
-        router,
+        router: this.$router,
         redirectUrl: '/user'
       });
     },
@@ -63,7 +62,7 @@ export default {
         type: 'user',
         userId: this.userId,
         user,
-        router,
+        router: this.$router,
         redirectUrl: '/user'
       });
     }

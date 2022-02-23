@@ -142,9 +142,7 @@
         </b-form-group>
 
         <b-form-group id="group-blocked-at" label-for="input-blocked-at">
-          <template v-slot:label
-            >Blocked At (Y-M-D H:M)</template
-          >
+          <template v-slot:label>Blocked At (Y-M-D H:M)</template>
 
           <datetime
             type="datetime"
@@ -387,9 +385,7 @@ export default {
         }
       },
       enabled: {
-        validateStatus: value => {
-          return _.some(User.userEnabled, enabled => value === enabled);
-        }
+        validateStatus: value => _.some(User.userEnabled, enabled => value === enabled)
       }
     };
 

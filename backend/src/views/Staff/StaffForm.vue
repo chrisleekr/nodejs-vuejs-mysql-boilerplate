@@ -16,7 +16,6 @@
 <script>
 import { mapState, mapActions } from 'vuex';
 import UserFormBox from '@/components/UserFormBox.vue';
-import router from '@/router';
 
 export default {
   name: 'StaffForm',
@@ -24,7 +23,7 @@ export default {
     UserFormBox
   },
   async mounted() {
-    this.permissionList({ router });
+    this.permissionList({ router: this.$router });
 
     if (this.$route.name === 'staff-new') {
       this.formType = 'new';
@@ -35,7 +34,7 @@ export default {
       await this.getOne({
         type: 'staff',
         userId: this.userId,
-        router
+        router: this.$router
       });
     }
   },
@@ -61,7 +60,7 @@ export default {
       this.postOne({
         type: 'staff',
         user,
-        router,
+        router: this.$router,
         redirectUrl: '/staff'
       });
     },
@@ -70,7 +69,7 @@ export default {
         type: 'staff',
         userId: this.userId,
         user,
-        router,
+        router: this.$router,
         redirectUrl: '/staff'
       });
     }

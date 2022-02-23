@@ -13,9 +13,7 @@ export default {
 
     return axios
       .get(url, {})
-      .then(response => {
-        return response.data;
-      })
+      .then(response => response.data)
       .catch(e => {
         throw e;
       });
@@ -24,9 +22,7 @@ export default {
   async getOne({ type = 'user', userId }) {
     return axios
       .get(`${configService.get('apiUrl')}/${type}/${userId}`, {})
-      .then(response => {
-        return response.data;
-      })
+      .then(response => response.data)
       .catch(e => {
         throw e;
       });
@@ -35,9 +31,7 @@ export default {
   async postOne({ type = 'user', user } = {}) {
     return axios
       .post(`${configService.get('apiUrl')}/${type}`, user)
-      .then(response => {
-        return response.data;
-      })
+      .then(response => response.data)
       .catch(e => {
         throw e;
       });
@@ -46,9 +40,7 @@ export default {
   async patchOne({ type = 'user', userId, newUser }) {
     return axios
       .patch(`${configService.get('apiUrl')}/${type}/${userId}`, newUser)
-      .then(response => {
-        return response.data;
-      })
+      .then(response => response.data)
       .catch(e => {
         throw e;
       });
@@ -57,9 +49,7 @@ export default {
   async deleteOne({ type = 'user', userId }) {
     return axios
       .delete(`${configService.get('apiUrl')}/${type}/${userId}`)
-      .then(response => {
-        return response.data;
-      })
+      .then(response => response.data)
       .catch(e => {
         throw e;
       });

@@ -29,7 +29,6 @@
 import Vue from 'vue';
 import { mapState, mapActions } from 'vuex';
 import TableBox from '@/components/TableBox.vue';
-import router from '@/router';
 
 export default {
   name: 'SettingList',
@@ -93,10 +92,10 @@ export default {
   methods: {
     ...mapActions('setting', ['list', 'deleteOne']),
     onAdd() {
-      router.push('/setting/new');
+      this.$router.push('/setting/new');
     },
     onEdit({ row }) {
-      router.push(`/setting/${row.id}`);
+      this.$router.push(`/setting/${row.id}`);
     },
     onDelete({ row }) {
       Vue.swal({
