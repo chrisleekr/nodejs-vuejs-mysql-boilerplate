@@ -24,9 +24,7 @@
           </span>
         </template>
         <template v-if="slotProps.row.confirmedAtFormatted === null">
-          <span class="text-warning span-help-text">
-            (Not confirmed)
-          </span>
+          <span class="text-warning span-help-text"> (Not confirmed) </span>
         </template>
       </template>
       <template v-slot:lastLoginAtFormatted="slotProps">

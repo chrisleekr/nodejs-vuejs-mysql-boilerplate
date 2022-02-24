@@ -44,6 +44,6 @@ describe('App.vue', () => {
   });
 
   it('renders router-view component', () => {
-    expect(wrapper.find(RouterViewStub).exists()).toBeTruthy();
+    expect(wrapper.findComponent(RouterViewStub).exists()).toBeTruthy();
   });
 });

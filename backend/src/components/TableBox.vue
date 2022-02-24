@@ -149,20 +149,20 @@ export default {
 .table-row {
   display: flex;
   flex-flow: row wrap;
+  margin-right: 0;
+  margin-left: 0;
   border-left: solid 1px #d9d9d9;
   transition: 0.5s;
-  margin-left: 0;
-  margin-right: 0;
 }
 
 .table-row:first-of-type {
   border-top: solid 1px #d9d9d9;
-  border-left: solid 1px #d9d9d9;
   border-bottom: solid 2px #d9d9d9;
+  border-left: solid 1px #d9d9d9;
 }
 
 .table-column {
-  padding: 0.5em 0.5em;
+  padding: 0.5em;
   border-right: solid 1px #d9d9d9;
   border-bottom: solid 1px #d9d9d9;
 }
@@ -189,10 +189,10 @@ export default {
 }
 
 .table-row:first-of-type .table-column {
-  background: #fff;
-  color: #000;
-  border-color: #d9d9d9;
   font-weight: bold;
+  color: #000;
+  background: #fff;
+  border-color: #d9d9d9;
 }
 
 .table-row:nth-child(odd) .table-column {
@@ -216,27 +216,27 @@ export default {
 }
 
 .flex-cell {
+  padding: 0.5em;
   text-align: center;
-  padding: 0.5em 0.5em;
   border-right: solid 1px #d9d9d9;
 }
 
 @media all and (max-width: 767px) {
   .table-row {
-    border-bottom: solid 2px #d9d9d9;
     border-right: solid 1px #d9d9d9;
+    border-bottom: solid 2px #d9d9d9;
   }
 
   .table-row .table-column {
     width: 50% !important;
-    border: 0;
     text-align: left !important;
     background: #fff;
+    border: 0;
   }
 
   .table-row .table-column.table-column-first {
-    border-bottom: solid 1px #d9d9d9;
     width: 100% !important;
+    border-bottom: solid 1px #d9d9d9;
   }
 
   .table-row .table-column.table-column-last-odd {
@@ -260,8 +260,8 @@ export default {
 
   .table-row .table-column {
     width: 100% !important;
-    border-bottom: 0;
     text-align: left !important;
+    border-bottom: 0;
   }
 
   .table-row .table-column:last-of-type {

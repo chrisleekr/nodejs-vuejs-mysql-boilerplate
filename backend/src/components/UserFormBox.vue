@@ -98,9 +98,7 @@
         </b-form-group>
 
         <b-form-group id="group-confirmed-at" label-for="input-confirmed-at">
-          <template v-slot:label>
-            Confirmed At (Y-M-D H:M)
-          </template>
+          <template v-slot:label> Confirmed At (Y-M-D H:M) </template>
 
           <datetime
             type="datetime"

@@ -72,9 +72,7 @@
           </b-form-group>
 
           <b-form-group id="group-meta-desc" label-for="input-meta-desc">
-            <template v-slot:label>
-              Description
-            </template>
+            <template v-slot:label>Description</template>
             <b-form-textarea
               id="input-meta-desc"
               v-model="form.metaDesc"
@@ -395,7 +393,7 @@ export default {
       this.$v.$reset(); // Reset $dirty
     },
     // eslint-disable-next-line func-names
-    'form.metaAttribute': function(_newValue, _oldValue) {
+    'form.metaAttribute': function (_newValue, _oldValue) {
       this.form.metaAttribute = _.trim(this.form.metaAttribute);
 
       let metaAttribute = {};

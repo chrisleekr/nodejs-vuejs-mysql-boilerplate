@@ -11,7 +11,7 @@ const validateDateTime = async value => {
     return true;
   }
 
-  return moment.parseZone(value).isValid();
+  return moment.parseZone(value, 'YYYY-MM-DD HH:MM:SS').isValid();
 };
 
 export default {

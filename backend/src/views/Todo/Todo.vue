@@ -8,9 +8,7 @@
         <todo-box card-header="Completed" state="completed" :todo-list="completedTodoList" :loading="loading" />
       </b-card-group>
     </div>
-    <p>
-      * Note that this page is just listing todo. The feature to manage todo is not developed.
-    </p>
+    <p> * Note that this page is just listing todo. The feature to manage todo is not developed. </p>
   </div>
 </template>
 
