@@ -36,7 +36,7 @@
     "@sweetalert2/theme-dark": "^5.0.10",
     "@types/vuelidate": "^0.7.15",
     "axios": "^0.26.0",
-    "bootstrap": "^5",
+    "bootstrap": "^4",
     "bootstrap-vue": "^2.21.2",
     "core-js": "^3.21.1",
     "jwt-decode": "^3.1.2",
