@@ -33,7 +33,7 @@ import { mapActions } from 'vuex'
 import LoginBox from '@/components/LoginBox.vue'
 
 export default {
-  name: 'Login',
+  name: 'PageLogin',
   components: { LoginBox },
   middleware: ['guest-only'],
   head() {

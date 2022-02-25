@@ -8,7 +8,7 @@
 import { mapActions } from 'vuex'
 
 export default {
-  name: 'Logout',
+  name: 'PageLogout',
   mounted() {
     this.logout({ router: this.$router })
   },

@@ -3,30 +3,25 @@ body {
 }
 
 #app {
-  font-family: 'Avenir', Helvetica, Arial, sans-serif;
+  padding-top: 4.5rem;
+  font-family: Avenir, Helvetica, Arial, sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   color: #2c3e50;
-  padding-top: 4.5rem;
 }
 
 .spinner {
   /* Spinner size and color */
+  box-sizing: border-box;
+  display: inline-block;
   width: 1rem;
   height: 1rem;
-  border-top-color: #444;
-  border-left-color: #444;
-
-  /* Additional spinner styles */
-  animation: spinner 400ms linear infinite;
-  border-bottom-color: transparent;
-  border-right-color: transparent;
+  vertical-align: middle;
+  border-color: #444 #444 transparent transparent;
   border-style: solid;
   border-width: 2px;
   border-radius: 50%;
-  box-sizing: border-box;
-  display: inline-block;
-  vertical-align: middle;
+  animation: spinner 400ms linear infinite;
 }
 
 /* Animation styles */
@@ -34,6 +29,7 @@ body {
   0% {
     transform: rotate(0deg);
   }
+
   100% {
     transform: rotate(360deg);
   }

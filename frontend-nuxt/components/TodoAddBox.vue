@@ -61,7 +61,7 @@ export default {
     ...mapGetters('alert', ['errorMessages'])
   },
   mounted() {
-    this.isBrowser = process.browser
+    // this.isBrowser = process.browser
   },
   methods: {
     ...mapActions('todo', ['addOne']),

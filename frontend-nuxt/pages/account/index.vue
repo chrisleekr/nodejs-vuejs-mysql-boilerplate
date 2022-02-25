@@ -44,7 +44,7 @@
 import { mapState, mapActions } from 'vuex'
 
 export default {
-  name: 'Account',
+  name: 'PageAccount',
   middleware: ['require-auth'],
   head() {
     return {
