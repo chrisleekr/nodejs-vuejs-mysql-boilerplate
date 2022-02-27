@@ -47,14 +47,14 @@ describe('App.vue', () => {
   });
 
   it('renders nav bar component', () => {
-    expect(wrapper.find(NavBarStub).exists()).toBeTruthy();
+    expect(wrapper.getComponent(NavBarStub).exists()).toBeTruthy();
   });
 
   it('renders footer bar component', () => {
-    expect(wrapper.find(FooterBarStub).exists()).toBeTruthy();
+    expect(wrapper.getComponent(FooterBarStub).exists()).toBeTruthy();
   });
 
   it('renders router-view component', () => {
-    expect(wrapper.find(RouterViewStub).exists()).toBeTruthy();
+    expect(wrapper.getComponent(RouterViewStub).exists()).toBeTruthy();
   });
 });
