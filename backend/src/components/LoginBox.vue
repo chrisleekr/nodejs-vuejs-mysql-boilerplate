@@ -1,6 +1,6 @@
 <template>
   <b-form @submit.stop.prevent="onSubmit" class="login-box" data-cy="login-form">
-    <b-form-group id="group-username" label label-for="input-username" description>
+    <b-form-group id="group-username" label label-for="input-username" class="mb-2">
       <b-form-input
         id="input-username"
         v-model="form.username"
@@ -22,7 +22,7 @@
       </b-form-invalid-feedback>
     </b-form-group>
 
-    <b-form-group id="group-password" label label-for="input-password" description>
+    <b-form-group id="group-password" label label-for="input-password" class="mb-2">
       <b-form-input
         id="input-password"
         type="password"

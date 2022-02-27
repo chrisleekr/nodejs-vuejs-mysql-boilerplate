@@ -24,9 +24,7 @@
           </span>
         </template>
         <template v-if="slotProps.row.confirmedAtFormatted === null">
-          <span class="text-warning span-help-text">
-            (Not confirmed)
-          </span>
+          <span class="text-warning span-help-text"> (Not confirmed) </span>
         </template>
       </template>
       <template v-slot:lastLoginAtFormatted="slotProps">
@@ -53,7 +51,6 @@
 import Vue from 'vue';
 import { mapState, mapActions } from 'vuex';
 import TableBox from '@/components/TableBox.vue';
-import router from '@/router';
 
 export default {
   name: 'UserList',
@@ -135,10 +132,10 @@ export default {
   methods: {
     ...mapActions('user', ['list', 'deleteOne']),
     onAdd() {
-      router.push('/user/new');
+      this.$router.push('/user/new');
     },
     onEdit({ row }) {
-      router.push(`/user/${row.id}`);
+      this.$router.push(`/user/${row.id}`);
     },
     onDelete({ row }) {
       Vue.swal({

@@ -44,7 +44,7 @@ import TodoBox from '@/components/TodoBox.vue'
 import TodoAddBox from '@/components/TodoAddBox.vue'
 
 export default {
-  name: 'Todo',
+  name: 'PageTodo',
   components: { TodoBox, TodoAddBox },
   middleware: ['require-auth'],
   data() {

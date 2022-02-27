@@ -153,7 +153,7 @@ import { mapState, mapActions, mapGetters } from 'vuex'
 import { email, required, minLength } from 'vuelidate/lib/validators'
 
 export default {
-  name: 'AccountUpdate',
+  name: 'PageAccountUpdate',
   middleware: ['require-auth'],
   asyncData() {
     return { isBrowser: process.browser }
@@ -206,7 +206,7 @@ export default {
     }
   },
   mounted() {
-    this.isBrowser = process.browser
+    // this.isBrowser = process.browser
     this.me({ router: this.$router }).then(() => {})
   },
   methods: {

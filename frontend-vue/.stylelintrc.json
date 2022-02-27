@@ -1,3 +1,13 @@
 {
-  "extends": "stylelint-config-standard"
+  "extends": [
+    "stylelint-config-standard",
+    "stylelint-config-css-modules",
+    "stylelint-config-prettier",
+    "stylelint-config-recess-order",
+    "stylelint-scss",
+    "stylelint-config-recommended-vue"
+  ],
+  "rules": {
+    "alpha-value-notation": ["percentage", { "exceptProperties": ["opacity"] }]
+  }
 }

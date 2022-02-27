@@ -6,7 +6,7 @@ RUN apk update && \
   python3=3.8.10-r0 \
   make=4.3-r0 \
   g++=10.2.1_pre1-r3 \
-  mysql-client=10.5.11-r0
+  mysql-client=10.5.13-r0
 
 # Add configuration files
 COPY image-files/ /
@@ -36,7 +36,7 @@ FROM node:16-alpine3.13 AS production-stage
 
 RUN apk update && \
   apk add --no-cache \
-    mysql-client=10.5.11-r0
+  mysql-client=10.5.11-r0
 
 # Add configuration files
 COPY image-files/ /

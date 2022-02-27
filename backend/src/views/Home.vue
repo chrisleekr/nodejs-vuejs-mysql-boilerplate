@@ -1,6 +1,6 @@
 <template>
   <div class="page-class page-home">
-    <b-container class=" text-center my-5">
+    <b-container class="text-center my-5">
       <img alt="Bootstrap Vue logo" src="../assets/images/bootstrap-vue.png" width="150" />
       <h1>Starter template</h1>
       <p class="lead"

@@ -11,7 +11,7 @@
 
 <script>
 export default {
-  name: 'Index',
+  name: 'PageIndex',
   head() {
     return {
       title: 'Homepage',

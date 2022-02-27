@@ -8,9 +8,7 @@ export default {
         username,
         password
       })
-      .then(response => {
-        return response.data;
-      })
+      .then(response => response.data)
       .catch(e => {
         throw e;
       });

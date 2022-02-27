@@ -1,13 +1,12 @@
 import _ from 'lodash';
 import moment from 'moment';
 
-const toQueryStrings = params => {
-  return Object.keys(params)
+const toQueryStrings = params =>
+  Object.keys(params)
     .map(key => `${key}=${params[key]}`)
     .join('&');
-};
 
-const validateDateTime = async value => {
+const validateDateTime = value => {
   if (_.isEmpty(value)) {
     return true;
   }

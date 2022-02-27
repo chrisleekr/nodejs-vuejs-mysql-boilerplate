@@ -1,9 +1,9 @@
 <template>
   <div class="page-class page-login">
-    <b-container class=" my-5">
+    <b-container class="my-5">
       <b-row align-v="center" align-h="center" align-content="center">
         <b-col class="text-center" sm="10" md="8" lg="5">
-          <img src="../assets/images/bootstrap-vue.png" width="100" />
+          <img src="../assets/images/bootstrap-vue.png" width="100" alt="Logo" />
 
           <b-card-group deck class="mt-3">
             <b-card>

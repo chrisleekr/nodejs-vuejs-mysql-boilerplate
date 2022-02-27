@@ -78,7 +78,7 @@ export default {
     ...mapGetters('auth', ['isLoggedIn'])
   },
   mounted() {
-    this.isBrowser = process.browser
+    // this.isBrowser = process.client
 
     if (this.isLoggedIn) {
       // Already logged in

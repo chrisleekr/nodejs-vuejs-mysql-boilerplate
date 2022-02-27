@@ -6,12 +6,11 @@
 
 <script>
 import { mapActions } from 'vuex';
-import router from '@/router';
 
 export default {
   name: 'Logout',
   mounted() {
-    this.logout({ router });
+    this.logout({ router: this.$router });
   },
   methods: {
     ...mapActions('auth', ['logout'])

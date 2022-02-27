@@ -10,9 +10,7 @@ export default {
 
     return axios
       .get(url, {})
-      .then(response => {
-        return response.data;
-      })
+      .then(response => response.data)
       .catch(e => {
         throw e;
       });

@@ -8,9 +8,7 @@ export default {
         key,
         password
       })
-      .then(response => {
-        return response.data;
-      })
+      .then(response => response.data)
       .catch(e => {
         throw e;
       });
@@ -21,9 +19,7 @@ export default {
       .post(`${configService.get('apiUrl')}/user/password-reset-request`, {
         email
       })
-      .then(response => {
-        return response.data;
-      })
+      .then(response => response.data)
       .catch(e => {
         throw e;
       });
@@ -38,9 +34,7 @@ export default {
         first_name: firstName,
         last_name: lastName
       })
-      .then(response => {
-        return response.data;
-      })
+      .then(response => response.data)
       .catch(e => {
         throw e;
       });
@@ -52,9 +46,7 @@ export default {
         username,
         password
       })
-      .then(response => {
-        return response.data;
-      })
+      .then(response => response.data)
       .catch(e => {
         throw e;
       });

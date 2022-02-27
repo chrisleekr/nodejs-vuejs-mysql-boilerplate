@@ -10,7 +10,7 @@
 
 <script>
 export default {
-  name: 'Page',
+  name: 'PageContainer',
   head() {
     return {
       title: this.pageTitle,

@@ -33,7 +33,7 @@ import { mapState } from 'vuex'
 import RegisterBox from '@/components/RegisterBox.vue'
 
 export default {
-  name: 'Register',
+  name: 'PageRegister',
   components: { RegisterBox },
   middleware: ['guest-only'],
   computed: {

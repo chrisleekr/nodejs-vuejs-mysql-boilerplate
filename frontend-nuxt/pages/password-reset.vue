@@ -34,7 +34,7 @@ import { mapState, mapActions, mapGetters } from 'vuex'
 import PasswordResetBox from '@/components/PasswordResetBox.vue'
 
 export default {
-  name: 'PasswordReset',
+  name: 'PagePasswordReset',
   components: { PasswordResetBox },
   middleware: ['guest-only'],
   data() {

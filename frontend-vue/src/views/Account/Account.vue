@@ -32,8 +32,6 @@
 <script>
 import { mapState, mapActions } from 'vuex';
 
-import router from '@/router';
-
 export default {
   name: 'Account',
   metaInfo() {
@@ -43,7 +41,7 @@ export default {
     };
   },
   mounted() {
-    this.me({ router });
+    this.me({ router: this.$router });
   },
   computed: {
     ...mapState('user', ['loading', 'user'])

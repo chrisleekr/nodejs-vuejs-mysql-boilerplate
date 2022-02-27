@@ -10,9 +10,7 @@ export default {
 
     return axios
       .get(url, {})
-      .then(response => {
-        return response.data;
-      })
+      .then(response => response.data)
       .catch(e => {
         throw e;
       });
@@ -21,9 +19,7 @@ export default {
   async postOne({ todo }) {
     return axios
       .post(`${configService.get('apiUrl')}/todo`, todo)
-      .then(response => {
-        return response.data;
-      })
+      .then(response => response.data)
       .catch(e => {
         throw e;
       });
@@ -34,9 +30,7 @@ export default {
       .post(`${configService.get('apiUrl')}/todo/${state}`, {
         todo: todoList
       })
-      .then(response => {
-        return response.data;
-      })
+      .then(response => response.data)
       .catch(e => {
         throw e;
       });
@@ -45,9 +39,7 @@ export default {
   async deleteOne({ todoId }) {
     return axios
       .delete(`${configService.get('apiUrl')}/todo/${todoId}`)
-      .then(response => {
-        return response.data;
-      })
+      .then(response => response.data)
       .catch(e => {
         throw e;
       });

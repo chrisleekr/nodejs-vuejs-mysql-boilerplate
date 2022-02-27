@@ -72,9 +72,7 @@
           </b-form-group>
 
           <b-form-group id="group-meta-desc" label-for="input-meta-desc">
-            <template v-slot:label>
-              Description
-            </template>
+            <template v-slot:label>Description</template>
             <b-form-textarea
               id="input-meta-desc"
               v-model="form.metaDesc"
@@ -94,9 +92,7 @@
           </b-form-group>
 
           <b-form-group id="group-meta-attribute" label-for="input-meta-attribute" v-if="form.metaType === 'select'">
-            <template v-slot:label
-              >Attributes</template
-            >
+            <template v-slot:label>Attributes</template>
 
             <b-form-textarea
               id="input-meta-attribute"
@@ -199,7 +195,6 @@
 import { required, maxLength } from 'vuelidate/lib/validators';
 import { mapState, mapActions, mapGetters } from 'vuex';
 import _ from 'lodash';
-import router from '@/router';
 import Setting from '@/model/setting';
 
 export default {
@@ -290,9 +285,7 @@ export default {
           }
           if (
             this.form.metaType === Setting.metaTypes.select &&
-            _.find(this.metaSelectValues, o => {
-              return o.value === value;
-            }) === undefined
+            _.find(this.metaSelectValues, o => o.value === value) === undefined
           ) {
             return false;
           }
@@ -327,7 +320,7 @@ export default {
       this.settingId = parseInt(this.$route.params.id, 10);
       await this.getOne({
         settingId: this.settingId,
-        router
+        router: this.$router
       });
     }
   },
@@ -366,7 +359,7 @@ export default {
     onAdd({ setting }) {
       this.postOne({
         setting,
-        router,
+        router: this.$router,
         redirectUrl: '/setting'
       });
     },
@@ -374,7 +367,7 @@ export default {
       this.patchOne({
         settingId: this.settingId,
         setting,
-        router,
+        router: this.$router,
         redirectUrl: '/setting'
       });
     }
@@ -400,7 +393,7 @@ export default {
       this.$v.$reset(); // Reset $dirty
     },
     // eslint-disable-next-line func-names
-    'form.metaAttribute': function(_newValue, _oldValue) {
+    'form.metaAttribute': function (_newValue, _oldValue) {
       this.form.metaAttribute = _.trim(this.form.metaAttribute);
 
       let metaAttribute = {};

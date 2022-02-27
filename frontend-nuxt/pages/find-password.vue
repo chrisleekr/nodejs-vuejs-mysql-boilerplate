@@ -33,7 +33,7 @@ import { mapState } from 'vuex'
 import FindPasswordBox from '@/components/FindPasswordBox.vue'
 
 export default {
-  name: 'FindPassword',
+  name: 'PageFindPassword',
   components: { FindPasswordBox },
   middleware: ['guest-only'],
   head() {

@@ -109,7 +109,6 @@
 <script>
 import { mapState, mapActions, mapGetters } from 'vuex';
 import { email, required, minLength } from 'vuelidate/lib/validators';
-import router from '@/router';
 
 export default {
   name: 'AccountUpdate',
@@ -120,7 +119,7 @@ export default {
     };
   },
   mounted() {
-    this.me({ router }).then(() => {});
+    this.me({ router: this.$router }).then(() => {});
   },
   data() {
     return {
@@ -170,7 +169,7 @@ export default {
           email: this.form.email,
           password: this.form.password
         },
-        router
+        router: this.$router
       });
     }
   },

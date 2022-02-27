@@ -13,9 +13,7 @@ export default {
 
     return axios
       .get(url, {})
-      .then(response => {
-        return response.data;
-      })
+      .then(response => response.data)
       .catch(e => {
         throw e;
       });
@@ -24,9 +22,7 @@ export default {
   async getOne({ settingId }) {
     return axios
       .get(`${configService.get('apiUrl')}/setting/${settingId}`, {})
-      .then(response => {
-        return response.data;
-      })
+      .then(response => response.data)
       .catch(e => {
         throw e;
       });
@@ -35,9 +31,7 @@ export default {
   async postOne({ setting } = {}) {
     return axios
       .post(`${configService.get('apiUrl')}/setting`, setting)
-      .then(response => {
-        return response.data;
-      })
+      .then(response => response.data)
       .catch(e => {
         throw e;
       });
@@ -46,9 +40,7 @@ export default {
   async patchOne({ settingId, newSetting }) {
     return axios
       .patch(`${configService.get('apiUrl')}/setting/${settingId}`, newSetting)
-      .then(response => {
-        return response.data;
-      })
+      .then(response => response.data)
       .catch(e => {
         throw e;
       });
@@ -57,9 +49,7 @@ export default {
   async deleteOne({ settingId }) {
     return axios
       .delete(`${configService.get('apiUrl')}/setting/${settingId}`)
-      .then(response => {
-        return response.data;
-      })
+      .then(response => response.data)
       .catch(e => {
         throw e;
       });

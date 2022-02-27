@@ -98,9 +98,7 @@
         </b-form-group>
 
         <b-form-group id="group-confirmed-at" label-for="input-confirmed-at">
-          <template v-slot:label>
-            Confirmed At (Y-M-D H:M)
-          </template>
+          <template v-slot:label> Confirmed At (Y-M-D H:M) </template>
 
           <datetime
             type="datetime"
@@ -142,9 +140,7 @@
         </b-form-group>
 
         <b-form-group id="group-blocked-at" label-for="input-blocked-at">
-          <template v-slot:label
-            >Blocked At (Y-M-D H:M)</template
-          >
+          <template v-slot:label>Blocked At (Y-M-D H:M)</template>
 
           <datetime
             type="datetime"
@@ -387,9 +383,7 @@ export default {
         }
       },
       enabled: {
-        validateStatus: value => {
-          return _.some(User.userEnabled, enabled => value === enabled);
-        }
+        validateStatus: value => _.some(User.userEnabled, enabled => value === enabled)
       }
     };
 
@@ -462,12 +456,13 @@ export default {
       } else {
         this.$emit('edit', { user });
       }
+
       return false;
     },
     setFormPermissions() {
       if (this.formLoaded) {
         if (this.formType === 'new') {
-          _.forEach(this.permissions, (permission, index) => {
+          _.forEach(this.permissions, (_permission, index) => {
             this.form.permissions[index] = true;
           });
         } else {
