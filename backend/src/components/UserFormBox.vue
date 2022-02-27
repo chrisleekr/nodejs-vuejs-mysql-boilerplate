@@ -456,12 +456,13 @@ export default {
       } else {
         this.$emit('edit', { user });
       }
+
       return false;
     },
     setFormPermissions() {
       if (this.formLoaded) {
         if (this.formType === 'new') {
-          _.forEach(this.permissions, (permission, index) => {
+          _.forEach(this.permissions, (_permission, index) => {
             this.form.permissions[index] = true;
           });
         } else {

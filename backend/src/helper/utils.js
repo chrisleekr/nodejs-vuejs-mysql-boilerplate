@@ -6,12 +6,12 @@ const toQueryStrings = params =>
     .map(key => `${key}=${params[key]}`)
     .join('&');
 
-const validateDateTime = async value => {
+const validateDateTime = value => {
   if (_.isEmpty(value)) {
     return true;
   }
 
-  return moment.parseZone(value, 'YYYY-MM-DD HH:MM:SS').isValid();
+  return moment.parseZone(value).isValid();
 };
 
 export default {
