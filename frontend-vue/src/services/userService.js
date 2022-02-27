@@ -5,9 +5,7 @@ export default {
   async me() {
     return axios
       .get(`${configService.get('apiUrl')}/me`, {})
-      .then(response => {
-        return response.data;
-      })
+      .then(response => response.data)
       .catch(e => {
         throw e;
       });
@@ -15,9 +13,7 @@ export default {
   async updateMe(me) {
     return axios
       .post(`${configService.get('apiUrl')}/me`, me)
-      .then(response => {
-        return response.data;
-      })
+      .then(response => response.data)
       .catch(e => {
         throw e;
       });

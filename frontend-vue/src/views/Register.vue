@@ -2,7 +2,7 @@
   <b-container class="page-login my-5">
     <b-row>
       <b-col class="text-center">
-        <img src="../assets/images/bootstrap-vue.png" width="100" />
+        <img src="../assets/images/bootstrap-vue.png" width="100" alt="Logo" />
       </b-col>
     </b-row>
 

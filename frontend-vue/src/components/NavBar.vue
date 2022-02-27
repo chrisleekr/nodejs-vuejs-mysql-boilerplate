@@ -2,7 +2,7 @@
   <div>
     <b-navbar toggleable="md" type="light" variant="light" fixed="top">
       <b-navbar-brand :to="{ path: '/' }">
-        <img src="../assets/images/bootstrap-vue.png" width="25" />
+        <img src="../assets/images/bootstrap-vue.png" width="25" alt="Logo" />
         Company name
       </b-navbar-brand>
 

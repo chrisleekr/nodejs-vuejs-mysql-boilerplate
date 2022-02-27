@@ -40,7 +40,6 @@
 <script>
 import _ from 'lodash';
 import { mapGetters, mapActions, mapState } from 'vuex';
-import router from '@/router';
 import TodoBox from '@/components/TodoBox.vue';
 import TodoAddBox from '@/components/TodoAddBox.vue';
 
@@ -73,18 +72,16 @@ export default {
       // Form submit logic
       this.addOne({
         todo,
-        router
+        router: this.$router
       }).then(() => this.list({}));
     },
     onChange({ state, todoList }) {
-      const newTodoList = _.map(todoList, todo => {
-        return _.pick(todo, ['id', 'name', 'note']);
-      });
+      const newTodoList = _.map(todoList, todo => _.pick(todo, ['id', 'name', 'note']));
 
-      this.updateBulk({ state, todoList: newTodoList, router }).then(() => this.list({}));
+      this.updateBulk({ state, todoList: newTodoList, router: this.$router }).then(() => this.list({}));
     },
     onRemove({ state, todo }) {
-      this.deleteOne({ state, todoId: todo.id, router }).then(() => this.list({}));
+      this.deleteOne({ state, todoId: todo.id, router: this.$router }).then(() => this.list({}));
     }
   },
   mounted() {
