@@ -38,12 +38,6 @@ describe('Login', () => {
 
     cy.get('[data-cy="login-form"]').submit();
 
-    cy.get('[data-cy="login-username-invalid"]').should('not.be.visible');
-
-    cy.get('[data-cy="login-password-invalid"]').should('not.be.visible');
-
-    cy.get('[data-cy="login-error-message"]').should('not.be.visible');
-
     cy.get('[data-cy="nav-bar-welcome-text"] a').should('contain', 'Welcome, Staff');
   });
 });
