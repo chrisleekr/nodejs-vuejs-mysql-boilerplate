@@ -36,7 +36,7 @@ FROM node:16-alpine3.13 AS production-stage
 
 RUN apk update && \
   apk add --no-cache \
-  mysql-client=10.5.11-r0
+  mysql-client=10.5.13-r0
 
 # Add configuration files
 COPY image-files/ /
