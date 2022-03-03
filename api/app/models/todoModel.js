@@ -81,7 +81,9 @@ const getMaxPosition = async ({ searchOptions = {} } = {}) => {
   });
 
   try {
-    row = await (await getPool()).query(
+    row = await (
+      await getPool()
+    ).query(
       `
           SELECT
             MAX(position) AS max_position
@@ -109,7 +111,9 @@ const insertOne = async row => {
   let result = false;
 
   try {
-    result = await (await getPool()).query(
+    result = await (
+      await getPool()
+    ).query(
       `
         INSERT INTO todo (
           user_id,
@@ -158,7 +162,9 @@ const getOne = async ({ searchOptions = {}, includeDeletedTodo = false } = {}) =
   });
 
   try {
-    row = await (await getPool()).query(
+    row = await (
+      await getPool()
+    ).query(
       `
         SELECT
           id,
@@ -201,7 +207,9 @@ const updateOne = async (id, row) => {
   values.push(id);
 
   try {
-    result = await (await getPool()).query(
+    result = await (
+      await getPool()
+    ).query(
       `
         UPDATE
           todo
@@ -229,7 +237,9 @@ const deleteOne = async id => {
   let result = false;
 
   try {
-    result = await (await getPool()).query(
+    result = await (
+      await getPool()
+    ).query(
       `
         UPDATE todo
         SET status = ?
@@ -274,7 +284,9 @@ const deleteAll = async ({ searchOptions = {} }) => {
   }
 
   try {
-    result = await (await getPool()).query(
+    result = await (
+      await getPool()
+    ).query(
       `
         UPDATE todo
         SET status = ?

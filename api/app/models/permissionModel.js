@@ -72,7 +72,9 @@ const insertOne = async row => {
   let result = false;
 
   try {
-    result = await (await getPool()).query(
+    result = await (
+      await getPool()
+    ).query(
       `
         INSERT INTO permission (
           permission_key,
@@ -113,7 +115,9 @@ const getOne = async ({ searchOptions = {} } = {}) => {
   });
 
   try {
-    row = await (await getPool()).query(
+    row = await (
+      await getPool()
+    ).query(
       `
         SELECT
           id,
@@ -157,7 +161,9 @@ const updateOne = async (id, row) => {
   values.push(id);
 
   try {
-    result = await (await getPool()).query(
+    result = await (
+      await getPool()
+    ).query(
       `
         UPDATE
           permission
@@ -188,7 +194,9 @@ const deleteOne = async id => {
   let result = false;
 
   try {
-    result = await (await getPool()).query(
+    result = await (
+      await getPool()
+    ).query(
       `
         DELETE FROM permission
         WHERE id = ?
@@ -223,7 +231,9 @@ const findPermissionUsers = async ({ searchOptions = {} } = {}) => {
   });
 
   try {
-    rows = await (await getPool()).query(
+    rows = await (
+      await getPool()
+    ).query(
       `
           SELECT
               permission.id,
@@ -260,7 +270,9 @@ const replacePermissionUser = async row => {
   let result = false;
 
   try {
-    result = await (await getPool()).query(
+    result = await (
+      await getPool()
+    ).query(
       `
       INSERT INTO permission_user (
         permission_id,
@@ -318,7 +330,9 @@ const deletePermissionUsers = async searchOptions => {
   }
 
   try {
-    result = await (await getPool()).query(
+    result = await (
+      await getPool()
+    ).query(
       `
         DELETE FROM
           permission_user

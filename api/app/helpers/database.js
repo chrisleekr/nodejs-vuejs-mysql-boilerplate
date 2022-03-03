@@ -28,9 +28,7 @@ const getPool = async () => {
 };
 
 const currentTimestamp = {
-  toSqlString: () => {
-    return 'CURRENT_TIMESTAMP()';
-  }
+  toSqlString: () => 'CURRENT_TIMESTAMP()'
 };
 
 const fetchWithPagination = async (query, values, { page = 1, pageSize = 10 } = {}) => {

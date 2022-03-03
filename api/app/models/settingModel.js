@@ -72,7 +72,9 @@ const insertOne = async row => {
   let result = false;
 
   try {
-    result = await (await getPool()).query(
+    result = await (
+      await getPool()
+    ).query(
       `
         INSERT INTO setting (
           meta_key,
@@ -134,7 +136,9 @@ const getOne = async ({ searchOptions = {}, includeDeletedSetting = false } = {}
   });
 
   try {
-    row = await (await getPool()).query(
+    row = await (
+      await getPool()
+    ).query(
       `
         SELECT
           id,
@@ -180,7 +184,9 @@ const updateOne = async (id, row) => {
   values.push(id);
 
   try {
-    result = await (await getPool()).query(
+    result = await (
+      await getPool()
+    ).query(
       `
         UPDATE
           setting
@@ -208,7 +214,9 @@ const deleteOne = async id => {
   let result = false;
 
   try {
-    result = await (await getPool()).query(
+    result = await (
+      await getPool()
+    ).query(
       `
         UPDATE setting
         SET status = ?
@@ -253,7 +261,9 @@ const deleteAll = async ({ searchOptions = {} }) => {
   }
 
   try {
-    result = await (await getPool()).query(
+    result = await (
+      await getPool()
+    ).query(
       `
         UPDATE setting
         SET status = ?

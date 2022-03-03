@@ -153,7 +153,9 @@ const insertOne = async row => {
   }
 
   try {
-    result = await (await getPool()).query(
+    result = await (
+      await getPool()
+    ).query(
       `
         INSERT INTO user (
           username,
@@ -264,7 +266,9 @@ const getOne = async ({
   const passwordHash = includePasswordHash ? 'password_hash, password_reset_token' : '';
 
   try {
-    row = await (await getPool()).query(
+    row = await (
+      await getPool()
+    ).query(
       `
         SELECT
           id,
@@ -359,7 +363,9 @@ const updateOne = async (id, row) => {
   values.push(id);
 
   try {
-    result = await (await getPool()).query(
+    result = await (
+      await getPool()
+    ).query(
       `
         UPDATE
           user
@@ -390,7 +396,9 @@ const deleteOne = async id => {
   let result = false;
 
   try {
-    result = await (await getPool()).query(
+    result = await (
+      await getPool()
+    ).query(
       `
         UPDATE user
         SET status = ?
@@ -413,8 +421,6 @@ const deleteOne = async id => {
 // Set user roles based on the request type
 //    - staff: [administrator, staff]
 //    - user: [user]
-const getUserRoles = roleType => {
-  return roleType === 'staff' ? [userRole.administrator, userRole.staff] : [userRole.user];
-};
+const getUserRoles = roleType => (roleType === 'staff' ? [userRole.administrator, userRole.staff] : [userRole.user]);
 
 module.exports = { findAll, insertOne, getOne, updateOne, deleteOne, userRole, userStatus, userEnabled, getUserRoles };
