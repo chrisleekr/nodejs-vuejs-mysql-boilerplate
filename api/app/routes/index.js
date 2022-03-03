@@ -17,8 +17,8 @@ const todo = require('./validations/todo');
 const user = require('./validations/user');
 
 module.exports = app => {
-  app.route('/').get((_req, res) => {
-    return res.send({
+  app.route('/').get((_req, res) =>
+    res.send({
       success: true,
       status: 200,
       message: 'OK',
@@ -26,8 +26,8 @@ module.exports = app => {
         serverStatus: 'online',
         version: packageJson.version
       }
-    });
-  });
+    })
+  );
 
   app
     .route('/me')

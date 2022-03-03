@@ -22,9 +22,7 @@ app.use(
     logName: 'reqId',
     obscureHeaders: ['authorization'],
     logger,
-    additionalRequestFinishData: (_req, _res) => {
-      return {};
-    }
+    additionalRequestFinishData: (_req, _res) => ({})
   })
 );
 

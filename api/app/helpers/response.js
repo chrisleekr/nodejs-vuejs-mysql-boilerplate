@@ -4,14 +4,13 @@ const { getTokenData } = require('./authentication');
 const userModel = require('../models/userModel');
 const permissionModel = require('../models/permissionModel');
 
-const emitValidationResponse = (res, errorArray) => {
-  return res.status(422).json({
+const emitValidationResponse = (res, errorArray) =>
+  res.status(422).json({
     success: false,
     status: 422,
     message: errorArray.length === 1 ? 'There is a validation error.' : 'There are validation errors.',
     data: errorArray
   });
-};
 
 const handleValidationError = (req, res) => {
   const errors = validationResult(req);
@@ -22,39 +21,32 @@ const handleValidationError = (req, res) => {
   return null;
 };
 
-const handleCustomValidationError = (res, errorArray) => {
-  return emitValidationResponse(res, errorArray);
-};
+const handleCustomValidationError = (res, errorArray) => emitValidationResponse(res, errorArray);
 
-const handleSuccess = (res, message, data) => {
-  return res.status(200).json({
+const handleSuccess = (res, message, data) =>
+  res.status(200).json({
     success: true,
     status: 200,
     message,
     data
   });
-};
 
-const handleNotFound = (res, message) => {
-  return res.status(404).json({
+const handleNotFound = (res, message) =>
+  res.status(404).json({
     success: false,
     status: 404,
     message,
     data: {}
   });
-};
-const handleForbidden = (res, message) => {
-  return res.status(403).json({
+const handleForbidden = (res, message) =>
+  res.status(403).json({
     success: false,
     status: 403,
     message,
     data: {}
   });
-};
 
-const handleRedirect = (res, status, url) => {
-  return res.redirect(status, url);
-};
+const handleRedirect = (res, status, url) => res.redirect(status, url);
 
 const handlePermissionError = async (req, res, permissionKey) => {
   const tokenData = await getTokenData(req);

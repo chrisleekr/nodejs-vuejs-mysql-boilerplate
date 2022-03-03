@@ -17,16 +17,14 @@ const generateToken = data => {
 
 const verifyToken = async jwtToken => {
   try {
-    return await jwt.verify(jwtToken, secretKey, { algorithm: 'HS256' });
+    return jwt.verify(jwtToken, secretKey, { algorithm: 'HS256' });
   } catch (e) {
     moduleLogger.error({ e });
     return null;
   }
 };
 
-const getTokenData = async req => {
-  return verifyToken(req.headers.authorization);
-};
+const getTokenData = async req => verifyToken(req.headers.authorization);
 
 const isAuthenticated = async (req, res, next) => {
   if (typeof req.headers.authorization !== 'undefined') {
