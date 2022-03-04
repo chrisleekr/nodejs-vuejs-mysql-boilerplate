@@ -1,0 +1,36 @@
+{
+  "port": 3000,
+  "tz": "Australia/Melbourne",
+  "bcryptSaltingRound": 10,
+  "apiUrl": "http://localhost/api",
+  "backendUrl": "http://localhost/backend",
+  "frontendUrl": "http://localhost/frontend-nuxt",
+  "db": {
+    "host": "mysql",
+    "port": 3306,
+    "user": "root",
+    "password": "",
+    "name": "boilerplate",
+    "debug": true,
+    "connectionLimit": 10
+  },
+  "smtp": {
+    "host": "mailhog",
+    "port": 1025,
+    "secure": false,
+    "authUser": "",
+    "authPass": "",
+    "debug": true,
+    "logger": true
+  },
+  "email": {
+    "fromName": "Support",
+    "fromAddress": "support@boilerplate.local"
+  },
+  "jwt": {
+    "secretKey": "",
+    "expiresIn": "1w",
+    "refreshSecretKey": "",
+    "refreshExpiresIn": "1w"
+  }
+}

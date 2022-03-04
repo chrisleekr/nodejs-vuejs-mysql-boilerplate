@@ -1,3 +1,4 @@
+const config = require('config');
 const _ = require('lodash');
 const fs = require('fs');
 const nodemailer = require('nodemailer');
@@ -9,20 +10,20 @@ class Mail {
     this.moduleLogger = logger.child({ module: 'mail' });
 
     this.transportConfig = {
-      host: process.env.SMTP_HOST,
-      port: process.env.SMTP_PORT,
-      secure: process.env.SMTP_SECURE === 'true'
+      host: config.get('smtp.host'),
+      port: config.get('smtp.port'),
+      secure: config.get('smtp.secure')
     };
 
-    if (process.env.SMTP_SECURE === 'true') {
-      this.transportConfig.auth.user = process.env.SMTP_AUTH_USER;
-      this.transportConfig.auth.pass = process.env.SMTP_AUTH_PASS;
+    if (config.get('smtp.secure') === true) {
+      this.transportConfig.auth.user = config.get('smtp.authUser');
+      this.transportConfig.auth.pass = config.get('smtp.authPass');
     }
 
-    if (process.env.SMTP_DEBUG === 'true') {
+    if (config.get('smtp.debug') === true) {
       this.transportConfig.debug = true;
     }
-    if (process.env.SMTP_LOGGER === 'true') {
+    if (config.get('smtp.logger') === true) {
       this.transportConfig.logger = true;
     }
 
@@ -53,7 +54,7 @@ class Mail {
       this.moduleLogger.debug({ renderedHtml }, 'HTML file loaded for email, send now');
 
       this.transporter.sendMail({
-        from: from || `"${process.env.EMAIL_FROM_NAME}" <${process.env.EMAIL_FROM_ADDRESS}>`,
+        from: from || `"${config.get('email.fromName')}" <${config.get('email.fromAddress')}>`,
         to,
         subject,
         html: renderedHtml

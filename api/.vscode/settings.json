@@ -18,5 +18,5 @@
   "editor.codeActionsOnSave": {
     "source.fixAll.eslint": true
   },
-  "cSpell.words": []
+  "cSpell.words": ["mailhog"]
 }

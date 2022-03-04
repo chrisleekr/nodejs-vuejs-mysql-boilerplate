@@ -1,12 +1,14 @@
 const _ = require('lodash');
+const config = require('config');
 const bcrypt = require('bcryptjs');
 const moment = require('moment');
 const { v4: uuidv4 } = require('uuid');
 
 const { logger } = require('../helpers/logger');
-const { generateToken } = require('../helpers/authentication');
+const { generateToken, generateRefreshToken, verifyToken, verifyRefreshToken } = require('../helpers/authentication');
 
 const userModel = require('./userModel');
+const userAuthModel = require('./userAuthModel');
 const mail = require('../helpers/mail');
 
 const moduleLogger = logger.child({ module: 'authModel' });
@@ -30,6 +32,22 @@ const processLogin = async (user, { ipAddress }) => {
   };
 
   const jwtToken = generateToken(data);
+  const jwtRefreshToken = generateRefreshToken(data);
+
+  const jwtTokenData = await verifyToken(jwtToken);
+  const jwtRefreshTokenData = await verifyRefreshToken(jwtRefreshToken);
+
+  const newUserAuth = {
+    user_id: user.id,
+    auth_key: bcrypt.hashSync(jwtToken, bcrypt.genSaltSync(config.get('bcryptSaltingRound'))),
+    auth_key_expired_at: moment.unix(jwtTokenData.exp).format('YYYY-MM-DD HH:mm:ss'),
+    refresh_auth_key: bcrypt.hashSync(jwtRefreshToken, bcrypt.genSaltSync(config.get('bcryptSaltingRound'))),
+    refresh_auth_key_expired_at: moment.unix(jwtRefreshTokenData.exp).format('YYYY-MM-DD HH:mm:ss'),
+    status: userAuthModel.userAuthStatus.active
+  };
+
+  moduleLogger.debug({ newUserAuth }, 'Updating user auth information');
+  await userAuthModel.insertOne(newUserAuth);
 
   const newUser = {
     id: user.id,
@@ -37,10 +55,10 @@ const processLogin = async (user, { ipAddress }) => {
     last_login_ip: ipAddress
   };
 
-  moduleLogger.debug(newUser, 'Updating user information with ');
+  moduleLogger.debug({ newUser }, 'Updating user information ');
   await userModel.updateOne(user.id, newUser);
 
-  return { auth_key: jwtToken };
+  return { auth_key: jwtToken, refresh_auth_key: jwtRefreshToken };
 };
 
 const login = async (username, password, roles = [userModel.userRole.user], { ipAddress = '' } = {}) => {

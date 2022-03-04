@@ -7,6 +7,7 @@ import authService from '@/services/authService';
 
 const state = {
   authKey: localStorage.getItem('auth-key') || '',
+  refreshAuthKey: localStorage.getItem('refresh-auth-key') || '',
   loading: false,
   isLoggedIn: false,
   user: localStorage.getItem('auth-key') ? jwtDecode(localStorage.getItem('auth-key')) : null
@@ -20,7 +21,7 @@ const actions = {
     authService
       .login(username, password)
       .then(response => {
-        commit('loginSuccess', { authKey: response.data.auth_key });
+        commit('loginSuccess', { authKey: response.data.auth_key, refreshAuthKey: response.data.refresh_auth_key });
         dispatch('alert/success', { showType: 'toast', title: response.message }, { root: true });
         router.push('/');
       })
@@ -92,12 +93,13 @@ const mutations = {
     state.loading = true;
     state.isLoggedIn = false;
   },
-  loginSuccess(state, { authKey }) {
+  loginSuccess(state, { authKey, refreshAuthKey }) {
     state.loading = false;
     state.isLoggedIn = true;
     state.authKey = authKey;
     state.user = jwtDecode(authKey);
     localStorage.setItem('auth-key', authKey);
+    localStorage.setItem('refresh-auth-key', refreshAuthKey);
     axios.defaults.headers.common.Authorization = authKey;
   },
   loginFailure(state) {
@@ -108,6 +110,7 @@ const mutations = {
     state.authKey = null;
     state.user = null;
     localStorage.removeItem('auth-key');
+    localStorage.removeItem('refresh-auth-key');
     axios.defaults.headers.common.Authorization = null;
   },
   clear(state) {

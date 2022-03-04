@@ -1,23 +1,43 @@
+const config = require('config');
 const _ = require('lodash');
 const jwt = require('jsonwebtoken');
 const { logger } = require('./logger');
 const userModel = require('../models/userModel');
 
 const moduleLogger = logger.child({ module: 'authentication' });
-const secretKey = process.env.JWT_SECRET_KEY;
-const expiresIn = process.env.JWT_EXPIRES_IN;
+const secretKey = config.get('jwt.secretKey');
+const expiresIn = config.get('jwt.expiresIn');
+const refreshSecretKey = config.get('jwt.refreshSecretKey');
+const refreshExpiresIn = config.get('jwt.refreshExpiresIn');
 
 const generateToken = data => {
-  moduleLogger.debug('generating new token', { expiresIn });
+  moduleLogger.debug('generating new token', { secretKey, expiresIn });
   return jwt.sign(data, secretKey, {
     algorithm: 'HS256',
     expiresIn
   });
 };
 
+const generateRefreshToken = data => {
+  moduleLogger.debug('generating new refresh token', { refreshSecretKey, refreshExpiresIn });
+  return jwt.sign(data, refreshSecretKey, {
+    algorithm: 'HS256',
+    expiresIn: refreshExpiresIn
+  });
+};
+
 const verifyToken = async jwtToken => {
   try {
     return jwt.verify(jwtToken, secretKey, { algorithm: 'HS256' });
+  } catch (e) {
+    moduleLogger.error({ e });
+    return null;
+  }
+};
+
+const verifyRefreshToken = async jwtToken => {
+  try {
+    return jwt.verify(jwtToken, refreshSecretKey, { algorithm: 'HS256' });
   } catch (e) {
     moduleLogger.error({ e });
     return null;
@@ -81,7 +101,9 @@ const isAuthenticated = async (req, res, next) => {
 
 module.exports = {
   generateToken,
+  generateRefreshToken,
   verifyToken,
+  verifyRefreshToken,
   isAuthenticated,
   getTokenData
 };
