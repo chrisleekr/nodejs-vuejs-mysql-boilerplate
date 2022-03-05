@@ -1,4 +1,5 @@
 const _ = require('lodash');
+const moment = require('moment');
 const { getPool } = require('../helpers/database');
 const { logger } = require('../helpers/logger');
 
@@ -8,6 +9,66 @@ const moduleLogger = logger.child({ module: 'userAuthModel' });
 const userAuthStatus = {
   active: 1,
   deleted: 0
+};
+
+/**
+ * Find all user auths that matches search options
+ */
+const findAllWithoutPagination = async ({
+  searchOptions = {},
+  orderBy = 'id DESC',
+  includeActiveRefreshAuthKeyOnly = true
+} = {}) => {
+  let rows = {};
+  moduleLogger.debug({ searchOptions, orderBy, includeActiveRefreshAuthKeyOnly }, 'findAllWithoutPagination called');
+
+  const where = [];
+  const values = [];
+
+  _.forIn(searchOptions, (value, key) => {
+    where.push(`${key} = ?`);
+    values.push(value);
+  });
+
+  if (includeActiveRefreshAuthKeyOnly === true) {
+    where.push(`refresh_auth_key_expired_at >= ?`);
+    values.push(moment().format('YYYY-MM-DD HH:mm:ss'));
+  }
+
+  const query = `
+    SELECT
+      id,
+      user_id,
+      auth_key,
+      auth_key_expired_at,
+      refresh_auth_key,
+      refresh_auth_key_expired_at,
+      status,
+      CASE
+        WHEN status = ${userAuthStatus.active} THEN "Active"
+        WHEN status = ${userAuthStatus.deleted} THEN "Deleted"
+        ELSE "Unknown status"
+      END AS status_name,
+      created_at,
+      updated_at
+    FROM user_auth
+    WHERE
+      ${_.join(where, ' AND ')}
+    ORDER BY
+      ${orderBy}
+  `;
+
+  try {
+    // Get rows/pagination
+    rows = await (await getPool()).query(query, values);
+  } catch (e) {
+    moduleLogger.error(e);
+    throw e;
+  }
+
+  moduleLogger.debug({ rows });
+
+  return rows;
 };
 
 /**
@@ -62,7 +123,7 @@ const insertOne = async row => {
 /**
  * Get single user
  */
-const getOne = async ({ searchOptions = {} } = {}) => {
+const getOne = async ({ searchOptions = {} }) => {
   let row = {};
   const where = [];
   const values = [];
@@ -185,4 +246,4 @@ const deleteOne = async id => {
   };
 };
 
-module.exports = { userAuthStatus, insertOne, getOne, updateOne, deleteOne };
+module.exports = { userAuthStatus, findAllWithoutPagination, insertOne, getOne, updateOne, deleteOne };

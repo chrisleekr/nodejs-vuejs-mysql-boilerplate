@@ -180,11 +180,42 @@ const passwordReset = async (req, res) => {
   }
 };
 
+const refreshToken = async (req, res) => {
+  const validationResponse = handleValidationError(req, res);
+  if (validationResponse !== null) {
+    return validationResponse;
+  }
+
+  try {
+    const result = await authModel.refreshToken(
+      {
+        jwtRefreshToken: req.body.refreshToken
+      },
+      {
+        ipAddress: getIPAddress(req)
+      }
+    );
+
+    return handleSuccess(res, 'Your token has been refreshed.', result);
+  } catch (e) {
+    moduleLogger.error({ e }, 'Token refresh failed');
+    return handleCustomValidationError(res, [
+      {
+        value: '',
+        msg: e.message,
+        param: 'general',
+        location: 'body'
+      }
+    ]);
+  }
+};
+
 module.exports = {
   login,
   register,
   registerConfirm,
   passwordResetRequest,
   passwordResetVerify,
-  passwordReset
+  passwordReset,
+  refreshToken
 };

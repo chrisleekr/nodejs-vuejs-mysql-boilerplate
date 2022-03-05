@@ -40,6 +40,7 @@ module.exports = app => {
 
   app.route('/:roleType(user|staff)/login').post([checkSchema(auth.authLoginPost)], authController.login);
   app.route('/:roleType(user)/register').post([checkSchema(auth.authRegisterPost)], authController.register);
+  app.route('/refresh-token').post([checkSchema(auth.authRefreshTokenPost)], authController.refreshToken);
   app
     .route('/:roleType(user)/register-confirm')
     .get([checkSchema(auth.authRegisterConfirmGet)], authController.registerConfirm);

@@ -13,28 +13,33 @@ const mail = require('../helpers/mail');
 
 const moduleLogger = logger.child({ module: 'authModel' });
 
+const getTokenData = user => ({
+  id: user.id,
+  first_name: user.first_name,
+  last_name: user.last_name,
+  email: user.email,
+  role: user.role,
+  permission_keys: _.reduce(
+    user.permissions,
+    (acc, permission, _index) => {
+      acc.push(permission.permission_key);
+      return acc;
+    },
+    []
+  )
+});
+
+const getRefreshTokenData = user => ({
+  id: user.id
+});
+
 const processLogin = async (user, { ipAddress }) => {
-  // Update auth_key, auth_key, last_login_at, last_login_ip
-  const data = {
-    id: user.id,
-    first_name: user.first_name,
-    last_name: user.last_name,
-    email: user.email,
-    role: user.role,
-    permission_keys: _.reduce(
-      user.permissions,
-      (acc, permission, _index) => {
-        acc.push(permission.permission_key);
-        return acc;
-      },
-      []
-    )
-  };
-
+  const data = getTokenData(user);
   const jwtToken = generateToken(data);
-  const jwtRefreshToken = generateRefreshToken(data);
-
   const jwtTokenData = await verifyToken(jwtToken);
+
+  const refreshData = getRefreshTokenData(user);
+  const jwtRefreshToken = generateRefreshToken(refreshData);
   const jwtRefreshTokenData = await verifyRefreshToken(jwtRefreshToken);
 
   const newUserAuth = {
@@ -207,4 +212,66 @@ const passwordReset = async ({ password, passwordResetToken }) => {
   return result;
 };
 
-module.exports = { login, register, registerConfirm, passwordResetRequest, passwordReset };
+const findMatchingRefreshToken = async ({ jwtRefreshToken }) => {
+  const jwtRefreshTokenData = await verifyRefreshToken(jwtRefreshToken);
+
+  // Find user auth
+  const userAuthTokens = await userAuthModel.findAllWithoutPagination({
+    searchOptions: {
+      user_id: jwtRefreshTokenData.id,
+      status: userAuthModel.userAuthStatus.active
+    },
+    includeActiveRefreshAuthKeyOnly: true
+  });
+
+  return userAuthTokens.filter(userAuth => {
+    logger.debug(
+      { userAuth, bcrypt: bcrypt.compareSync(jwtRefreshToken, userAuth.refresh_auth_key) },
+      'DELETME user auth check'
+    );
+    return bcrypt.compareSync(jwtRefreshToken, userAuth.refresh_auth_key);
+  });
+};
+
+const refreshToken = async ({ jwtRefreshToken }, { ipAddress = '' } = {}) => {
+  // Decode token data
+
+  const matchingUserAuths = await findMatchingRefreshToken({ jwtRefreshToken });
+  if (matchingUserAuths.length === 0) {
+    moduleLogger.debug('Refresh token cannot be found.');
+    throw new Error('Your refresh token is not valid. Please login again.');
+  }
+
+  const matchingUserAuth = matchingUserAuths[0];
+  const disableUserAuth = {
+    status: userAuthModel.userAuthStatus.deleted
+  };
+  await userAuthModel.updateOne(matchingUserAuth.id, disableUserAuth);
+  moduleLogger.debug('Refresh token is disabled for refreshing.');
+
+  // Get user
+  const user = await userModel.getOne({
+    searchOptions: {
+      id: matchingUserAuth.user_id,
+      enabled: userModel.userEnabled.active,
+      status: userModel.userStatus.active
+    },
+    includePermissions: true
+  });
+
+  // Check whether user is disabled
+  if (user.blocked_at !== null && user.blocked_at !== '') {
+    moduleLogger.debug('User is blocked to login.');
+    throw new Error('You are not allowed to login.');
+  }
+
+  if (user.confirmed_at === null || user.confirmed_at === '') {
+    moduleLogger.debug('User is not confirmed yet.');
+    throw new Error('Your email is not verified. Please verify your email and try again.');
+  }
+
+  // Process login
+  return processLogin(user, { ipAddress });
+};
+
+module.exports = { login, register, registerConfirm, passwordResetRequest, passwordReset, refreshToken };

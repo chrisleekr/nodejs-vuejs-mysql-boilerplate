@@ -76,7 +76,7 @@ services:
       - DB_CONNECTION_LIMIT=10
       - DB_DEBUG=true
       - JWT_SECRET_KEY=aaGhu2foo7sheithePhai4Aef
-      - JWT_EXPIRES_IN=6d
+      - JWT_EXPIRES_IN=1d
       - JWT_REFRESH_SECRET_KEY=7rtbSK6wR05cKn4jMBwIr0Fjs
       - JWT_REFRESH_EXPIRES_IN=1w
       - BCRYPT_SALTING_ROUND=10
