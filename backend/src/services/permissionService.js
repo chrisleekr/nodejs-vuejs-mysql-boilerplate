@@ -1,7 +1,8 @@
 import _ from 'lodash';
-import axios from 'axios';
 import configService from '@/services/configService';
 import utils from '@/helper/utils';
+
+import api from './api';
 
 export default {
   async list({ query = {} } = {}) {
@@ -11,11 +12,6 @@ export default {
       url += `?${utils.toQueryStrings(pickedQuery)}`;
     }
 
-    return axios
-      .get(url, {})
-      .then(response => response.data)
-      .catch(e => {
-        throw e;
-      });
+    return api.get(url, {}).then(response => response.data);
   }
 };

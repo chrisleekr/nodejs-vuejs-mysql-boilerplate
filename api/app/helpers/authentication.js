@@ -30,7 +30,7 @@ const verifyToken = async jwtToken => {
   try {
     return jwt.verify(jwtToken, secretKey, { algorithm: 'HS256' });
   } catch (e) {
-    moduleLogger.error({ e });
+    moduleLogger.error({ e }, 'verifyToken failed');
     return null;
   }
 };
@@ -39,7 +39,7 @@ const verifyRefreshToken = async jwtToken => {
   try {
     return jwt.verify(jwtToken, refreshSecretKey, { algorithm: 'HS256' });
   } catch (e) {
-    moduleLogger.error({ e });
+    moduleLogger.error({ e }, 'verifyRefreshToken failed');
     return null;
   }
 };
@@ -58,7 +58,7 @@ const isAuthenticated = async (req, res, next) => {
     const data = await verifyToken(token);
     if (data === null) {
       moduleLogger.info('Verification failed. Return error.');
-      return res.status(403).json({
+      return res.status(401).json({
         success: false,
         status: 401,
         message: 'Please login before to continue.',
@@ -77,7 +77,7 @@ const isAuthenticated = async (req, res, next) => {
       moduleLogger.info('User not found. Return error.');
       return res.status(403).json({
         success: false,
-        status: 401,
+        status: 403,
         message: 'Please login before to continue.',
         data: {}
       });

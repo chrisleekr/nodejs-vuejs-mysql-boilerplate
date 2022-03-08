@@ -1,5 +1,5 @@
-import axios from 'axios';
 import configService from '@/services/configService';
+import api from './api';
 
 export default {
   async list({ state = undefined } = {}) {
@@ -8,11 +8,6 @@ export default {
       url += `/${state}`;
     }
 
-    return axios
-      .get(url, {})
-      .then(response => response.data)
-      .catch(e => {
-        throw e;
-      });
+    return api.get(url, {}).then(response => response.data);
   }
 };

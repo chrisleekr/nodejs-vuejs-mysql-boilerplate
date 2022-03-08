@@ -47,7 +47,7 @@ export default {
     };
   },
   mounted() {
-    this.list({ query: this.$route.query });
+    this.list({ query: this.$route.query, router: this.$router });
   },
   data() {
     return {
@@ -108,8 +108,8 @@ export default {
 
         preConfirm: () => {
           this.deleteOne({
-            type: 'setting',
-            settingId: row.id
+            settingId: row.id,
+            router: this.$router
           });
         }
       });

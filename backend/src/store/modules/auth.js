@@ -1,5 +1,4 @@
 import _ from 'lodash';
-import axios from 'axios';
 import moment from 'moment';
 import jwtDecode from 'jwt-decode';
 
@@ -21,8 +20,12 @@ const actions = {
     authService
       .login(username, password)
       .then(response => {
-        commit('loginSuccess', { authKey: response.data.auth_key, refreshAuthKey: response.data.refresh_auth_key });
+        const { auth_key: authKey, refresh_auth_key: refreshAuthKey } = response.data;
+
+        commit('loginSuccess', { authKey, refreshAuthKey });
+
         dispatch('alert/success', { showType: 'toast', title: response.message }, { root: true });
+
         router.push('/');
       })
       .catch(e => {
@@ -48,13 +51,13 @@ const actions = {
 
     dispatch(
       'alert/error',
-      { showType: 'toast', title: 'Session expired', text: 'Please login with your account.' },
+      { showType: 'toast', title: 'Session expired', text: 'Your session has been expired. Please login again.' },
       { root: true }
     );
 
     router.push('/login');
   },
-  handleAuthMessageKey({ _dispatch }, { messageKey }) {
+  handleAuthMessageKey(_store, { messageKey }) {
     switch (messageKey) {
       default:
         break;
@@ -68,6 +71,7 @@ const getters = {
       return true;
     }
 
+    // Check auth key
     if (_.isEmpty(state.authKey)) {
       return false;
     }
@@ -80,7 +84,21 @@ const getters = {
     }
 
     if (decoded.exp && moment.unix(decoded.exp).isAfter()) {
-      axios.defaults.headers.common.Authorization = state.authKey;
+      return true;
+    }
+
+    // Check refresh auth key
+    if (_.isEmpty(state.refreshAuthKey)) {
+      return false;
+    }
+
+    try {
+      decoded = jwtDecode(state.refreshAuthKey);
+    } catch (e) {
+      return false;
+    }
+
+    if (decoded.exp && moment.unix(decoded.exp).isAfter()) {
       return true;
     }
 
@@ -100,7 +118,6 @@ const mutations = {
     state.user = jwtDecode(authKey);
     localStorage.setItem('auth-key', authKey);
     localStorage.setItem('refresh-auth-key', refreshAuthKey);
-    axios.defaults.headers.common.Authorization = authKey;
   },
   loginFailure(state) {
     state.loading = false;
@@ -111,7 +128,6 @@ const mutations = {
     state.user = null;
     localStorage.removeItem('auth-key');
     localStorage.removeItem('refresh-auth-key');
-    axios.defaults.headers.common.Authorization = null;
   },
   clear(state) {
     state.loading = false;

@@ -214,6 +214,9 @@ const passwordReset = async ({ password, passwordResetToken }) => {
 
 const findMatchingRefreshToken = async ({ jwtRefreshToken }) => {
   const jwtRefreshTokenData = await verifyRefreshToken(jwtRefreshToken);
+  if (jwtRefreshTokenData === null) {
+    throw new Error('jwt expired');
+  }
 
   // Find user auth
   const userAuthTokens = await userAuthModel.findAllWithoutPagination({
@@ -224,13 +227,7 @@ const findMatchingRefreshToken = async ({ jwtRefreshToken }) => {
     includeActiveRefreshAuthKeyOnly: true
   });
 
-  return userAuthTokens.filter(userAuth => {
-    logger.debug(
-      { userAuth, bcrypt: bcrypt.compareSync(jwtRefreshToken, userAuth.refresh_auth_key) },
-      'DELETME user auth check'
-    );
-    return bcrypt.compareSync(jwtRefreshToken, userAuth.refresh_auth_key);
-  });
+  return userAuthTokens.filter(userAuth => bcrypt.compareSync(jwtRefreshToken, userAuth.refresh_auth_key));
 };
 
 const refreshToken = async ({ jwtRefreshToken }, { ipAddress = '' } = {}) => {

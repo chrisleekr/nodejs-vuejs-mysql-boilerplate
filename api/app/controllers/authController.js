@@ -199,6 +199,16 @@ const refreshToken = async (req, res) => {
     return handleSuccess(res, 'Your token has been refreshed.', result);
   } catch (e) {
     moduleLogger.error({ e }, 'Token refresh failed');
+
+    if (e.message === 'jwt expired') {
+      return res.status(403).json({
+        success: false,
+        status: 403,
+        message: 'Your login has been expired. Please login again.',
+        data: {}
+      });
+    }
+
     return handleCustomValidationError(res, [
       {
         value: '',
