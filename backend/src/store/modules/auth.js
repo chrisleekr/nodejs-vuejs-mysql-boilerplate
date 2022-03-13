@@ -5,11 +5,11 @@ import jwtDecode from 'jwt-decode';
 import authService from '@/services/authService';
 
 const state = {
-  authKey: localStorage.getItem('auth-key') || '',
-  refreshAuthKey: localStorage.getItem('refresh-auth-key') || '',
+  authKey: localStorage.getItem('backend-auth-key') || '',
+  refreshAuthKey: localStorage.getItem('backend-refresh-auth-key') || '',
   loading: false,
   isLoggedIn: false,
-  user: localStorage.getItem('auth-key') ? jwtDecode(localStorage.getItem('auth-key')) : null
+  user: localStorage.getItem('backend-auth-key') ? jwtDecode(localStorage.getItem('backend-auth-key')) : null
 };
 
 const actions = {
@@ -116,8 +116,8 @@ const mutations = {
     state.isLoggedIn = true;
     state.authKey = authKey;
     state.user = jwtDecode(authKey);
-    localStorage.setItem('auth-key', authKey);
-    localStorage.setItem('refresh-auth-key', refreshAuthKey);
+    localStorage.setItem('backend-auth-key', authKey);
+    localStorage.setItem('backend-refresh-auth-key', refreshAuthKey);
   },
   loginFailure(state) {
     state.loading = false;
@@ -126,8 +126,8 @@ const mutations = {
     state.isLoggedIn = false;
     state.authKey = null;
     state.user = null;
-    localStorage.removeItem('auth-key');
-    localStorage.removeItem('refresh-auth-key');
+    localStorage.removeItem('backend-auth-key');
+    localStorage.removeItem('backend-refresh-auth-key');
   },
   clear(state) {
     state.loading = false;

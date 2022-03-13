@@ -53,7 +53,7 @@ const displayToast = ({ type, position, _title, text }) => {
 export const mutations = {
   success(state, { showType, position, title, text }) {
     state.type = 'success'
-    state.position = position
+    state.position = position || 'bottom-end'
     state.title = title
     state.text = text
     if (showType === 'toast') {
@@ -67,7 +67,7 @@ export const mutations = {
   },
   info(state, { showType, position, title, text }) {
     state.type = 'info'
-    state.position = position
+    state.position = position || 'bottom-end'
     state.title = title
     state.text = text
     if (showType === 'toast') {
@@ -81,7 +81,7 @@ export const mutations = {
   },
   error(state, { showType, position, title, text }) {
     state.type = 'error'
-    state.position = position
+    state.position = position || 'bottom-end'
     state.title = title
     state.text = text
     if (showType === 'toast') {

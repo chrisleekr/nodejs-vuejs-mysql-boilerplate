@@ -29,7 +29,7 @@ module.exports = {
   /*
    ** Plugins to load before mounting the App
    */
-  plugins: [{ src: '@/plugins/vuelidate', ssr: false }],
+  plugins: [{ src: '@/plugins/vuelidate', ssr: false }, '@/plugins/axios'],
   /*
    ** Nuxt.js dev-modules
    */
@@ -76,7 +76,13 @@ module.exports = {
    ** Axios module configuration
    ** See https://axios.nuxtjs.org/options
    */
-  axios: {},
+  axios: {
+    headers: {
+      common: {
+        Accept: 'application/json'
+      }
+    }
+  },
   /*
    ** Build configuration
    */
@@ -112,7 +118,7 @@ module.exports = {
     }
   },
   toast: {
-    position: 'top-center',
+    position: 'bottom-end',
     register: [
       // Register custom toasts
     ]

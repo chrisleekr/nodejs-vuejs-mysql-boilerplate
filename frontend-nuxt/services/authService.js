@@ -1,29 +1,23 @@
-import axios from 'axios'
-
 export default {
-  passwordReset({ key, password }) {
-    return axios
+  passwordReset($axios, { key, password }) {
+    return $axios
       .post(`${process.env.API_URL}/user/password-reset`, {
         key,
         password
       })
-      .then((response) => {
-        return response.data
-      })
+      .then((response) => response.data)
   },
 
-  passwordResetRequest({ email }) {
-    return axios
+  passwordResetRequest($axios, { email }) {
+    return $axios
       .post(`${process.env.API_URL}/user/password-reset-request`, {
         email
       })
-      .then((response) => {
-        return response.data
-      })
+      .then((response) => response.data)
   },
 
-  register({ username, email, password, firstName, lastName }) {
-    return axios
+  register($axios, { username, email, password, firstName, lastName }) {
+    return $axios
       .post(`${process.env.API_URL}/user/register`, {
         username,
         email,
@@ -31,22 +25,15 @@ export default {
         first_name: firstName,
         last_name: lastName
       })
-      .then((response) => {
-        return response.data
-      })
+      .then((response) => response.data)
   },
 
-  login(username, password) {
-    return axios
+  login($axios, { username, password }) {
+    return $axios
       .post(`${process.env.API_URL}/user/login`, {
         username,
         password
       })
-      .then((response) => {
-        return response.data
-      })
-      .catch((e) => {
-        throw e
-      })
+      .then((response) => response.data)
   }
 }

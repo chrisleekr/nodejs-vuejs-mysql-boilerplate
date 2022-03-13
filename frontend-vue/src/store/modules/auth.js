@@ -5,14 +5,14 @@ import jwtDecode from 'jwt-decode';
 import authService from '@/services/authService';
 
 const state = {
-  authKey: localStorage.getItem('auth-key') || '',
-  refreshAuthKey: localStorage.getItem('refresh-auth-key') || '',
+  authKey: localStorage.getItem('frontend-vue-auth-key') || '',
+  refreshAuthKey: localStorage.getItem('frontend-vue-refresh-auth-key') || '',
   loading: false,
   isRegistered: false,
   isLoggedIn: false,
   isPasswordResetRequested: false,
   isPasswordResetted: false,
-  user: localStorage.getItem('auth-key') ? jwtDecode(localStorage.getItem('auth-key')) : null
+  user: localStorage.getItem('frontend-vue-auth-key') ? jwtDecode(localStorage.getItem('frontend-vue-auth-key')) : null
 };
 
 const actions = {
@@ -200,8 +200,8 @@ const mutations = {
     state.isLoggedIn = true;
     state.authKey = authKey;
     state.user = jwtDecode(authKey);
-    localStorage.setItem('auth-key', authKey);
-    localStorage.setItem('refresh-auth-key', refreshAuthKey);
+    localStorage.setItem('frontend-vue-auth-key', authKey);
+    localStorage.setItem('frontend-vue-refresh-auth-key', refreshAuthKey);
   },
   loginFailure(state) {
     state.loading = false;
@@ -234,8 +234,8 @@ const mutations = {
     state.isLoggedIn = false;
     state.authKey = null;
     state.user = null;
-    localStorage.removeItem('auth-key');
-    localStorage.removeItem('refresh-auth-key');
+    localStorage.removeItem('frontend-vue-auth-key');
+    localStorage.removeItem('frontend-vue-refresh-auth-key');
   },
   clear(state) {
     state.loading = false;

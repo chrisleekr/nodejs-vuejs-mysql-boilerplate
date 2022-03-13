@@ -12,7 +12,7 @@ export const actions = {
     commit('startRequest')
 
     userService
-      .me()
+      .me(this.$axios)
       .then((response) => {
         commit('setUser', { user: response.data })
       })
@@ -26,7 +26,7 @@ export const actions = {
     commit('startRequest')
 
     userService
-      .updateMe({
+      .updateMe(this.$axios, {
         first_name: user.firstName,
         last_name: user.lastName,
         email: user.email,
