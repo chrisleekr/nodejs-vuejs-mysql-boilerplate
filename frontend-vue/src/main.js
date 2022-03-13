@@ -13,6 +13,7 @@ import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome';
 import App from './App.vue';
 import router from './router';
 import store from './store';
+import setupInterceptors from './services/setupInterceptors';
 import './registerServiceWorker';
 
 Vue.config.productionTip = false;
@@ -27,6 +28,8 @@ Vue.use(VueSweetalert2, {});
 
 library.add(faTrash, faPlus, faCheckSquare, faSquare);
 Vue.component('font-awesome-icon', FontAwesomeIcon);
+
+setupInterceptors(store);
 
 new Vue({
   router,

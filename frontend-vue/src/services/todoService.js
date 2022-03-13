@@ -1,5 +1,5 @@
-import axios from 'axios';
 import configService from '@/services/configService';
+import api from './api';
 
 export default {
   async list({ state = undefined } = {}) {
@@ -8,40 +8,22 @@ export default {
       url += `/${state}`;
     }
 
-    return axios
-      .get(url, {})
-      .then(response => response.data)
-      .catch(e => {
-        throw e;
-      });
+    return api.get(url, {}).then(response => response.data);
   },
 
   async postOne({ todo }) {
-    return axios
-      .post(`${configService.get('apiUrl')}/todo`, todo)
-      .then(response => response.data)
-      .catch(e => {
-        throw e;
-      });
+    return api.post(`${configService.get('apiUrl')}/todo`, todo).then(response => response.data);
   },
 
   async postBulk({ state, todoList }) {
-    return axios
+    return api
       .post(`${configService.get('apiUrl')}/todo/${state}`, {
         todo: todoList
       })
-      .then(response => response.data)
-      .catch(e => {
-        throw e;
-      });
+      .then(response => response.data);
   },
 
   async deleteOne({ todoId }) {
-    return axios
-      .delete(`${configService.get('apiUrl')}/todo/${todoId}`)
-      .then(response => response.data)
-      .catch(e => {
-        throw e;
-      });
+    return api.delete(`${configService.get('apiUrl')}/todo/${todoId}`).then(response => response.data);
   }
 };

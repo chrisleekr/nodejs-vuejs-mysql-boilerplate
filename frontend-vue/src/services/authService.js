@@ -1,32 +1,26 @@
-import axios from 'axios';
 import configService from '@/services/configService';
+import api from './api';
 
 export default {
   async passwordReset({ key, password }) {
-    return axios
+    return api
       .post(`${configService.get('apiUrl')}/user/password-reset`, {
         key,
         password
       })
-      .then(response => response.data)
-      .catch(e => {
-        throw e;
-      });
+      .then(response => response.data);
   },
 
   async passwordResetRequest({ email }) {
-    return axios
+    return api
       .post(`${configService.get('apiUrl')}/user/password-reset-request`, {
         email
       })
-      .then(response => response.data)
-      .catch(e => {
-        throw e;
-      });
+      .then(response => response.data);
   },
 
   async register({ username, email, password, firstName, lastName }) {
-    return axios
+    return api
       .post(`${configService.get('apiUrl')}/user/register`, {
         username,
         email,
@@ -34,21 +28,15 @@ export default {
         first_name: firstName,
         last_name: lastName
       })
-      .then(response => response.data)
-      .catch(e => {
-        throw e;
-      });
+      .then(response => response.data);
   },
 
   async login(username, password) {
-    return axios
+    return api
       .post(`${configService.get('apiUrl')}/user/login`, {
         username,
         password
       })
-      .then(response => response.data)
-      .catch(e => {
-        throw e;
-      });
+      .then(response => response.data);
   }
 };
