@@ -5,7 +5,7 @@ import configService from './configService';
 const setupInterceptors = store => {
   axiosInstance.interceptors.request.use(
     config => {
-      const token = localStorage.getItem('auth-key') || '';
+      const token = localStorage.getItem('backend-auth-key') || '';
       if (token) {
         // eslint-disable-next-line no-param-reassign
         config.headers.Authorization = token;
@@ -24,7 +24,7 @@ const setupInterceptors = store => {
           originalConfig._retry = true;
           try {
             const response = await axiosInstance.post(`${configService.get('apiUrl')}/refresh-token`, {
-              refreshToken: localStorage.getItem('refresh-auth-key') || ''
+              refreshToken: localStorage.getItem('backend-refresh-auth-key') || ''
             });
             const { data } = response.data;
 
