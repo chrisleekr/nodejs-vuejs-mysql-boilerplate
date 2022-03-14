@@ -1,7 +1,7 @@
 import { shallowMount, createLocalVue } from '@vue/test-utils'
 // eslint-disable-next-line import/no-named-as-default
 import BootstrapVue from 'bootstrap-vue'
-import Vuex from 'vuex'
+import Vuex, { Store } from 'vuex'
 import Vuelidate from 'vuelidate'
 import LoginBox from '@/components/LoginBox.vue'
 
@@ -41,7 +41,7 @@ describe('LoginBox.vue', () => {
       }
     }
 
-    store = new Vuex.Store({
+    store = new Store({
       modules: {
         alert: alertModule,
         auth: authModule
@@ -74,7 +74,7 @@ describe('LoginBox.vue', () => {
 
   describe('if isLoggedIn is true', () => {
     beforeEach(() => {
-      store = new Vuex.Store({
+      store = new Store({
         modules: {
           alert: alertModule,
           auth: authModule
@@ -91,7 +91,7 @@ describe('LoginBox.vue', () => {
 
   describe('onSubmit', () => {
     beforeEach(() => {
-      store = new Vuex.Store({
+      store = new Store({
         modules: {
           alert: alertModule,
           auth: authModule

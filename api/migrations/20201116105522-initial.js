@@ -26,9 +26,7 @@ exports.up = db => {
 
       resolve(data);
     });
-  }).then(data => {
-    return db.runSql(data);
-  });
+  }).then(data => db.runSql(data));
 };
 
 exports.down = db => {
@@ -40,9 +38,7 @@ exports.down = db => {
 
       resolve(data);
     });
-  }).then(data => {
-    return db.runSql(data);
-  });
+  }).then(data => db.runSql(data));
 };
 
 exports._meta = {

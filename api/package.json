@@ -9,6 +9,7 @@
     "build": "cross-env NODE_ENV=production webpack --config webpack.config.prod.js --progress --profile",
     "lint": "eslint ./app --fix",
     "test": "cross-env NODE_ENV=test jest --coverage --detectOpenHandles --runInBand",
+    "migrate:create": "db-migrate create",
     "migrate:up": "db-migrate up --verbose",
     "migrate:down": "db-migrate down --verbose",
     "migrate:reset": "db-migrate reset --verbose"
@@ -35,6 +36,7 @@
     "bunyan": "^1.8.15",
     "bunyan-middleware": "^1.0.1",
     "compression": "^1.7.4",
+    "config": "^3.3.7",
     "cors": "^2.8.5",
     "cross-env": "^7.0.3",
     "db-migrate": "^0.11.13",

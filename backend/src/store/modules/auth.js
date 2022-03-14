@@ -1,15 +1,15 @@
 import _ from 'lodash';
-import axios from 'axios';
 import moment from 'moment';
 import jwtDecode from 'jwt-decode';
 
 import authService from '@/services/authService';
 
 const state = {
-  authKey: localStorage.getItem('auth-key') || '',
+  authKey: localStorage.getItem('backend-auth-key') || '',
+  refreshAuthKey: localStorage.getItem('backend-refresh-auth-key') || '',
   loading: false,
   isLoggedIn: false,
-  user: localStorage.getItem('auth-key') ? jwtDecode(localStorage.getItem('auth-key')) : null
+  user: localStorage.getItem('backend-auth-key') ? jwtDecode(localStorage.getItem('backend-auth-key')) : null
 };
 
 const actions = {
@@ -20,8 +20,12 @@ const actions = {
     authService
       .login(username, password)
       .then(response => {
-        commit('loginSuccess', { authKey: response.data.auth_key });
+        const { auth_key: authKey, refresh_auth_key: refreshAuthKey } = response.data;
+
+        commit('loginSuccess', { authKey, refreshAuthKey });
+
         dispatch('alert/success', { showType: 'toast', title: response.message }, { root: true });
+
         router.push('/');
       })
       .catch(e => {
@@ -47,13 +51,13 @@ const actions = {
 
     dispatch(
       'alert/error',
-      { showType: 'toast', title: 'Session expired', text: 'Please login with your account.' },
+      { showType: 'toast', title: 'Session expired', text: 'Your session has been expired. Please login again.' },
       { root: true }
     );
 
     router.push('/login');
   },
-  handleAuthMessageKey({ _dispatch }, { messageKey }) {
+  handleAuthMessageKey(_store, { messageKey }) {
     switch (messageKey) {
       default:
         break;
@@ -67,6 +71,7 @@ const getters = {
       return true;
     }
 
+    // Check auth key
     if (_.isEmpty(state.authKey)) {
       return false;
     }
@@ -79,7 +84,21 @@ const getters = {
     }
 
     if (decoded.exp && moment.unix(decoded.exp).isAfter()) {
-      axios.defaults.headers.common.Authorization = state.authKey;
+      return true;
+    }
+
+    // Check refresh auth key
+    if (_.isEmpty(state.refreshAuthKey)) {
+      return false;
+    }
+
+    try {
+      decoded = jwtDecode(state.refreshAuthKey);
+    } catch (e) {
+      return false;
+    }
+
+    if (decoded.exp && moment.unix(decoded.exp).isAfter()) {
       return true;
     }
 
@@ -92,13 +111,13 @@ const mutations = {
     state.loading = true;
     state.isLoggedIn = false;
   },
-  loginSuccess(state, { authKey }) {
+  loginSuccess(state, { authKey, refreshAuthKey }) {
     state.loading = false;
     state.isLoggedIn = true;
     state.authKey = authKey;
     state.user = jwtDecode(authKey);
-    localStorage.setItem('auth-key', authKey);
-    axios.defaults.headers.common.Authorization = authKey;
+    localStorage.setItem('backend-auth-key', authKey);
+    localStorage.setItem('backend-refresh-auth-key', refreshAuthKey);
   },
   loginFailure(state) {
     state.loading = false;
@@ -107,8 +126,8 @@ const mutations = {
     state.isLoggedIn = false;
     state.authKey = null;
     state.user = null;
-    localStorage.removeItem('auth-key');
-    axios.defaults.headers.common.Authorization = null;
+    localStorage.removeItem('backend-auth-key');
+    localStorage.removeItem('backend-refresh-auth-key');
   },
   clear(state) {
     state.loading = false;

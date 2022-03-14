@@ -1,3 +1,4 @@
+const config = require('config');
 const { validationResult } = require('express-validator');
 const authModel = require('../models/authModel');
 const userModel = require('../models/userModel');
@@ -50,7 +51,7 @@ const register = async (req, res) => {
 
   const userRole = userModel.userRole.user;
 
-  const apiURL = `${process.env.API_URL}/user`;
+  const apiURL = `${config.get('apiUrl')}/user`;
 
   try {
     const result = await authModel.register(
@@ -85,7 +86,7 @@ const register = async (req, res) => {
 const registerConfirm = async (req, res) => {
   const errors = validationResult(req);
 
-  const appURL = process.env.FRONTEND_URL;
+  const appURL = config.get('frontendUrl');
 
   if (!errors.isEmpty()) {
     return handleRedirect(res, 302, `${appURL}/login?messageKey=registerConfirmValidationError`);
@@ -109,7 +110,7 @@ const passwordResetRequest = async (req, res) => {
     return validationResponse;
   }
 
-  const apiURL = `${process.env.API_URL}/user`;
+  const apiURL = `${config.get('apiUrl')}/user`;
 
   try {
     const result = await authModel.passwordResetRequest(
@@ -140,7 +141,7 @@ const passwordResetRequest = async (req, res) => {
 const passwordResetVerify = async (req, res) => {
   const errors = validationResult(req);
 
-  const appURL = process.env.FRONTEND_URL;
+  const appURL = config.get('frontendUrl');
 
   if (!errors.isEmpty()) {
     return handleRedirect(res, 302, `${appURL}/password-reset-request?messageKey=passwordResetValidationError`);
@@ -179,11 +180,52 @@ const passwordReset = async (req, res) => {
   }
 };
 
+const refreshToken = async (req, res) => {
+  const validationResponse = handleValidationError(req, res);
+  if (validationResponse !== null) {
+    return validationResponse;
+  }
+
+  try {
+    const result = await authModel.refreshToken(
+      {
+        jwtRefreshToken: req.body.refreshToken
+      },
+      {
+        ipAddress: getIPAddress(req)
+      }
+    );
+
+    return handleSuccess(res, 'Your token has been refreshed.', result);
+  } catch (e) {
+    moduleLogger.error({ e }, 'Token refresh failed');
+
+    if (e.message === 'jwt expired') {
+      return res.status(403).json({
+        success: false,
+        status: 403,
+        message: 'Your login has been expired. Please login again.',
+        data: {}
+      });
+    }
+
+    return handleCustomValidationError(res, [
+      {
+        value: '',
+        msg: e.message,
+        param: 'general',
+        location: 'body'
+      }
+    ]);
+  }
+};
+
 module.exports = {
   login,
   register,
   registerConfirm,
   passwordResetRequest,
   passwordResetVerify,
-  passwordReset
+  passwordReset,
+  refreshToken
 };

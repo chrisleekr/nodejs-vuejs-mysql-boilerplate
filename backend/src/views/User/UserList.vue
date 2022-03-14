@@ -69,7 +69,7 @@ export default {
     };
   },
   mounted() {
-    this.list({ type: 'user', query: this.$route.query });
+    this.list({ type: 'user', query: this.$route.query, router: this.$router });
   },
   data() {
     return {
@@ -149,7 +149,8 @@ export default {
         preConfirm: () => {
           this.deleteOne({
             type: 'user',
-            userId: row.id
+            userId: row.id,
+            router: this.$router
           });
         }
       });

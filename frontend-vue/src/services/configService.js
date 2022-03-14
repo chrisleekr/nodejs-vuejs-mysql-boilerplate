@@ -6,10 +6,9 @@ class ConfigService {
     this.config = {};
   }
 
-  loadConfig() {
-    axios.get(`${vueConfig.publicPath}static/config.json`).then(response => {
-      this.config = response.data;
-    });
+  async loadConfig() {
+    const response = await axios.get(`${vueConfig.publicPath}static/config.json`);
+    this.config = response.data;
   }
 
   set(key, value) {

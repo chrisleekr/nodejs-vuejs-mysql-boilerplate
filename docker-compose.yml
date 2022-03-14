@@ -76,7 +76,9 @@ services:
       - DB_CONNECTION_LIMIT=10
       - DB_DEBUG=true
       - JWT_SECRET_KEY=aaGhu2foo7sheithePhai4Aef
-      - JWT_EXPIRES_IN=1w
+      - JWT_EXPIRES_IN=6d
+      - JWT_REFRESH_SECRET_KEY=7rtbSK6wR05cKn4jMBwIr0Fjs
+      - JWT_REFRESH_EXPIRES_IN=7d
       - BCRYPT_SALTING_ROUND=10
       - API_URL=http://localhost/api
       - BACKEND_URL=http://localhost/backend

@@ -1,3 +1,4 @@
+const config = require('config');
 const supertest = require('supertest');
 const { v4: uuidv4 } = require('uuid');
 
@@ -10,7 +11,7 @@ describe('authController', () => {
   let request;
   let response;
 
-  const frontendURL = process.env.FRONTEND_URL;
+  const frontendURL = config.get('frontendUrl');
 
   beforeAll(async () => {
     request = supertest(app);

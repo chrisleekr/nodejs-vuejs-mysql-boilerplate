@@ -15,7 +15,7 @@ describe('authService.js', () => {
     describe('when result is returned', () => {
       beforeEach(async () => {
         axios.post.mockResolvedValue({ data: { some: 'value' } })
-        result = await authService.passwordReset({
+        result = await authService.passwordReset(axios, {
           key: 'key',
           password: 'password'
         })
@@ -38,7 +38,11 @@ describe('authService.js', () => {
         axios.post.mockRejectedValue(new Error('something happened'))
 
         try {
-          result = await authService.passwordReset('username', 'password')
+          result = await authService.passwordReset(
+            axios,
+            'username',
+            'password'
+          )
         } catch (e) {
           error = e
         }
@@ -54,7 +58,7 @@ describe('authService.js', () => {
     describe('when result is returned', () => {
       beforeEach(async () => {
         axios.post.mockResolvedValue({ data: { some: 'value' } })
-        result = await authService.passwordResetRequest({
+        result = await authService.passwordResetRequest(axios, {
           email: 'my@email.com'
         })
       })
@@ -78,7 +82,7 @@ describe('authService.js', () => {
         axios.post.mockRejectedValue(new Error('something happened'))
 
         try {
-          result = await authService.passwordResetRequest({
+          result = await authService.passwordResetRequest(axios, {
             email: 'my@email.com'
           })
         } catch (e) {
@@ -96,7 +100,7 @@ describe('authService.js', () => {
     describe('when result is returned', () => {
       beforeEach(async () => {
         axios.post.mockResolvedValue({ data: { some: 'value' } })
-        result = await authService.register({
+        result = await authService.register(axios, {
           username: 'username',
           email: 'my@email.com',
           password: '123456',
@@ -125,7 +129,7 @@ describe('authService.js', () => {
         axios.post.mockRejectedValue(new Error('something happened'))
 
         try {
-          result = await authService.register({
+          result = await authService.register(axios, {
             username: 'username',
             email: 'my@email.com',
             password: '123456',

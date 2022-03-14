@@ -1,16 +1,13 @@
-import axios from 'axios';
 import configService from '@/services/configService';
+import api from './api';
 
 export default {
   async login(username, password) {
-    return axios
+    return api
       .post(`${configService.get('apiUrl')}/staff/login`, {
         username,
         password
       })
-      .then(response => response.data)
-      .catch(e => {
-        throw e;
-      });
+      .then(response => response.data);
   }
 };

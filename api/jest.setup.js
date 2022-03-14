@@ -5,6 +5,7 @@ const { getPool } = require('./app/helpers/database');
 // Override port for supertest
 process.env.PORT = 3001;
 
+// eslint-disable-next-line no-promise-executor-return
 const timeout = () => new Promise(resolve => setTimeout(resolve, 3000));
 
 const isDatabaseReady = async () => {
@@ -14,7 +15,9 @@ const isDatabaseReady = async () => {
   for (let count = 1; count < limit; count += 1) {
     console.log(`Checking ${count} time${count >= 1 ? 's' : ''}`);
     try {
-      const user = await (await getPool()).query(
+      const user = await (
+        await getPool()
+      ).query(
         `
           SELECT
             *

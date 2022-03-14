@@ -1,4 +1,5 @@
 const _ = require('lodash');
+const config = require('config');
 const bcrypt = require('bcryptjs');
 const { getPool, fetchWithPagination } = require('../helpers/database');
 const { logger } = require('../helpers/logger');
@@ -149,7 +150,7 @@ const insertOne = async row => {
   let passwordHash = null;
   // If password is provided, then hash it
   if (row.password) {
-    passwordHash = bcrypt.hashSync(row.password, bcrypt.genSaltSync(+process.env.BCRYPT_SALTING_ROUND));
+    passwordHash = bcrypt.hashSync(row.password, bcrypt.genSaltSync(config.get('bcryptSaltingRound')));
   }
 
   try {
@@ -352,7 +353,7 @@ const updateOne = async (id, row) => {
     if (key === 'password') {
       if (_.isEmpty(value) === false) {
         fields.push('password_hash = ?');
-        values.push(bcrypt.hashSync(row.password, bcrypt.genSaltSync(+process.env.BCRYPT_SALTING_ROUND)));
+        values.push(bcrypt.hashSync(row.password, bcrypt.genSaltSync(config.get('bcryptSaltingRound'))));
       }
     } else if (key !== 'id') {
       fields.push(`${key} = ?`);

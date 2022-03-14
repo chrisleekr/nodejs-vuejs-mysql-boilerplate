@@ -37,6 +37,8 @@ import './registerServiceWorker';
 import SimpleLayout from './views/Layout/SimpleLayout.vue';
 import BackendLayout from './views/Layout/BackendLayout.vue';
 
+import setupInterceptors from './services/setupInterceptors';
+
 Vue.config.productionTip = false;
 
 Vue.use(VueMeta, {
@@ -70,6 +72,8 @@ Vue.component('simple-layout', SimpleLayout);
 Vue.component('backend-layout', BackendLayout);
 
 ConfigService.loadConfig().then(() => {
+  setupInterceptors(store);
+
   new Vue({
     router,
     store,

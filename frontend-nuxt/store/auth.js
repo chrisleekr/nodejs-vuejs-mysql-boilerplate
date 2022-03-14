@@ -1,14 +1,15 @@
 import _ from 'lodash'
-import axios from 'axios'
 import moment from 'moment'
 import jwtDecode from 'jwt-decode'
 
 import authService from '@/services/authService'
 
 export const cookieAuthKey = 'frontend-nuxt-auth-key'
+export const cookieRefreshAuthKey = 'frontend-nuxt-refresh-auth-key'
 
 export const state = () => ({
-  authKey: '',
+  authKey: null,
+  refreshAuthKey: null,
   loading: false,
   isRegistered: false,
   isLoggedIn: false,
@@ -23,7 +24,7 @@ export const actions = {
     commit('startRequest')
 
     authService
-      .passwordReset({ key, password })
+      .passwordReset(this.$axios, { key, password })
       .then((response) => {
         commit('passwordResetSuccess', {})
         dispatch(
@@ -43,7 +44,7 @@ export const actions = {
     commit('startRequest')
 
     authService
-      .passwordResetRequest({ email })
+      .passwordResetRequest(this.$axios, { email })
       .then((response) => {
         commit('passwordResetRequestSuccess', {})
         dispatch(
@@ -66,7 +67,7 @@ export const actions = {
     commit('startRequest')
 
     authService
-      .register({ username, email, password, firstName, lastName })
+      .register(this.$axios, { username, email, password, firstName, lastName })
       .then((response) => {
         commit('registerSuccess', {})
         dispatch(
@@ -86,9 +87,13 @@ export const actions = {
     commit('startRequest')
 
     authService
-      .login(username, password)
+      .login(this.$axios, { username, password })
       .then((response) => {
-        commit('loginSuccess', { authKey: response.data.auth_key })
+        const { auth_key: authKey, refresh_auth_key: refreshAuthKey } =
+          response.data
+
+        commit('loginSuccess', { authKey, refreshAuthKey })
+
         dispatch(
           'alert/success',
           { showType: 'toast', text: response.message },
@@ -117,8 +122,8 @@ export const actions = {
       router.push('/')
     }
   },
-  updateAuthKey({ commit }, { authKey }) {
-    commit('setAuthKey', authKey)
+  updateAuthKey({ commit }, { authKey, refreshAuthKey }) {
+    commit('setAuthKey', { authKey, refreshAuthKey })
     if (authKey) {
       commit('setUser', jwtDecode(authKey))
     }
@@ -126,7 +131,6 @@ export const actions = {
   sessionExpired({ dispatch, commit }, { router }) {
     dispatch('alert/clear', {}, { root: true })
     commit('logout')
-
     dispatch(
       'alert/error',
       {
@@ -185,6 +189,7 @@ export const getters = {
       return true
     }
 
+    // Check auth key
     if (_.isEmpty(state.authKey)) {
       return false
     }
@@ -197,7 +202,21 @@ export const getters = {
     }
 
     if (decoded.exp && moment.unix(decoded.exp).isAfter()) {
-      axios.defaults.headers.common.Authorization = state.authKey
+      return true
+    }
+
+    // Check refresh auth key
+    if (_.isEmpty(state.refreshAuthKey)) {
+      return false
+    }
+
+    try {
+      decoded = jwtDecode(state.refreshAuthKey)
+    } catch (e) {
+      return false
+    }
+
+    if (decoded.exp && moment.unix(decoded.exp).isAfter()) {
       return true
     }
 
@@ -211,13 +230,18 @@ export const mutations = {
     state.isRegistered = false
     state.isLoggedIn = false
   },
-  loginSuccess(state, { authKey }) {
+  loginSuccess(state, { authKey, refreshAuthKey }) {
     state.loading = false
     state.isLoggedIn = true
     state.authKey = authKey
+    state.refreshAuthKey = refreshAuthKey
     state.user = jwtDecode(authKey)
+
     this.$cookies.set(cookieAuthKey, authKey)
-    axios.defaults.headers.common.Authorization = authKey
+    this.$cookies.set(cookieRefreshAuthKey, refreshAuthKey)
+
+    localStorage.setItem(cookieAuthKey, authKey)
+    localStorage.setItem(cookieRefreshAuthKey, refreshAuthKey)
   },
   loginFailure(state) {
     state.loading = false
@@ -251,7 +275,7 @@ export const mutations = {
     state.authKey = null
     state.user = null
     this.$cookies.remove(cookieAuthKey)
-    axios.defaults.headers.common.Authorization = null
+    this.$cookies.remove(cookieRefreshAuthKey)
   },
   clear(state) {
     state.loading = false
@@ -259,8 +283,9 @@ export const mutations = {
     state.isLoggedIn = false
     state.isPasswordResetRequested = false
   },
-  setAuthKey(state, authKey) {
+  setAuthKey(state, { authKey, refreshAuthKey }) {
     state.authKey = authKey
+    state.refreshAuthKey = refreshAuthKey
   },
   setUser(state, user) {
     state.user = user

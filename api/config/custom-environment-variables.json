@@ -1,0 +1,63 @@
+{
+  "port": {
+    "__name": "PORT",
+    "__format": "number"
+  },
+  "tz": "TZ",
+  "bcryptSaltingRound": {
+    "__name": "BCRYPT_SALTING_ROUND",
+    "__format": "number"
+  },
+  "apiUrl": "API_URL",
+  "backendUrl": "BACKEND_URL",
+  "frontendUrl": "FRONTEND_URL",
+  "db": {
+    "host": "DB_HOST",
+    "port": {
+      "__name": "DB_PORT",
+      "__format": "number"
+    },
+    "user": "DB_USER",
+    "password": "DB_PASSWORD",
+    "name": "DB_NAME",
+    "debug": {
+      "__name": "DB_DEBUG",
+      "__format": "boolean"
+    },
+    "connectionLimit": {
+      "__name": "DB_CONNECTION_LIMIT",
+      "__format": "number"
+    }
+  },
+  "smtp": {
+    "host": "SMTP_HOST",
+    "port": {
+      "__name": "SMTP_PORT",
+      "__format": "number"
+    },
+    "secure": {
+      "__name": "SMTP_SECURE",
+      "__format": "boolean"
+    },
+    "authUser": "SMTP_AUTH_USER",
+    "authPass": "SMTP_AUTH_PASS",
+    "debug": {
+      "__name": "SMTP_DEBUG",
+      "__format": "boolean"
+    },
+    "logger": {
+      "__name": "SMTP_LOGGER",
+      "__format": "boolean"
+    }
+  },
+  "email": {
+    "fromName": "EMAIL_FROM_NAME",
+    "fromAddress": "EMAIL_FROM_ADDRESS"
+  },
+  "jwt": {
+    "secretKey": "JWT_SECRET_KEY",
+    "expiresIn": "JWT_EXPIRES_IN",
+    "refreshSecretKey": "JWT_REFRESH_SECRET_KEY",
+    "refreshExpiresIn": "JWT_REFRESH_EXPIRES_IN"
+  }
+}

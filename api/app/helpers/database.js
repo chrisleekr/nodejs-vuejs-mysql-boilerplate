@@ -1,16 +1,17 @@
+const config = require('config');
 const mysql = require('promise-mysql');
 const { logger } = require('./logger');
 
 const moduleLogger = logger.child({ module: 'database' });
 
 const dbConfig = {
-  connectionLimit: process.env.DB_CONNECTION_LIMIT,
-  host: process.env.DB_HOST,
-  port: process.env.DB_PORT,
-  user: process.env.DB_USER,
-  password: process.env.DB_PASSWORD,
-  database: process.env.DB_NAME,
-  debug: process.env.DB_DEBUG === 'true' ? ['ComQueryPacket', 'RowDataPacket'] : false,
+  connectionLimit: config.get('db.connectionLimit'),
+  host: config.get('db.host'),
+  port: config.get('db.port'),
+  user: config.get('db.user'),
+  password: config.get('db.password'),
+  database: config.get('db.name'),
+  debug: config.get('db.debug') === 'true' ? ['ComQueryPacket', 'RowDataPacket'] : false,
   timezone: (new Date().getTimezoneOffset() / 60) * -1
 };
 moduleLogger.debug({ dbConfig });

@@ -1,7 +1,7 @@
 import _ from 'lodash';
-import axios from 'axios';
 import configService from '@/services/configService';
 import utils from '@/helper/utils';
+import api from './api';
 
 export default {
   async list({ type = 'user', query = {} } = {}) {
@@ -11,47 +11,22 @@ export default {
       url += `?${utils.toQueryStrings(pickedQuery)}`;
     }
 
-    return axios
-      .get(url, {})
-      .then(response => response.data)
-      .catch(e => {
-        throw e;
-      });
+    return api.get(url, {}).then(response => response.data);
   },
 
   async getOne({ type = 'user', userId }) {
-    return axios
-      .get(`${configService.get('apiUrl')}/${type}/${userId}`, {})
-      .then(response => response.data)
-      .catch(e => {
-        throw e;
-      });
+    return api.get(`${configService.get('apiUrl')}/${type}/${userId}`, {}).then(response => response.data);
   },
 
   async postOne({ type = 'user', user } = {}) {
-    return axios
-      .post(`${configService.get('apiUrl')}/${type}`, user)
-      .then(response => response.data)
-      .catch(e => {
-        throw e;
-      });
+    return api.post(`${configService.get('apiUrl')}/${type}`, user).then(response => response.data);
   },
 
   async patchOne({ type = 'user', userId, newUser }) {
-    return axios
-      .patch(`${configService.get('apiUrl')}/${type}/${userId}`, newUser)
-      .then(response => response.data)
-      .catch(e => {
-        throw e;
-      });
+    return api.patch(`${configService.get('apiUrl')}/${type}/${userId}`, newUser).then(response => response.data);
   },
 
   async deleteOne({ type = 'user', userId }) {
-    return axios
-      .delete(`${configService.get('apiUrl')}/${type}/${userId}`)
-      .then(response => response.data)
-      .catch(e => {
-        throw e;
-      });
+    return api.delete(`${configService.get('apiUrl')}/${type}/${userId}`).then(response => response.data);
   }
 };

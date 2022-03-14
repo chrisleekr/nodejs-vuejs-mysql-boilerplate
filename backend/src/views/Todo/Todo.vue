@@ -43,7 +43,7 @@ export default {
     ...mapActions('todo', ['list'])
   },
   mounted() {
-    this.list({});
+    this.list({ router: this.$router });
   }
 };
 </script>

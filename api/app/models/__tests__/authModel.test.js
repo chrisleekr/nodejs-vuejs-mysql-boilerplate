@@ -9,15 +9,21 @@ jest.mock('../../helpers/logger', () => ({
 }));
 
 const bcrypt = require('bcryptjs');
-
 const authenticationHelper = require('../../helpers/authentication');
 const userModel = require('../userModel');
+const userAuthModel = require('../userAuthModel');
 const authModel = require('../authModel');
 const mailHelper = require('../../helpers/mail');
 
-jest.mock('moment', () => () => ({
-  format: jest.fn().mockReturnValue('2019-12-06 00:11:22')
-}));
+jest.mock('moment', () => {
+  const mockMoment = {
+    format: () => '2019-12-06 00:11:22'
+  };
+
+  const fn = () => mockMoment;
+  fn.unix = () => mockMoment;
+  return fn;
+});
 
 jest.mock('uuid', () => ({
   v4: () => 'my-uuid'
@@ -159,7 +165,17 @@ describe('authModel', () => {
 
       describe('when processing login is success', () => {
         beforeEach(async () => {
-          authenticationHelper.generateToken.mockReturnValue('my-jwt-token');
+          authenticationHelper.generateToken.mockReturnValueOnce('my-jwt-token');
+
+          authenticationHelper.verifyToken.mockResolvedValue({
+            exp: Date.now()
+          });
+
+          authenticationHelper.generateRefreshToken.mockReturnValueOnce('my-refresh-jwt-token');
+
+          authenticationHelper.verifyRefreshToken.mockResolvedValue({
+            exp: Date.now()
+          });
 
           userModel.getOne = jest.fn().mockResolvedValue({
             id: 10,
@@ -172,8 +188,11 @@ describe('authModel', () => {
             confirmed_at: '2019-10-05T23:33:22Z',
             password_hash: 'valid-hash'
           });
+          userAuthModel.insertOne = jest.fn();
           userModel.updateOne = jest.fn();
 
+          bcrypt.genSaltSync = jest.fn().mockReturnValue(1);
+          bcrypt.hashSync = jest.fn().mockReturnValue('encrypted-auth-key');
           bcrypt.compareSync = jest.fn().mockReturnValue(true);
 
           result = await authModel.login(
@@ -220,7 +239,8 @@ describe('authModel', () => {
 
         it('returns value', () => {
           expect(result).toStrictEqual({
-            auth_key: 'my-jwt-token'
+            auth_key: 'my-jwt-token',
+            refresh_auth_key: 'my-refresh-jwt-token'
           });
         });
       });

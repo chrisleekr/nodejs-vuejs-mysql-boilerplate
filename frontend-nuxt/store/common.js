@@ -23,7 +23,7 @@ export const actions = {
           { type: 'error', message: _.join(errorMessages, '\r\n') },
           { root: true }
         )
-      } else if (status === 401 || status === 403) {
+      } else if (status === 403) {
         dispatch('auth/sessionExpired', { router }, { root: true })
       }
     } else {

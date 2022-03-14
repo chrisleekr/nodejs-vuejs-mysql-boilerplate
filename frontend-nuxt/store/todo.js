@@ -14,7 +14,7 @@ export const actions = {
     commit('startRequest')
 
     todoService
-      .list({ state })
+      .list(this.$axios, { state })
       .then((response) => {
         commit('setTodo', {
           todo: response.data.rows,
@@ -31,7 +31,7 @@ export const actions = {
     commit('startRequest')
 
     todoService
-      .postBulk({
+      .postBulk(this.$axios, {
         state,
         todoList
       })
@@ -56,7 +56,7 @@ export const actions = {
     commit('startRequest')
 
     todoService
-      .postOne({ todo })
+      .postOne(this.$axios, { todo })
       .then((_response) => {
         dispatch('list', { router })
         dispatch(
@@ -79,7 +79,7 @@ export const actions = {
     commit('startRequest')
 
     todoService
-      .deleteOne({ todoId })
+      .deleteOne(this.$axios, { todoId })
       .then((_response) => {
         dispatch('list', { router })
         dispatch(

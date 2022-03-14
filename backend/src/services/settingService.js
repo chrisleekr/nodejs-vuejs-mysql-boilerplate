@@ -1,7 +1,7 @@
 import _ from 'lodash';
-import axios from 'axios';
 import configService from '@/services/configService';
 import utils from '@/helper/utils';
+import api from './api';
 
 export default {
   async list({ query = {} } = {}) {
@@ -11,47 +11,22 @@ export default {
       url += `?${utils.toQueryStrings(pickedQuery)}`;
     }
 
-    return axios
-      .get(url, {})
-      .then(response => response.data)
-      .catch(e => {
-        throw e;
-      });
+    return api.get(url, {}).then(response => response.data);
   },
 
   async getOne({ settingId }) {
-    return axios
-      .get(`${configService.get('apiUrl')}/setting/${settingId}`, {})
-      .then(response => response.data)
-      .catch(e => {
-        throw e;
-      });
+    return api.get(`${configService.get('apiUrl')}/setting/${settingId}`, {}).then(response => response.data);
   },
 
   async postOne({ setting } = {}) {
-    return axios
-      .post(`${configService.get('apiUrl')}/setting`, setting)
-      .then(response => response.data)
-      .catch(e => {
-        throw e;
-      });
+    return api.post(`${configService.get('apiUrl')}/setting`, setting).then(response => response.data);
   },
 
   async patchOne({ settingId, newSetting }) {
-    return axios
-      .patch(`${configService.get('apiUrl')}/setting/${settingId}`, newSetting)
-      .then(response => response.data)
-      .catch(e => {
-        throw e;
-      });
+    return api.patch(`${configService.get('apiUrl')}/setting/${settingId}`, newSetting).then(response => response.data);
   },
 
   async deleteOne({ settingId }) {
-    return axios
-      .delete(`${configService.get('apiUrl')}/setting/${settingId}`)
-      .then(response => response.data)
-      .catch(e => {
-        throw e;
-      });
+    return api.delete(`/setting/${settingId}`).then(response => response.data);
   }
 };
