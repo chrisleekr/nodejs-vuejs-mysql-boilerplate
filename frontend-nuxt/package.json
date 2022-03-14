@@ -74,7 +74,7 @@
     "eslint-plugin-prettier": "^4.0.0",
     "husky": "^7.0.4",
     "lint-staged": "^12.3.5",
-    "node-sass": "^6.0.1",
+    "node-sass": "^7.0.0",
     "nodemon": "^2.0.15",
     "prettier": "^2.5.1",
     "sass": "^1.49.9",
