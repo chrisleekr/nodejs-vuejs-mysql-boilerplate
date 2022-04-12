@@ -16,6 +16,13 @@ const todoStatus = {
   deleted: 0
 };
 
+const todoOrderBy = {
+  updated_at_asc: 'updated_at ASC',
+  updated_at_desc: 'updated_at DESC',
+  position_asc: 'position ASC',
+  position_desc: 'position DESC'
+};
+
 const findAll = async ({ searchOptions = {}, orderBy = 'position ASC', page = 1, pageSize = 10 } = {}) => {
   moduleLogger.debug({ searchOptions, orderBy, page, pageSize }, 'findAll called');
 
@@ -353,6 +360,7 @@ module.exports = {
   deleteAll,
   todoState,
   todoStatus,
+  todoOrderBy,
   getMaxPosition,
   upsertBulk
 };
