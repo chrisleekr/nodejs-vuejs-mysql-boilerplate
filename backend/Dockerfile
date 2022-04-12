@@ -8,11 +8,11 @@ RUN apt-get update -y && \
   libpng-dev=1.6.36-6 \
   libjpeg-dev=1:1.5.2-2+deb10u1 \
   gifsicle=1.91-5 \
-  xvfb=2:1.20.4-1+deb10u3 \
+  xvfb=2:1.20.4-1+deb10u4 \
   libgtk-3-dev=3.24.5-1 \
   libnotify-dev=0.7.7-4 \
   libgconf-2-4=3.2.6-5 \
-  libnss3=2:3.42.1-1+deb10u3 \
+  libnss3=2:3.42.1-1+deb10u5 \
   libxss1=1:1.2.3-1 \
   libasound2=1.1.8-1 && \
   rm -rf /var/lib/apt/lists/*

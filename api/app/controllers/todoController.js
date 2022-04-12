@@ -53,6 +53,7 @@ const listTodos = async (req, res) => {
 
   const result = await todoModel.findAll({
     searchOptions,
+    orderBy: todoModel.todoOrderBy[params.order_by] || 'position ASC',
     page: params.page || 1,
     pageSize: params.page_size || 999999
   });
@@ -233,7 +234,7 @@ const patchTodo = async (req, res) => {
   });
 
   try {
-    const result = await todoModel.updateOne(params.todoId, params);
+    const result = await todoModel.updateOne(req.params.id, params);
     return handleSuccess(res, '', result);
   } catch (e) {
     moduleLogger.error({ e }, 'Updating todo failed');

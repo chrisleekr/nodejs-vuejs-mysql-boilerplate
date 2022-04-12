@@ -1,3 +1,5 @@
+const todoModel = require('../../../models/todoModel');
+
 module.exports = {
   page: {
     in: ['query'],
@@ -46,5 +48,21 @@ module.exports = {
     in: ['query'],
     optional: { options: { nullable: false } },
     escape: true
+  },
+  order_by: {
+    in: ['query'],
+    custom: {
+      options: value => {
+        if (value === undefined) {
+          return true;
+        }
+
+        if (todoModel.todoOrderBy[value] === undefined) {
+          throw new Error('Order by must be valid.');
+        }
+
+        return true;
+      }
+    }
   }
 };

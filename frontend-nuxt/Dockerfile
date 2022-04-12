@@ -6,7 +6,7 @@ RUN apk --no-cache add autoconf=2.69-r3 \
   gcc=10.2.1_pre1-r3 \
   make=4.3-r0 \
   g++=10.2.1_pre1-r3 \
-  zlib-dev=1.2.11-r3
+  zlib-dev=1.2.12-r0
 
 WORKDIR /srv
 
