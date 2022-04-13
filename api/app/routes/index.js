@@ -76,7 +76,7 @@ module.exports = app => {
     .post([[isAuthenticated, checkSchema(todo.todoListPost)], todoController.postTodos]);
 
   app
-    .route('/todo/:todoId')
+    .route('/todo/:id')
     .get([isAuthenticated, checkSchema(todo.todoGet)], todoController.getTodo)
     .patch([isAuthenticated, checkSchema(todo.todoPatch)], todoController.patchTodo)
     .delete([isAuthenticated, checkSchema(todo.todoDelete)], todoController.deleteTodo);
