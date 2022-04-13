@@ -82,14 +82,10 @@ const getTodo = async (req, res) => {
     onlyValidData: true
   });
 
-  const searchOptions = {
+  const row = await todoModel.getOne({
     id: params.todoId,
     user_id: tokenData.id,
     status: todoModel.todoStatus.active
-  };
-
-  const row = await todoModel.getOne({
-    searchOptions
   });
 
   if (_.isEmpty(row)) {
