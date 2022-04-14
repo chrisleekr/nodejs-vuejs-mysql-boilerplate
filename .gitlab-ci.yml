@@ -72,6 +72,7 @@ lint-dockerfile:
   image: hadolint/hadolint:latest
   script:
     - hadolint api/Dockerfile
+    - hadolint backend/Dockerfile
     - hadolint frontend-nuxt/Dockerfile
     - hadolint frontend-vue/Dockerfile
 
