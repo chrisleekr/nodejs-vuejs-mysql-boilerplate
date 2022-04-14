@@ -25,7 +25,9 @@
     "generate": "nuxt generate",
     "lint": "eslint --ext .js,.vue --ignore-path .gitignore .",
     "test": "jest",
-    "prod": "npm run build && npm run start"
+    "prod": "npm run build && npm run start",
+    "docker:build:dev": "docker build . --target build-stage --build-arg BASE_URL=/frontend-nuxt/  -t chrisleekr/nodejs-vuejs-mysql-boilerplate:frontend-nuxt-dev",
+    "docker:build:prod": "docker build . --target production-stage --build-arg BASE_URL=/frontend-nuxt/ -t chrisleekr/nodejs-vuejs-mysql-boilerplate:frontend-nuxt-latest"
   },
   "lint-staged": {
     "*.{js,vue}": "npm run lint",
@@ -53,7 +55,7 @@
     "cross-env": "^7.0.3",
     "express": "^4.17.3",
     "jwt-decode": "^3.1.2",
-    "moment": "^2.29.1",
+    "moment": "^2.29.2",
     "nuxt": "^2.15.8",
     "nuxt-fontawesome": "^0.4.0",
     "nuxt-imagemin": "^1.0.0",
