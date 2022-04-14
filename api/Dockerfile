@@ -6,7 +6,12 @@ RUN apk update && \
   python3=3.8.10-r0 \
   make=4.3-r0 \
   g++=10.2.1_pre1-r3 \
-  mysql-client=10.5.15-r0
+  mysql-client=10.5.15-r0 \
+  busybox=1.32.1-r8 \
+  libcrypto1.1=1.1.1n-r0 \
+  libssl1.1=1.1.1n-r0 \
+  ssl_client=1.32.1-r8 \
+  zlib=1.2.12-r0
 
 # Add configuration files
 COPY image-files/ /
@@ -36,7 +41,12 @@ FROM node:16-alpine3.13 AS production-stage
 
 RUN apk update && \
   apk add --no-cache \
-  mysql-client=10.5.15-r0
+  mysql-client=10.5.15-r0 \
+  busybox=1.32.1-r8 \
+  libcrypto1.1=1.1.1n-r0 \
+  libssl1.1=1.1.1n-r0 \
+  ssl_client=1.32.1-r8 \
+  zlib=1.2.12-r0
 
 # Add configuration files
 COPY image-files/ /

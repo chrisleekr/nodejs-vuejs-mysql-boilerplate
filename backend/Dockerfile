@@ -45,6 +45,10 @@ ENTRYPOINT [ "docker-entrypoint.dev.sh" ]
 # production stage
 FROM nginx:stable-alpine AS production-stage
 
+RUN apk update && \
+  apk add --no-cache \
+  xz-libs=5.2.5-r1
+
 # Add configuration files
 COPY image-files/ /
 

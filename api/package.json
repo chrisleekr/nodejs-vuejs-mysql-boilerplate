@@ -12,7 +12,9 @@
     "migrate:create": "db-migrate create",
     "migrate:up": "db-migrate up --verbose",
     "migrate:down": "db-migrate down --verbose",
-    "migrate:reset": "db-migrate reset --verbose"
+    "migrate:reset": "db-migrate reset --verbose",
+    "docker:build:dev": "docker build . --target dev-stage -t chrisleekr/nodejs-vuejs-mysql-boilerplate:api-dev",
+    "docker:build:prod": "docker build . --target production-stage -t chrisleekr/nodejs-vuejs-mysql-boilerplate:api-latest"
   },
   "repository": {
     "type": "git",
@@ -39,7 +41,7 @@
     "config": "^3.3.7",
     "cors": "^2.8.5",
     "cross-env": "^7.0.3",
-    "db-migrate": "^0.11.13",
+    "db-migrate": "^1.0.0-beta.5",
     "db-migrate-mysql": "^2.2.0",
     "dotenv": "^16.0.0",
     "express": "^4.17.3",
@@ -48,7 +50,7 @@
     "helmet": "^5.0.2",
     "jsonwebtoken": "^8.5.1",
     "lodash": "^4.17.21",
-    "moment": "^2.29.1",
+    "moment": "^2.29.2",
     "nodemailer": "^6.7.2",
     "npm-check-updates": "^12.4.0",
     "promise-mysql": "^5.1.0",

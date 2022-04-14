@@ -26,7 +26,9 @@
     "lint:prettier": "prettier --write --loglevel warn \"**/*.{js,json,css,scss,vue,html,md}\"",
     "lint": "run-s lint:*",
     "test:e2e": "vue-cli-service test:e2e",
-    "test:unit": "vue-cli-service test:unit"
+    "test:unit": "vue-cli-service test:unit",
+    "docker:build:dev": "docker build . --target build-stage --build-arg NODE_ENV=development --build-arg BASE_URL=/frontend-vue/  -t chrisleekr/nodejs-vuejs-mysql-boilerplate:frontend-vue-dev",
+    "docker:build:prod": "docker build . --target production-stage --build-arg NODE_ENV=production-stage --build-arg BASE_URL=/frontend-vue/ -t chrisleekr/nodejs-vuejs-mysql-boilerplate:frontend-vue-latest"
   },
   "dependencies": {
     "@fortawesome/fontawesome-svg-core": "^1.3.0",
@@ -40,7 +42,7 @@
     "core-js": "^3.21.1",
     "jwt-decode": "^3.1.2",
     "lodash": "^4.17.21",
-    "moment": "^2.29.1",
+    "moment": "^2.29.2",
     "register-service-worker": "^1.7.2",
     "sweetalert2": "^11.4.4",
     "vue": "^2.6.14",
