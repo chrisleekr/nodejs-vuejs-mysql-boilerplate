@@ -263,7 +263,7 @@ const deleteTodo = async (req, res) => {
   }
 
   try {
-    const result = await todoModel.deleteOne(req.params.todoId);
+    const result = await todoModel.deleteOne(req.params.id);
     return handleSuccess(res, '', result);
   } catch (e) {
     moduleLogger.error({ e }, 'Deleting todo failed');
