@@ -75,6 +75,20 @@ lint-dockerfile:
     - hadolint frontend-nuxt/Dockerfile
     - hadolint frontend-vue/Dockerfile
 
+security-check:
+  stage: testing
+  image: aquasec/trivy:latest
+  <<: *before-script
+  script:
+    - trivy image --exit-code 1 -s HIGH,CRITICAL --no-progress
+      $REGISTRY_DOMAIN/chrisleekr/nodejs-vuejs-mysql-boilerplate:api-latest
+    - trivy image --exit-code 1 -s HIGH,CRITICAL --no-progress
+      $REGISTRY_DOMAIN/chrisleekr/nodejs-vuejs-mysql-boilerplate:frontend-nuxt-latest
+    - trivy image --exit-code 1 -s HIGH,CRITICAL --no-progress
+      $REGISTRY_DOMAIN/chrisleekr/nodejs-vuejs-mysql-boilerplate:frontend-vue-latest
+    - trivy image --exit-code 1 -s HIGH,CRITICAL --no-progress
+      $REGISTRY_DOMAIN/chrisleekr/nodejs-vuejs-mysql-boilerplate:backend-latest
+
 testing-and-linting:
   stage: testing
   image: docker/compose:latest
@@ -98,20 +112,6 @@ testing-and-linting:
     - docker exec frontend-vue npm run test:unit
     - docker exec frontend-vue npm run test:e2e -- --headless
     - docker exec frontend-nuxt npm run test
-
-security-check:
-  stage: testing
-  image: aquasec/trivy:latest
-  <<: *before-script
-  script:
-    - trivy image --exit-code 1 -s HIGH,CRITICAL --no-progress
-      $REGISTRY_DOMAIN/chrisleekr/nodejs-vuejs-mysql-boilerplate:api-latest
-    - trivy image --exit-code 1 -s HIGH,CRITICAL --no-progress
-      $REGISTRY_DOMAIN/chrisleekr/nodejs-vuejs-mysql-boilerplate:frontend-nuxt-latest
-    - trivy image --exit-code 1 -s HIGH,CRITICAL --no-progress
-      $REGISTRY_DOMAIN/chrisleekr/nodejs-vuejs-mysql-boilerplate:frontend-vue-latest
-    - trivy image --exit-code 1 -s HIGH,CRITICAL --no-progress
-      $REGISTRY_DOMAIN/chrisleekr/nodejs-vuejs-mysql-boilerplate:backend-latest
 
 production-api:
   stage: build production

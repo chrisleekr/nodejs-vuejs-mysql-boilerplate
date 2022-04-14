@@ -45,17 +45,45 @@ jobs:
           docker push $REGISTRY_DOMAIN/chrisleekr/nodejs-vuejs-mysql-boilerplate:frontend-vue-dev
           docker build . --target production-stage --build-arg NODE_ENV=production --build-arg BASE_URL=/frontend-vue/ -t $REGISTRY_DOMAIN/chrisleekr/nodejs-vuejs-mysql-boilerplate:frontend-vue-latest
       - name: Lint Dockerfile for api
-        uses: hadolint/hadolint-action@v1.5.0
+        uses: hadolint/hadolint-action@latest
         with:
           dockerfile: api/Dockerfile
+      - name: Lint Dockerfile for backend
+        uses: hadolint/hadolint-action@latest
+        with:
+          dockerfile: backend/Dockerfile
       - name: Lint Dockerfile for frontend-nuxt
-        uses: hadolint/hadolint-action@v1.5.0
+        uses: hadolint/hadolint-action@latest
         with:
           dockerfile: frontend-nuxt/Dockerfile
       - name: Lint Dockerfile for vue
-        uses: hadolint/hadolint-action@v1.5.0
+        uses: hadolint/hadolint-action@latest
         with:
           dockerfile: frontend-vue/Dockerfile
+      - name: Run Trivy vulnerability scanner API
+        uses: aquasecurity/trivy-action@master
+        with:
+          image-ref: "${{ secrets.REGISTRY_DOMAIN }}/chrisleekr/nodejs-vuejs-mysql-boilerplate:api-latest"
+          exit-code: "1"
+          severity: "CRITICAL,HIGH"
+      - name: Run Trivy vulnerability scanner backend
+        uses: aquasecurity/trivy-action@master
+        with:
+          image-ref: "${{ secrets.REGISTRY_DOMAIN }}/chrisleekr/nodejs-vuejs-mysql-boilerplate:backend-latest"
+          exit-code: "1"
+          severity: "CRITICAL,HIGH"
+      - name: Run Trivy vulnerability scanner frontend-nuxt
+        uses: aquasecurity/trivy-action@master
+        with:
+          image-ref: "${{ secrets.REGISTRY_DOMAIN }}/chrisleekr/nodejs-vuejs-mysql-boilerplate:frontend-nuxt-latest"
+          exit-code: "1"
+          severity: "CRITICAL,HIGH"
+      - name: Run Trivy vulnerability scanner frontend-vue
+        uses: aquasecurity/trivy-action@master
+        with:
+          image-ref: "${{ secrets.REGISTRY_DOMAIN }}/chrisleekr/nodejs-vuejs-mysql-boilerplate:frontend-vue-latest"
+          exit-code: "1"
+          severity: "CRITICAL,HIGH"
       - name: Run docker compose for dev
         run: |
           docker-compose -f docker-compose.actions.yml pull
@@ -87,30 +115,6 @@ jobs:
       - name: Unit test frontend nuxt
         run: |
           docker exec frontend-nuxt npm run test
-      - name: Run Trivy vulnerability scanner API
-        uses: aquasecurity/trivy-action@master
-        with:
-          image-ref: "$REGISTRY_DOMAIN/chrisleekr/nodejs-vuejs-mysql-boilerplate:api-latest"
-          exit-code: "1"
-          severity: "CRITICAL,HIGH"
-      - name: Run Trivy vulnerability scanner backend
-        uses: aquasecurity/trivy-action@master
-        with:
-          image-ref: "$REGISTRY_DOMAIN/chrisleekr/nodejs-vuejs-mysql-boilerplate:backend-latest"
-          exit-code: "1"
-          severity: "CRITICAL,HIGH"
-      - name: Run Trivy vulnerability scanner frontend-nuxt
-        uses: aquasecurity/trivy-action@master
-        with:
-          image-ref: "$REGISTRY_DOMAIN/chrisleekr/nodejs-vuejs-mysql-boilerplate:frontend-nuxt-latest"
-          exit-code: "1"
-          severity: "CRITICAL,HIGH"
-      - name: Run Trivy vulnerability scanner frontend-vue
-        uses: aquasecurity/trivy-action@master
-        with:
-          image-ref: "$REGISTRY_DOMAIN/chrisleekr/nodejs-vuejs-mysql-boilerplate:frontend-vue-latest"
-          exit-code: "1"
-          severity: "CRITICAL,HIGH"
       - name: Build api latest image
         if: github.ref == 'refs/heads/master'
         run: |
