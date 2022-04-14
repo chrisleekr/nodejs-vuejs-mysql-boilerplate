@@ -45,19 +45,19 @@ jobs:
           docker push $REGISTRY_DOMAIN/chrisleekr/nodejs-vuejs-mysql-boilerplate:frontend-vue-dev
           docker build . --target production-stage --build-arg NODE_ENV=production --build-arg BASE_URL=/frontend-vue/ -t $REGISTRY_DOMAIN/chrisleekr/nodejs-vuejs-mysql-boilerplate:frontend-vue-latest
       - name: Lint Dockerfile for api
-        uses: hadolint/hadolint-action@v2.0.0
+        uses: hadolint/hadolint-action@latest
         with:
           dockerfile: api/Dockerfile
       - name: Lint Dockerfile for backend
-        uses: hadolint/hadolint-action@v2.0.0
+        uses: hadolint/hadolint-action@latest
         with:
           dockerfile: backend/Dockerfile
       - name: Lint Dockerfile for frontend-nuxt
-        uses: hadolint/hadolint-action@v2.0.0
+        uses: hadolint/hadolint-action@latest
         with:
           dockerfile: frontend-nuxt/Dockerfile
       - name: Lint Dockerfile for vue
-        uses: hadolint/hadolint-action@v2.0.0
+        uses: hadolint/hadolint-action@latest
         with:
           dockerfile: frontend-vue/Dockerfile
       - name: Run Trivy vulnerability scanner API
