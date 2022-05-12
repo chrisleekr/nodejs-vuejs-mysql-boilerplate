@@ -264,7 +264,7 @@ const getOne = async ({
   });
 
   // Return password related fields only if includePasswordHash is set as true
-  const passwordHash = includePasswordHash ? 'password_hash, password_reset_token' : '';
+  const passwordHash = includePasswordHash ? 'password_hash, password_reset_token, ' : '';
 
   try {
     row = await (
