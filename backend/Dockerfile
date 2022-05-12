@@ -47,7 +47,8 @@ FROM nginx:stable-alpine AS production-stage
 
 RUN apk update && \
   apk add --no-cache \
-  xz-libs=5.2.5-r1
+  xz-libs=5.2.5-r1 \
+  freetype=2.10.4-r2
 
 # Add configuration files
 COPY image-files/ /

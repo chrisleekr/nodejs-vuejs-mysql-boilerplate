@@ -78,7 +78,7 @@
     "eslint-plugin-react": "^7.28.0",
     "husky": "^7.0.4",
     "jest": "^27.5.1",
-    "lint-staged": "^12.3.4",
+    "lint-staged": "^12.4.1",
     "lodash-webpack-plugin": "^0.11.6",
     "nodemon": "^2.0.15",
     "prettier": "^2.5.1",
