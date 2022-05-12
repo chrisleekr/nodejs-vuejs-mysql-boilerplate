@@ -21,9 +21,8 @@ WORKDIR /srv
 COPY package*.json ./
 
 # Upgrade npm due to vulnerabilities on packaged version
-RUN npm install -g npm@8.10.0
-
-RUN npm install
+RUN npm install -g npm@8.10.0 && \
+  RUN npm install
 
 COPY . .
 
@@ -59,10 +58,9 @@ WORKDIR /srv
 COPY --from=build-stage /srv /srv
 
 # Upgrade npm due to vulnerabilities on packaged version
-RUN npm install -g npm@8.10.0
-
-# Remove dev dependencies
-RUN npm prune --omit=dev
+RUN npm install -g npm@8.10.0 && \
+  # Remove dev dependencies
+  npm prune --omit=dev
 
 EXPOSE 3000
 
