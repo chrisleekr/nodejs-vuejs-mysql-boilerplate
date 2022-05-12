@@ -8,10 +8,10 @@ RUN apk update && \
   g++=10.2.1_pre1-r3 \
   mysql-client=10.5.15-r0 \
   busybox=1.32.1-r8 \
-  libcrypto1.1=1.1.1n-r0 \
-  libssl1.1=1.1.1n-r0 \
+  libcrypto1.1=1.1.1o-r0 \
+  libssl1.1=1.1.1o-r0 \
   ssl_client=1.32.1-r8 \
-  zlib=1.2.12-r0
+  zlib=1.2.12-r1
 
 # Add configuration files
 COPY image-files/ /
@@ -46,10 +46,10 @@ RUN apk update && \
   apk add --no-cache \
   mysql-client=10.5.15-r0 \
   busybox=1.32.1-r8 \
-  libcrypto1.1=1.1.1n-r0 \
-  libssl1.1=1.1.1n-r0 \
+  libcrypto1.1=1.1.1o-r0 \
+  libssl1.1=1.1.1o-r0 \
   ssl_client=1.32.1-r8 \
-  zlib=1.2.12-r0
+  zlib=1.2.12-r1
 
 # Add configuration files
 COPY image-files/ /
