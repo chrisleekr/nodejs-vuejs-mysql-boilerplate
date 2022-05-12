@@ -22,7 +22,7 @@ COPY package*.json ./
 
 # Upgrade npm due to vulnerabilities on packaged version
 RUN npm install -g npm@8.10.0 && \
-  RUN npm install
+  npm install
 
 COPY . .
 
