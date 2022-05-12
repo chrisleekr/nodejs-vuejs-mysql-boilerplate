@@ -6,7 +6,7 @@ RUN apk --no-cache add autoconf=2.69-r3 \
   gcc=10.2.1_pre1-r3 \
   make=4.3-r0 \
   g++=10.2.1_pre1-r3 \
-  zlib-dev=1.2.12-r0
+  zlib-dev=1.2.12-r1
 
 WORKDIR /srv
 
@@ -47,8 +47,12 @@ ENV PATH /usr/local/bin:$PATH
 WORKDIR /srv
 
 COPY --from=build-stage /srv /srv
+
 ENV HOST 0.0.0.0
 EXPOSE 3000
+
+# Upgrade npm due to vulnerabilities on packaged version
+RUN npm install -g npm@8.10.0
 
 ENTRYPOINT [ "docker-entrypoint.sh" ]
 
