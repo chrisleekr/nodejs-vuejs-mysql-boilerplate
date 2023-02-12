@@ -52,7 +52,7 @@
     "lodash": "^4.17.21",
     "moment": "^2.29.2",
     "nodemailer": "^6.7.2",
-    "npm-check-updates": "^12.4.0",
+    "npm-check-updates": "^16.7.4",
     "promise-mysql": "^5.1.0",
     "uuid": "^8.3.2"
   },
@@ -80,7 +80,7 @@
     "jest": "^27.5.1",
     "lint-staged": "^12.4.1",
     "lodash-webpack-plugin": "^0.11.6",
-    "nodemon": "^2.0.15",
+    "nodemon": "^2.0.20",
     "prettier": "^2.5.1",
     "supertest": "^6.2.2",
     "terser-webpack-plugin": "^5.3.1",
